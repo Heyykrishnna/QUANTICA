@@ -219,7 +219,7 @@ const Index = () => {
               <p className="text-secondary uppercase tracking-[0.3em] text-sm mb-4">
                 About QUANTICA
               </p>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6 font-play">
                 THE FUTURE OF
                 <br />
                 <span className="text-primary">ESPORTS</span> IS HERE

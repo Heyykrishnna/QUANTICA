@@ -48,7 +48,7 @@ const Contact = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl font-bold text-foreground mb-8">
+              <h2 className="text-3xl font-bold text-foreground mb-8 font-play">
                 LET'S <span className="text-secondary">CONNECT</span>
               </h2>
               <div className="space-y-8">

@@ -35,7 +35,7 @@ const SponsorsSection = () => {
               <img
                 src={sponsor.logo}
                 alt={sponsor.name}
-                className="max-w-full max-h-full object-contain invert"
+                className="max-w-full max-h-full object-contain"
               />
             </div>
           ))}

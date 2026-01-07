@@ -39,7 +39,7 @@ const CountdownTimer = ({ targetDate, color = "cyan" }: CountdownTimerProps) => 
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
     <div className="text-center">
       <div
-        className={`w-16 h-16 md:w-20 md:h-20 flex items-center justify-center border ${borderColor} bg-background/50`}
+        className={`w-16 h-16 md:w-20 md:h-20 flex items-center justify-center border ${borderColor}`}
       >
         <span className={`text-2xl md:text-3xl font-bold ${textColor}`}>
           {value.toString().padStart(2, "0")}
