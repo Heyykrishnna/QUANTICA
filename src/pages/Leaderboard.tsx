@@ -14,8 +14,8 @@ const teams = [
   { rank: 8, name: "Revenant Esports", points: 1650, wins: 6, kills: 92, game: "BGMI" },
 ];
 const matches = [
-  { id: 1, team1: "Team Insane", team2: "GodLike Esports", score1: 3, score2: 1, status: "Completed", game: "BGMI" },
-  { id: 2, team1: "Velocity Gaming", team2: "Global Esports", score1: 2, score2: 2, status: "Live", game: "Valorant" },
+  { id: 1, team1: "Velocity Gaming", team2: "Global Esports", score1: 2, score2: 2, status: "Live", game: "Valorant" },
+  { id: 2, team1: "Team Insane", team2: "GodLike Esports", score1: 3, score2: 1, status: "Completed", game: "BGMI" },
   { id: 3, team1: "Phoenix Force", team2: "Enigma Gaming", score1: 0, score2: 0, status: "Upcoming", game: "Free Fire" },
   { id: 4, team1: "Team XSpark", team2: "Revenant Esports", score1: 0, score2: 0, status: "Upcoming", game: "BGMI" },
 ];
@@ -45,6 +45,13 @@ const bracketRounds = [
 ];
 const Leaderboard = () => {
   const [activeTab, setActiveTab] = useState<"rankings" | "matches" | "bracket">("rankings");
+  const [selectedGame, setSelectedGame] = useState<string>("All");
+
+  const games = ["All", ...new Set([...teams.map((t) => t.game), ...matches.map((m) => m.game)])];
+
+  const filteredTeams = teams.filter((team) => selectedGame === "All" || team.game === selectedGame);
+  const filteredMatches = matches.filter((match) => selectedGame === "All" || match.game === selectedGame);
+
   const getRankColor = (rank: number) => {
     if (rank === 1) return "text-yellow-400";
     if (rank === 2) return "text-gray-300";
@@ -69,10 +76,10 @@ const Leaderboard = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12"
           >
-            <p className="text-primary uppercase tracking-[0.3em] text-sm mb-4">
+            <p className="text-primary uppercase tracking-[0.3em] text-xs md:text-sm mb-4">
               Live Tournament Stats
             </p>
-            <h1 className="text-5xl md:text-7xl font-bold">
+            <h1 className="text-4xl md:text-7xl font-bold">
               <GlitchText text="LEADERBOARD" className="text-foreground" />
             </h1>
           </motion.div>
@@ -81,26 +88,45 @@ const Leaderboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="flex justify-center gap-4 mb-12 flex-wrap"
+            className="flex flex-col items-center gap-8 mb-12"
           >
-            {[
-              { id: "rankings", label: "Team Rankings", icon: Trophy },
-              { id: "matches", label: "Match Results", icon: Swords },
-              { id: "bracket", label: "Tournament Bracket", icon: Target },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`glitch-btn flex items-center gap-2 px-6 py-3 font-bold uppercase tracking-wider transition-all duration-300 ${
-                  activeTab === tab.id
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary"
-                }`}
-              >
-                <tab.icon className="w-5 h-5" />
-                <span>{tab.label}</span>
-              </button>
-            ))}
+            <div className="flex justify-center gap-4 flex-wrap">
+              {[
+                { id: "rankings", label: "Team Rankings", icon: Trophy },
+                { id: "matches", label: "Match Results", icon: Swords },
+                { id: "bracket", label: "Tournament Bracket", icon: Target },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  className={`glitch-btn flex items-center gap-2 px-6 py-3 font-bold uppercase tracking-wider transition-all duration-300 ${
+                    activeTab === tab.id
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary"
+                  }`}
+                >
+                  <tab.icon className="w-5 h-5" />
+                  <span>{tab.label}</span>
+                </button>
+              ))}
+            </div>
+             {activeTab !== "bracket" && (
+                <div className="flex justify-center gap-3 flex-wrap">
+                  {games.map((game) => (
+                    <button
+                      key={game}
+                      onClick={() => setSelectedGame(game)}
+                      className={`px-4 py-2 text-sm font-bold uppercase tracking-wider transition-all duration-300 rounded ${
+                        selectedGame === game
+                          ? "bg-secondary text-secondary-foreground"
+                          : "bg-card border border-border text-muted-foreground hover:text-secondary hover:border-secondary"
+                      }`}
+                    >
+                      {game}
+                    </button>
+                  ))}
+                </div>
+              )}
           </motion.div>
         </div>
       </section>
@@ -126,36 +152,46 @@ const Leaderboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {teams.map((team, index) => (
-                    <motion.tr
-                      key={team.rank}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      className={`border-b border-border/50 hover:bg-card/50 transition-colors ${
-                        team.rank <= 3 ? "bg-card/30" : ""
-                      }`}
-                    >
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          {getRankIcon(team.rank)}
-                        </div>
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-3">
-                          <span className={`font-bold ${getRankColor(team.rank)}`}>{team.name}</span>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4 text-center">
-                        <span className="px-3 py-1 bg-primary/20 text-primary text-xs uppercase tracking-wider">
-                          {team.game}
-                        </span>
-                      </td>
-                      <td className="py-4 px-4 text-center font-bold text-secondary">{team.points}</td>
-                      <td className="py-4 px-4 text-center text-muted-foreground">{team.wins}</td>
-                      <td className="py-4 px-4 text-center text-muted-foreground">{team.kills}</td>
-                    </motion.tr>
-                  ))}
+                  {filteredTeams.map((team, index) => {
+                    const currentRank = index + 1;
+                    return (
+                      <motion.tr
+                        key={team.name}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className={`border-b border-border/50 hover:bg-card/50 transition-colors ${
+                          currentRank <= 3 ? "bg-card/30" : ""
+                        }`}
+                      >
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-2">
+                            {getRankIcon(currentRank)}
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-3">
+                            <span className={`font-bold ${getRankColor(currentRank)}`}>{team.name}</span>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4 text-center">
+                          <span className="px-3 py-1 bg-primary/20 text-primary text-xs uppercase tracking-wider">
+                            {team.game}
+                          </span>
+                        </td>
+                        <td className="py-4 px-4 text-center font-bold text-secondary">{team.points}</td>
+                        <td className="py-4 px-4 text-center text-muted-foreground">{team.wins}</td>
+                        <td className="py-4 px-4 text-center text-muted-foreground">{team.kills}</td>
+                      </motion.tr>
+                    );
+                  })}
+                  {filteredTeams.length === 0 && (
+                     <tr>
+                        <td colSpan={6} className="text-center py-8 text-muted-foreground">
+                           No teams found for {selectedGame}
+                        </td>
+                     </tr>
+                  )}
                 </tbody>
               </table>
             </motion.div>
@@ -167,7 +203,7 @@ const Leaderboard = () => {
               animate={{ opacity: 1, y: 0 }}
               className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
-              {matches.map((match, index) => (
+              {filteredMatches.map((match, index) => (
                 <motion.div
                   key={match.id}
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -183,13 +219,13 @@ const Leaderboard = () => {
                       <span className="text-secondary text-xs uppercase tracking-wider font-bold">LIVE</span>
                     </div>
                   )}
-                  <div className="text-xs text-primary uppercase tracking-wider mb-4">{match.game}</div>
+                  <div className="text-[10px] md:text-xs text-primary uppercase tracking-wider mb-4">{match.game}</div>
                   <div className="flex items-center justify-between">
                     <div className="flex-1 text-center">
-                      <p className="font-bold text-foreground text-lg">{match.team1}</p>
+                      <p className="font-bold text-foreground md:text-lg text-sm">{match.team1}</p>
                     </div>
                     <div className="px-6">
-                      <div className="flex items-center gap-4 text-3xl font-bold">
+                      <div className="flex items-center gap-4 text-2xl font-bold md:text-4xl">
                         <span className={match.score1 > match.score2 ? "text-primary" : "text-muted-foreground"}>
                           {match.score1}
                         </span>
@@ -200,7 +236,7 @@ const Leaderboard = () => {
                       </div>
                     </div>
                     <div className="flex-1 text-center">
-                      <p className="font-bold text-foreground text-lg">{match.team2}</p>
+                      <p className="font-bold text-foreground md:text-lg text-sm">{match.team2}</p>
                     </div>
                   </div>
                   <div className="mt-4 text-center">
@@ -214,6 +250,11 @@ const Leaderboard = () => {
                   </div>
                 </motion.div>
               ))}
+               {filteredMatches.length === 0 && (
+                   <div className="col-span-full text-center py-12 text-muted-foreground">
+                      No matches found for {selectedGame}
+                   </div>
+               )}
             </motion.div>
           )}
           { }
@@ -269,32 +310,6 @@ const Leaderboard = () => {
               </div>
             </motion.div>
           )}
-        </div>
-      </section>
-      { }
-      <section className="py-12 bg-card border-y border-border">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { icon: Users, label: "Active Teams", value: "64" },
-              { icon: Swords, label: "Matches Played", value: "128" },
-              { icon: Target, label: "Total Kills", value: "2,456" },
-              { icon: Trophy, label: "Prize Claimed", value: "₹5L+" },
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="text-center"
-              >
-                <stat.icon className="w-8 h-8 text-primary mx-auto mb-2" />
-                <p className="text-3xl font-bold text-foreground">{stat.value}</p>
-                <p className="text-sm text-muted-foreground uppercase tracking-wider">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
     </PageTransition>

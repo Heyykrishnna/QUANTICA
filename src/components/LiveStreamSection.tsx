@@ -71,10 +71,6 @@ const LiveStreamSection = () => {
                 </div>
               )}
               
-              <div className="absolute top-4 right-4 z-10 flex items-center gap-2 bg-background/80 px-3 py-1">
-                <Users className="w-4 h-4 text-primary" />
-                <span className="text-xs font-bold text-foreground">{selectedStream.viewers}</span>
-              </div>
 
               {!isPlaying ? (
                 <div 
@@ -94,12 +90,6 @@ const LiveStreamSection = () => {
                     >
                       <Play className="w-10 h-10 text-primary-foreground fill-primary-foreground ml-1" />
                     </motion.div>
-                  </div>
-                  
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <div className="absolute top-1/4 left-0 right-0 h-[1px] bg-primary/50 animate-pulse" />
-                    <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-secondary/50 animate-pulse" />
-                    <div className="absolute top-3/4 left-0 right-0 h-[1px] bg-primary/50 animate-pulse" />
                   </div>
                 </div>
               ) : (
@@ -176,10 +166,6 @@ const LiveStreamSection = () => {
                 <div className="flex-1 min-w-0">
                   <h4 className="text-sm font-bold text-foreground truncate">{stream.title}</h4>
                   <p className="text-xs text-muted-foreground">{stream.channel}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Users className="w-3 h-3 text-primary" />
-                    <span className="text-xs text-primary">{stream.viewers}</span>
-                  </div>
                 </div>
               </motion.div>
             ))}
