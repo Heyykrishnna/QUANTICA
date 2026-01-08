@@ -18,6 +18,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import SmoothScroll from "./components/SmoothScroll";
 import AudioController from "./components/AudioController";
 import GlitchOverlay from "./components/GlitchOverlay";
+import TargetCursor from "./components/TargetCursor";
 const queryClient = new QueryClient();
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -52,6 +53,7 @@ const App = () => {
         {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
         <GlitchOverlay />
         <AudioController />
+        <TargetCursor targetSelector="button, a.cyber-btn, a.cyber-btn-outline, .cursor-target" />
         <SmoothScroll>
           <BrowserRouter>
             <div className="min-h-screen bg-background">

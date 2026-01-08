@@ -68,7 +68,7 @@ const About = () => {
               About Us
             </p>
             <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-8">
-              <GlitchText text="WE ARE QUANTICA" />
+              <GlitchText text="WE ARE QUANTICA" className="text-[40px] md:text-9xl"/>
             </h1>
             <p className="text-xl text-muted-foreground">
               Delhi NCR's pioneering esports organization, dedicated to
@@ -223,7 +223,7 @@ const About = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
             >
-              <p className="text-5xl md:text-6xl font-bold text-primary mb-2">
+              <p className="text-3xl md:text-6xl font-bold text-primary mb-2">
                 10+
               </p>
               <p className="text-muted-foreground uppercase tracking-wider text-sm">
@@ -236,7 +236,7 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
-              <p className="text-5xl md:text-6xl font-bold text-secondary mb-2">
+              <p className="text-3xl md:text-6xl font-bold text-secondary mb-2">
                 500+
               </p>
               <p className="text-muted-foreground uppercase tracking-wider text-sm">
@@ -249,7 +249,7 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <p className="text-5xl md:text-6xl font-bold text-primary mb-2">
+              <p className="text-3xl md:text-6xl font-bold text-primary mb-2">
                 ₹25L+
               </p>
               <p className="text-muted-foreground uppercase tracking-wider text-sm">
@@ -262,7 +262,7 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              <p className="text-5xl md:text-6xl font-bold text-secondary mb-2">
+              <p className="text-3xl md:text-6xl font-bold text-secondary mb-2">
                 50K+
               </p>
               <p className="text-muted-foreground uppercase tracking-wider text-sm">

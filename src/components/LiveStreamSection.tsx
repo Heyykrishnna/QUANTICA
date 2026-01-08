@@ -174,7 +174,7 @@ const LiveStreamSection = () => {
               href="https://www.youtube.com/@Rishihood"
               target="_blank"
               rel="noopener noreferrer"
-              className="glitch-btn flex items-center justify-center gap-2 w-full py-3 bg-card border border-border text-foreground hover:border-primary hover:text-primary transition-all mt-6"
+              className="glitch-btn cursor-target flex items-center justify-center gap-2 w-full py-3 bg-card border border-border text-foreground hover:border-primary hover:text-primary transition-all mt-6"
             >
               <ExternalLink className="w-4 h-4" />
               <span className="text-sm uppercase tracking-wider font-bold">View All Streams</span>
