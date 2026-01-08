@@ -38,6 +38,7 @@ const AnimatedRoutes = () => {
 };
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     if (isLoading) {
       document.body.style.overflow = "hidden";
@@ -45,6 +46,14 @@ const App = () => {
       document.body.style.overflow = "unset";
     }
   }, [isLoading]);
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -53,7 +62,7 @@ const App = () => {
         {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
         <GlitchOverlay />
         <AudioController />
-        <TargetCursor targetSelector="button, a.cyber-btn, a.cyber-btn-outline, .cursor-target" />
+        {!isMobile && <TargetCursor targetSelector="button, a.cyber-btn, a.cyber-btn-outline, .cursor-target" />}
         <SmoothScroll>
           <BrowserRouter>
             <div className="min-h-screen bg-background">
