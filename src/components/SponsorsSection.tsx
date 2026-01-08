@@ -38,7 +38,6 @@ const SponsorsSection = () => {
 		const onChange = (e: MediaQueryListEvent | MediaQueryList) => {
 			setMarqueeDuration((e as any).matches ? 40 : 20);
 		};
-		// initialize
 		onChange(mql);
 		if (mql.addEventListener) mql.addEventListener("change", onChange);
 		else mql.addListener(onChange);
