@@ -39,26 +39,27 @@ const CountdownTimer = ({ targetDate, color = "cyan" }: CountdownTimerProps) => 
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
     <div className="text-center">
       <div
-        className={`w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-background/40 backdrop-blur-sm rounded-lg p-1 border border-border shadow-2xl`}
+        className={`w-12 sm:w-16 md:w-20 h-12 sm:h-16 md:h-20 flex items-center justify-center bg-background/40 backdrop-blur-sm rounded-lg p-1 border border-border shadow-2xl`}
         style={{ filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.6))' }}
       >
-        <span className={`text-2xl md:text-3xl font-bold ${textColor}`}>
+        <span className={`text-lg sm:text-2xl md:text-3xl font-bold ${textColor}`}>
           {value.toString().padStart(2, "0")}
         </span>
       </div>
-      <span className="text-xs text-muted-foreground uppercase tracking-wider mt-2 block">
+      <span className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wider mt-2 block">
         {label}
       </span>
     </div>
   );
   return (
-    <div className="flex gap-2 md:gap-4 justify-center mx-8 items-center">
+    /* use padding instead of horizontal margins, allow wrap on very small screens to avoid overflow */
+    <div className="flex flex-wrap gap-2 sm:gap-4 justify-center px-4 sm:px-8 items-center max-w-full">
       <TimeUnit value={timeLeft.days} label="Days" />
-      <div className={`self-center ${textColor} text-2xl font-bold`} style={{ filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.6))' }}>:</div>
+      <div className={`self-center ${textColor} text-lg sm:text-2xl font-bold`} style={{ filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.6))' }}>:</div>
       <TimeUnit value={timeLeft.hours} label="Hours" />
-      <div className={`self-center ${textColor} text-2xl font-bold`} style={{ filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.6))' }}>:</div>
+      <div className={`self-center ${textColor} text-lg sm:text-2xl font-bold`} style={{ filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.6))' }}>:</div>
       <TimeUnit value={timeLeft.minutes} label="Mins" />
-      <div className={`self-center ${textColor} text-2xl font-bold`} style={{ filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.6))' }}>:</div>
+      <div className={`self-center ${textColor} text-lg sm:text-2xl font-bold`} style={{ filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.6))' }}>:</div>
       <TimeUnit value={timeLeft.seconds} label="Secs" />
     </div>
   );

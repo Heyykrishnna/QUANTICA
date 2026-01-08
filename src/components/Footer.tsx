@@ -17,11 +17,11 @@ const Footer = () => {
       </div>
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent z-10" />
       <div className="absolute inset-0 grid-bg opacity-5 z-0" />
-      <div className="container mx-auto px-4 py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           { }
           <div className="md:col-span-2">
-            <h2 className="text-5xl md:text-7xl font-bold text-foreground mb-4 glitch" data-text="QUANTICA">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-foreground mb-3 glitch" data-text="QUANTICA">
               QUANTI<span className="text-primary">CA</span>
             </h2>
             <p className="text-sm md:text-sm text-muted-foreground max-w-sm">
@@ -88,7 +88,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="border-t border-border mt-8 md:mt-12 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-muted-foreground text-xs md:text-xs">
             © 2026 QUANTICA. All rights reserved.
           </p>
