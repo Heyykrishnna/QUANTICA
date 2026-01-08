@@ -133,7 +133,7 @@ const AudioController = () => {
     <motion.div
       initial={{ x: 100 }}
       animate={{ x: 0 }}
-      className="fixed bottom-8 right-8 z-50"
+      className="fixed bottom-8 right-8 z-50 hidden md:block"
     >
       <AnimatePresence>
         {isExpanded && (

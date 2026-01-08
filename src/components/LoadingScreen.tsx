@@ -51,10 +51,10 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
               style={{ clipPath: "inset(50% 0 40% 0)" }}
             />
           </div>
-          <div className="relative">
+          <div className="relative px-4">
             { }
             <motion.h1
-              className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-foreground glitch-intense"
+              className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-foreground glitch-intense text-center"
               data-text="QUANTICA"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

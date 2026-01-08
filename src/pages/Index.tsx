@@ -54,7 +54,7 @@ const stats = [
 const Index = () => {
   return (
     <PageTransition>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-20">
         <div className="absolute inset-0 z-0">
           <video
             autoPlay
@@ -132,7 +132,7 @@ const Index = () => {
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <ChevronDown className="text-primary" size={32} />
+          <ChevronDown className="text-primary hidden md:inline" size={32} />
         </motion.div>
         <div className="hidden sm:block absolute top-24 left-8 w-24 h-24 border-l-2 border-t-2 border-primary/30" />
         <div className="hidden sm:block absolute top-24 right-8 w-24 h-24 border-r-2 border-t-2 border-secondary/30" />
