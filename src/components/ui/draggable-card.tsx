@@ -30,7 +30,6 @@ export const DraggableCardBody = ({
     bottom: 0,
   });
 
-  // physics biatch
   const velocityX = useVelocity(mouseX);
   const velocityY = useVelocity(mouseY);
 
@@ -60,7 +59,6 @@ export const DraggableCardBody = ({
   );
 
   useEffect(() => {
-    // Update constraints when component mounts or window resizes
     const updateConstraints = () => {
       if (typeof window !== "undefined") {
         setConstraints({
@@ -74,10 +72,8 @@ export const DraggableCardBody = ({
 
     updateConstraints();
 
-    // Add resize listener
     window.addEventListener("resize", updateConstraints);
 
-    // Clean up
     return () => {
       window.removeEventListener("resize", updateConstraints);
     };
@@ -165,7 +161,7 @@ export const DraggableCardBody = ({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "relative min-h-96 w-80 overflow-hidden rounded-md bg-neutral-100 p-6 shadow-2xl transform-3d dark:bg-neutral-900",
+        "relative min-h-96 w-80 overflow-hidden rounded-md bg-[#9d04fe] p-6 shadow-2xl transform-3d dark:bg-neutral-900",
         className,
       )}
     >
