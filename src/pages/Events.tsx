@@ -18,46 +18,44 @@ type MiniGameLite = {
 // curated mini-games (requested list)
 const miniGames: MiniGameLite[] = [
   {
+    title: "Super Mario Bros",
+    image: "/mario-8bit.png",
+    slug: "mario-bros",
+  },
+  {
+    title: "Contra",
+    image: "/contra-8bit.png",
+    slug: "contra",
+  },
+  {
+    title: "Pac-Man",
+    image: "/pacman-8bit.png",
+    slug: "pac-man",
+  },
+  {
+    title: "Krunker.io",
+    image: "/krunker.png",
+    slug: "krunker",
+  },
+  {
+    title: "Among Us",
+    image: "/among-us.png",
+    slug: "among-us",
+  },
+  {
     title: "Smash Carts",
-    image:
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=60",
+    image: "/smash-karts.png",
     slug: "smash-carts",
   },
   {
-    title: "ARVR - Cricket",
-    image:
-      "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?auto=format&fit=crop&w=1200&q=60",
-    slug: "arvr-cricket",
-  },
-  {
     title: "Deadshot",
-    image:
-      "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?auto=format&fit=crop&w=1200&q=60",
+    image: "/deadshot.png",
     slug: "deadshot-io",
   },
   {
-    title: "ARVR - Cricket",
-    image:
-      "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?auto=format&fit=crop&w=1200&q=60",
-    slug: "arvr-cricket",
-  },
-  {
-    title: "ARVR - Cricket",
-    image:
-      "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?auto=format&fit=crop&w=1200&q=60",
-    slug: "arvr-cricket",
-  },
-  {
-    title: "ARVR - Cricket",
-    image:
-      "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?auto=format&fit=crop&w=1200&q=60",
-    slug: "arvr-cricket",
-  },
-  {
-    title: "ARVR - Cricket",
-    image:
-      "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?auto=format&fit=crop&w=1200&q=60",
-    slug: "arvr-cricket",
+    title: "Deadshot",
+    image: "/deadshot.png",
+    slug: "deadshot-io",
   },
 ];
 
@@ -266,7 +264,7 @@ const Events = () => {
       { }
       <section className="py-8">
         <div className="container mx-auto px-4">
-          <h3 className="text-center text-3xl md:text-5xl font-semibold text-foreground leading-tight mt-24 ">
+          <h3 className="text-center text-3xl md:text-6xl font-semibold text-foreground leading-tight mt-24 ">
             Mini-Game <span className="text-primary">Showdown</span>
           </h3>
         </div>
