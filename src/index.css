@@ -409,3 +409,34 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--secondary));
 }
+
+/* Infinite Gallery Animations */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-left 30s linear infinite;
+}
+
+.animate-marquee-fast {
+  animation: marquee-left 20s linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee-right 30s linear infinite;
+}

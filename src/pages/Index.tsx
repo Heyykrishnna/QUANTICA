@@ -12,6 +12,7 @@ import LiveStreamSection from "../components/LiveStreamSection";
 import PastTournaments from "@/components/PastTournaments";
 import ParallaxGallery from "@/components/ParallaxGallery";
 import FeedbackSection from "@/components/FeedbackSection";
+import InfiniteGallery from "@/components/InfiniteGallery";
 import {
   Carousel,
   CarouselContent,
@@ -210,8 +211,7 @@ const Index = () => {
       <SponsorsSection />
       <LiveStreamSection />
       <PastTournaments />
-      {/* <ParallaxGallery /> */}
-      {/* <GallerySection /> */}
+      <InfiniteGallery />
       <FeedbackSection />
       <section className="py-24 relative overflow-hidden">
         <div className="container mx-auto px-4">
