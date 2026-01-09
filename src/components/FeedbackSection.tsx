@@ -147,7 +147,7 @@ const FeedbackSection = () => {
                     <h4 className="font-bold text-xl leading-none">{feedback.name}</h4>
                     <span className="text-xs text-primary uppercase">{feedback.role}</span>
                   </div>
-                  <div className="ml-auto flex">
+                  <div className="ml-auto hidden md:flex">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <img
                         src="/Elements/image copy.png"

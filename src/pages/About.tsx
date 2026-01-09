@@ -90,7 +90,7 @@ const About = () => {
             <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-8">
               <GlitchText text="WE ARE QUANTICA" className="text-[40px] md:text-9xl" />
             </h1>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-lg md:text-xl text-muted-foreground">
               Delhi NCR's pioneering esports organization, dedicated to
               elevating competitive gaming to unprecedented heights. Since 
               inception, we've been on a mission to create the biggest and most

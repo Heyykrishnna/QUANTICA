@@ -85,7 +85,7 @@ interface GalleryRowProps {
   speedMultiplier: number;
 }
 
-const GalleryRow = ({ images, direction, speed = 40, speedMultiplier }: GalleryRowProps) => {
+const GalleryRow = ({ images, direction, speed = 80, speedMultiplier }: GalleryRowProps) => {
   const [isPaused, setIsPaused] = useState(false);
 
   const dynamicSpeed = speed / speedMultiplier;
@@ -99,7 +99,7 @@ const GalleryRow = ({ images, direction, speed = 40, speedMultiplier }: GalleryR
       <motion.div
         className="flex gap-4"
         animate={{
-          x: direction === "left" ? [0, -150 + "%"] : [-150 + "%", 0],
+          x: direction === "left" ? [0, "-150%"] : ["-150%", 0],
         }}
         transition={{
           x: {
@@ -116,7 +116,7 @@ const GalleryRow = ({ images, direction, speed = 40, speedMultiplier }: GalleryR
         {[...images, ...images].map((image, index) => (
           <motion.div
             key={`${image.src}-${index}`}
-            className="relative flex-shrink-0 w-[200px] h-[200px] md:w-[300px] md:h-[200px] group cursor-pointer overflow-hidden"
+            className="relative flex-shrink-0 w-[200px] h-[200px] md:w-[400px] md:h-[300px] group cursor-pointer overflow-hidden"
             whileHover={{ scale: 1.05, zIndex: 10 }}
             transition={{ duration: 0.2 }}
           >
@@ -231,13 +231,13 @@ const InfiniteGallery = () => {
       </div>
 
 
-      <div className="absolute left-0 top-0 bottom-0 w-48 md:w-64 lg:w-80 pointer-events-none z-10">
+      <div className="hidden md:block absolute left-0 top-0 bottom-0 w-48 md:w-64 lg:w-80 pointer-events-none z-10">
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/50 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/20 to-transparent" />
       </div>
 
-      <div className="absolute right-0 top-0 bottom-0 w-48 md:w-64 lg:w-80 pointer-events-none z-10">
+      <div className=" hidden md:block absolute right-0 top-0 bottom-0 w-48 md:w-64 lg:w-80 pointer-events-none z-10">
         <div className="absolute inset-0 bg-gradient-to-l from-background via-background/95 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-l from-background/80 via-background/50 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-l from-background/60 via-background/20 to-transparent" />
