@@ -12,22 +12,22 @@ const faqs = [
       {
         question: "How do I register my team for a tournament?",
         answer:
-          "Registration is simple! Navigate to the Events page, select your desired tournament, and click 'Register Now'. You'll be redirected to our Google Forms registration where you need to fill in team details, player IGNs, and contact information. Make sure all team members have valid IDs.",
+          "Registration is quick and easy! Head to the Events page, choose your desired tournament, and click Register Now. You’ll be redirected to Upstop, where you’ll need to fill in your team details, player IGNs, and contact information. Please ensure that all team members have valid IDs before registering.",
       },
       {
         question: "What is the registration fee?",
         answer:
-          "Registration fees vary by tournament: BGMI Championship - ₹500/team, Valorant Masters - ₹750/team, Free Fire League - ₹400/team. Payment instructions will be provided after form submission. Early bird discounts may apply!",
+          "There is no registration fee to participate. All tournaments hosted by us are completely free to enter. Simply register your team through the Events page and follow the provided instructions to complete your registration.",
       },
       {
         question: "Can I change my team members after registration?",
         answer:
-          "Yes, you can make roster changes up to 24 hours before the tournament begins. Contact our support team with the original team leader's details and the new player information. A maximum of 2 substitutions are allowed.",
+          "No, team rosters are final once registration is completed. Please ensure that all player details are accurate before submitting your registration, as no changes or substitutions will be permitted after registration.",
       },
       {
         question: "Is there an age limit for participants?",
         answer:
-          "Yes, participants must be at least 15 years old for Free Fire, and 16 years old for BGMI and Valorant tournaments. Valid government ID proof will be required during check-in.",
+          "Yes. The tournament is open to school and college students, as well as other eligible participants under the age of 28. All players must carry a valid government-issued ID or institutional ID for verification during check-in.",
       },
     ],
   },
@@ -35,19 +35,14 @@ const faqs = [
     category: "Rules & Gameplay",
     questions: [
       {
-        question: "What devices are allowed for mobile tournaments?",
+        question: "What devices are allowed/provided?",
         answer:
-          "For BGMI and Free Fire, only mobile phones are allowed - no tablets, iPads, or emulators. Players must use their own devices. External triggers, gamepads, or any physical attachments are strictly prohibited.",
+          "For mobile tournaments (BGMI, Free Fire, Clash Royale), only mobile phones are allowed - no tablets/iPads. Players must use their own devices. For PC/Console titles (Valorant, Tekken 8, EAFC, F1), high-end equipment is provided at the venue.",
       },
       {
         question: "What happens if a player disconnects during a match?",
         answer:
           "If a player disconnects, the match will continue. Teams are given a 5-minute grace period to reconnect. If the issue persists, our technical team will assess whether a rematch is warranted. This decision is final.",
-      },
-      {
-        question: "How are tie-breakers handled?",
-        answer:
-          "Tie-breakers are resolved based on: 1) Total kills, 2) Average placement, 3) Head-to-head results, 4) Chicken dinners/wins. If still tied, a sudden death match will be played.",
       },
       {
         question: "What behavior can lead to disqualification?",
@@ -62,17 +57,12 @@ const faqs = [
       {
         question: "How and when are prizes distributed?",
         answer:
-          "Prize money is distributed within 7-14 business days after the tournament concludes. Winners need to provide valid bank account details and complete KYC verification. Physical prizes (if any) will be shipped within 30 days.",
-      },
-      {
-        question: "Are there any taxes on prize money?",
-        answer:
-          "Yes, TDS (Tax Deducted at Source) of 30% will be deducted on prizes exceeding ₹10,000 as per Indian tax laws. Winners will receive Form 16A for tax filing purposes.",
+          "Winners need to provide valid bank account details and complete KYC verification.",
       },
       {
         question: "What other rewards are there besides prize money?",
         answer:
-          "Winners receive exclusive QUANTICA merchandise, gaming peripherals from sponsors, certificates, trophies, and potential recruitment opportunities with professional esports organizations. Top performers may also get streaming deals!",
+          "Winners receive exclusive QUANTICA merchandise, gaming peripherals from sponsors, certificates, trophies, and potential recruitment opportunities with professional esports organizations.",
       },
     ],
   },
@@ -92,7 +82,7 @@ const faqs = [
       {
         question: "What should I bring on match day?",
         answer:
-          "For LAN events: Valid government ID, your registered mobile device (fully charged), earphones/headphones, charger, and a positive attitude! For Valorant, PCs are provided at the venue.",
+          "For LAN events: Valid government ID, your registered mobile device (if applicable, fully charged), earphones/headphones, charger, and a positive attitude! For PC titles, standard peripherals are provided, but you may bring your own mouse/keyboard/headset if compatible.",
       },
     ],
   },

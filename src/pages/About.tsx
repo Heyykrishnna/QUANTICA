@@ -6,44 +6,34 @@ import DraggableCardDemo from "../components/Draggable";
 
 const team = [
   {
-    name: "Arjun Verma",
-    role: "Founder & CEO",
+    name: "Deepanshu Chaudhary",
+    role: "Founder",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
   },
   {
-    name: "Priya Sharma",
+    name: "Sarabjeet singh",
     role: "Tournament Director",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
-  },
-  {
-    name: "Rahul Singh",
-    role: "Technical Lead",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-  },
-  {
-    name: "Ananya Patel",
-    role: "Marketing Head",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
   },
   {
-    name: "Arjun Verma",
-    role: "Founder & CEO",
+    name: "Somil Thakur",
+    role: "Marketing Head",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+  },
+  {
+    name: "Kapish Rohilla",
+    role: "Technical Lead",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
+  },
+  {
+    name: "Neelanshu karn",
+    role: "Sponsorship Head",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
   },
   {
-    name: "Priya Sharma",
-    role: "Tournament Director",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
-  },
-  {
-    name: "Rahul Singh",
-    role: "Technical Lead",
+    name: "Manas Saxena",
+    role: "Outreach Head",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
-  },
-  {
-    name: "Ananya Patel",
-    role: "Marketing Head",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
   },
 ];
 const values = [
@@ -87,14 +77,12 @@ const About = () => {
             <p className="text-primary uppercase tracking-[0.3em] text-sm mb-4">
               About Us
             </p>
-            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-8">
-              <GlitchText text="WE ARE QUANTICA" className="text-[40px] md:text-9xl" />
+            <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-8">
+              <GlitchText text="WE ARE QUANTICA" className="text-[40px] md:text-7xl" />
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground">
               Delhi NCR's pioneering esports organization, dedicated to
-              elevating competitive gaming to unprecedented heights. Since 
-              inception, we've been on a mission to create the biggest and most
-              electrifying esports tournaments in the region.
+              elevating competitive gaming to unprecedented heights.
             </p>
           </motion.div>
         </div>
@@ -113,23 +101,13 @@ const About = () => {
               </h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
-                  Founded in 2023, QUANTICA emerged from a shared passion for
-                  competitive gaming and a vision to put Delhi NCR on the global
-                  esports map. What started as a dream among friends has evolved
-                  into the region's most anticipated esports organization.
+                  Team Sage emerged in September 2025 with a single, unwavering purpose: to redefine the gaming experience. More than an organization, we became a collective driven by passion, precision, and the relentless pursuit of competitive excellence.
                 </p>
                 <p>
-                  We recognized the immense talent in our region that lacked a
-                  proper platform to shine. QUANTICA was born to bridge this
-                  gap, providing professional-grade tournaments where aspiring
-                  esports athletes can prove their worth.
+                  By December 2025, that drive evolved into a vision called QUANTICA—a tournament imagined as the ultimate proving ground for gamers across Delhi NCR. What began as an ambitious concept quickly transformed into an obsession: to build something bigger, bolder, and unforgettable.
                 </p>
                 <p>
-                  Today, we host multiple flagship tournaments across BGMI,
-                  Valorant, and Free Fire, with prize pools exceeding ₹10 lakhs.
-                  Our events have attracted hundreds of teams and thousands of
-                  spectators, establishing QUANTICA as the premier esports brand
-                  in Delhi NCR.
+                  Defying limitations and expectations, Team Sage turned vision into reality. Now, in February 2026, QUANTICA rises as one of the most anticipated esports spectacles in the region—powered by resilience, fueled by passion, and built for those who live for the game.
                 </p>
               </div>
             </motion.div>
@@ -244,7 +222,7 @@ const About = () => {
               viewport={{ once: true }}
             >
               <p className="text-3xl md:text-6xl font-bold text-primary mb-2">
-                10+
+                8+
               </p>
               <p className="text-muted-foreground uppercase tracking-wider text-sm">
                 Events Hosted
@@ -257,7 +235,7 @@ const About = () => {
               transition={{ delay: 0.1 }}
             >
               <p className="text-3xl md:text-6xl font-bold text-secondary mb-2">
-                500+
+                2K+
               </p>
               <p className="text-muted-foreground uppercase tracking-wider text-sm">
                 Players
@@ -270,7 +248,7 @@ const About = () => {
               transition={{ delay: 0.2 }}
             >
               <p className="text-3xl md:text-6xl font-bold text-primary mb-2">
-                ₹25L+
+                ₹4L+
               </p>
               <p className="text-muted-foreground uppercase tracking-wider text-sm">
                 Prize Distributed
@@ -283,7 +261,7 @@ const About = () => {
               transition={{ delay: 0.3 }}
             >
               <p className="text-3xl md:text-6xl font-bold text-secondary mb-2">
-                50K+
+                1K+
               </p>
               <p className="text-muted-foreground uppercase tracking-wider text-sm">
                 Community Members
