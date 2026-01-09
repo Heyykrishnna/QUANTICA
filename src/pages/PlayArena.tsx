@@ -17,7 +17,7 @@ const games: Game[] = [
     {
     id: "superbros",
     name: "Super Luigi Bros",
-    icon: "https://upload.wikimedia.org/wikipedia/en/b/be/Luigi_by_Shigehisa_Nakaue.png",
+    icon: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1767979054/mario-8bit_qrnhc1.jpg",
     url: "https://www.retrogames.cc/embed/43803-super-luigi-bros-by-thenintendude64.html",
     color: "#2196F3",
     type: 'iframe'
@@ -33,7 +33,7 @@ const games: Game[] = [
   {
     id: "tekken",
     name: "Tekken 3",
-    icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDNQEVrVDHXhFpl5CUta_CmkkpNph-IJP2QA&s",
+    icon: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1767979054/tekken_rf6z2n.jpg",
     url: "https://www.retrogames.cc/embed/40238-tekken-3.html",
     color: "#4CAF50",
     type: 'iframe'
@@ -41,7 +41,7 @@ const games: Game[] = [
   {
     id: "contra",
     name: "Contra",
-    icon: "https://1000logos.net/wp-content/uploads/2020/09/Contra-Logo.png",
+    icon: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1767979054/contra-8bit_lb9cij.jpg",
     url: "https://www.retrogames.cc/embed/16841-contra-usa.html",
     color: "#2196F3",
     type: 'iframe'
@@ -165,7 +165,7 @@ const PlayArena = () => {
                 <h2 className="text-xl font-bold text-primary mb-6 uppercase tracking-wider" style={{ fontFamily: "'Press Start 2P', monospace" }}>
                   Game Library
                 </h2>
-                <div className="flex flex-row lg:flex-col gap-4 justify-center lg:justify-start flex-wrap">
+                <div className="grid grid-cols-2 gap-4">
                   {games.map((game) => (
                     <GameCartridge
                       key={game.id}
@@ -267,7 +267,7 @@ const PlayArena = () => {
                       </div>
                     )}
                   </div>
-                
+                  
                   <div className="mt-6 flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-2">
@@ -297,10 +297,10 @@ const PlayArena = () => {
                     <button
                       onClick={handleReset}
                       disabled={!currentGame}
-                      className="cyber-btn-outline text-sm px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/20 transition-all"
+                      className="cyber-btn-outline text-xs px-10 py-5 disabled:opacity-70 disabled:cursor-not-allowed"
                       style={{ fontFamily: "'Press Start 2P', monospace" }}
                     >
-                      RESET GAME
+                      Reset Game
                     </button>
                   </div>
                 </div>
