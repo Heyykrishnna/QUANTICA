@@ -229,6 +229,27 @@ const Contact = () => {
             />
           </motion.div>
         </div>
+        <div className="container mx-auto px-4 py-24">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold text-foreground">
+              Want to win <span className="text-primary">exciting goodies?</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto pt-4 pb-16">
+              Fill out the feedback form below and we'll get back to you as soon as possible.
+            </p>
+            <a href="https://forms.gle/1etR6SeTA9njygFb8" target="_blank" rel="noopener noreferrer">
+              <button type="submit" className="cyber-btn w-[100] flex w-full items-center justify-center gap-2">
+                <Send size={18} />
+                Submit Form
+              </button>
+            </a>
+          </motion.div>
+        </div>
       </section>
     </PageTransition>
   );
