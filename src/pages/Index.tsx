@@ -7,10 +7,8 @@ import PageTransition from "../components/PageTransition";
 import SponsorsSection from "../components/SponsorsSection";
 import FAQSection from "../components/FAQSection";
 import CountdownTimer from "../components/CountdownTimer";
-// import GallerySection from "../components/GallerySection";
 import LiveStreamSection from "../components/LiveStreamSection";
 import PastTournaments from "@/components/PastTournaments";
-import ParallaxGallery from "@/components/ParallaxGallery";
 import FeedbackSection from "@/components/FeedbackSection";
 import {
   Carousel,

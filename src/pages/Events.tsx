@@ -8,6 +8,7 @@ import { events as allEvents } from "@/data/events";
 const Events = () => {
   return (
     <PageTransition>
+
       { }
       <section className="pt-32 pb-16 relative">
         <div className="absolute inset-0 grid-bg opacity-10" />
@@ -60,6 +61,9 @@ const Events = () => {
       { }
       <section className="py-24 relative">
         <div className="container mx-auto px-4">
+          <h2 className="text-center text-4xl md:text-5xl font-bold text-foreground leading-tight mb-12">
+            Choose Your <span className="text-primary text-[32px] md:text-[48px]">GameMode</span>
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {allEvents.map((event, index) => (
               <motion.div
