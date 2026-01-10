@@ -963,9 +963,9 @@ The Organising Team and Match Officials reserve complete authority over the tour
 decisions taken shall be final and binding, and no disputes will be entertained after the
 conclusion of a match.`,
   },
-  f126: {
-    title: "F1 26",
-    game: "F1 26",
+  f125: {
+    title: "F1 25",
+    game: "F1 25",
     tagline: "The Ultimate Racing Experience",
     date: "7-8 Feb 2026",
     time: "11:00 AM - 9:00 PM",
@@ -994,7 +994,7 @@ conclusion of a match.`,
       { day: "Day 2 (Feb 8)", events: "Semi Finals & Finals" },
     ],
     registerLink: "#register",
-    rulebook: "/rulebook/f126-rules.pdf",
+    rulebook: "/rulebook/f125-rules.pdf",
     rulebookText: `QUANTICA FEST
 
 F1 25 – Tournament Rulebook
