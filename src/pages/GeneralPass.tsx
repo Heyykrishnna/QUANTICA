@@ -7,22 +7,22 @@ import GlitchText from "@/components/GlitchText";
 const GeneralPass = () => {
   const features = [
     {
-      icon: <Sparkles className="w-6 h-6 text-primary" />,
+      src: "https://res.cloudinary.com/dxo4ulvnf/image/upload/v1767973388/WhatsApp_Image_2026-01-09_at_16.55.33_qa9qpk.jpg",
       title: "All-Area Access",
       desc: "Get access to all tournament zones, spectator arenas, and cultural event areas.",
     },
     {
-      icon: <Zap className="w-6 h-6 text-secondary" />,
+      src: "https://res.cloudinary.com/dxo4ulvnf/image/upload/v1767974506/WhatsApp_Image_2026-01-09_at_16.55.35_m6hwta.jpg",
       title: "Live Spectating",
       desc: "Watch the top teams battle it out live on massive screens with professional commentary.",
     },
     {
-      icon: <Shield className="w-6 h-6 text-primary" />,
+      src: "https://res.cloudinary.com/dxo4ulvnf/image/upload/v1767973316/Screenshot_2026-01-09_at_9.02.22_PM_vjl86g.png",
       title: "Side Activities",
       desc: "Participate in mini-games, quizzes, and sponsor booths to win exclusive merchandise.",
     },
     {
-      icon: <Ticket className="w-6 h-6 text-secondary" />,
+      src: "https://res.cloudinary.com/dxo4ulvnf/image/upload/v1767973316/Screenshot_2026-01-09_at_8.58.59_PM_vojjgg.png",
       title: "Cultural Night",
       desc: "Entry to the star-studded cultural night and DJ performance after the matches.",
     },
@@ -65,10 +65,10 @@ const GeneralPass = () => {
             <span className="text-secondary text-sm font-bold uppercase tracking-wider px-4 py-1 border border-secondary inline-block mb-4">
               Official Entry Pass
             </span>
-            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-8">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-8">
               <GlitchText text="STEP INTO QUANTICA" />
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl">
+            <p className="text-md md:text-lg text-muted-foreground mb-8 max-w-2xl">
               Experience the ultimate gaming festival. Spectate battles, enjoy the vibe, and be part of the legacy.
             </p>
             
@@ -77,13 +77,13 @@ const GeneralPass = () => {
                 href="https://unstop.com/o/gra7Eck?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="cyber-btn inline-block text-lg px-8 py-4"
+                className="cyber-btn inline-block text-md px-8 py-4"
               >
                 Buy Pass — ₹100
               </a>
               <div className="flex items-center gap-2 px-6 py-4 border border-border bg-black/40 backdrop-blur-sm clip-corner">
-                <Calendar className="w-5 h-5 text-primary" />
-                <span className="text-foreground font-semibold">7-8 Feb 2026</span>
+                <Calendar className="w-4 h-4 text-primary" />
+                <span className="text-foreground text-md font-semibold">7-8 Feb 2026</span>
               </div>
             </div>
           </motion.div>
@@ -115,8 +115,8 @@ const GeneralPass = () => {
                 transition={{ delay: index * 0.1 }}
                 className="bg-background/50 border border-border p-6 hover:border-primary/50 transition-colors group clip-corner"
               >
-                <div className="mb-4 bg-black/40 w-12 h-12 flex items-center justify-center rounded-sm">
-                  {feature.icon}
+                <div className="mb-4 bg-black/40 w-64 h-64 flex items-center justify-center rounded-sm mb-4">
+                  <img src={feature.src} alt={feature.title} className="w-64 h-64 object-cover"/>
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
                   {feature.title}
