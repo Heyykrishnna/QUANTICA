@@ -1273,8 +1273,8 @@ const EventDetail = () => {
             <p className="text-xl text-muted-foreground mb-8">
               {event.tagline}
             </p>
-           <a
-              href="https://unstop.com/"
+            <a
+              href={event.registrationUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="cyber-btn inline-block"
@@ -1482,7 +1482,7 @@ const EventDetail = () => {
               Limited slots available. Register now to secure your spot in {event.title}.
             </p>
             <a
-              href="https://unstop.com/"
+              href={event.registrationUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="cyber-btn inline-block"
