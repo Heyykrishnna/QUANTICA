@@ -99,19 +99,13 @@ const Contact = () => {
                 </h3>
                 <div className="flex gap-4">
                   <a
-                    href="#"
+                    href="https://www.instagram.com/quantica.fest/"
                     className="w-12 h-12 border border-border hover:border-primary hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-all"
                   >
                     <Instagram size={20} />
                   </a>
                   <a
-                    href="#"
-                    className="w-12 h-12 border border-border hover:border-primary hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-all"
-                  >
-                    <Twitter size={20} />
-                  </a>
-                  <a
-                    href="#"
+                    href="https://www.youtube.com/@SageClubRU"
                     className="w-12 h-12 border border-border hover:border-primary hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-all"
                   >
                     <Youtube size={20} />

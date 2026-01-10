@@ -30,25 +30,20 @@ const Footer = () => {
             </p>
             <div className="flex gap-4 mt-6">
               <a
-                href="#"
+                href="https://www.instagram.com/quantica.fest/"
                 className="w-10 h-10 flex items-center justify-center border border-border hover:border-primary hover:text-primary transition-colors"
               >
                 <FiInstagram size={18} />
               </a>
+
               <a
-                href="#"
-                className="w-10 h-10 flex items-center justify-center border border-border hover:border-primary hover:text-primary transition-colors"
-              >
-                <FaXTwitter size={18} />
-              </a>
-              <a
-                href="#"
+                href="https://www.youtube.com/@SageClubRU"
                 className="w-10 h-10 flex items-center justify-center border border-border hover:border-primary hover:text-primary transition-colors"
               >
                 <FaYoutube size={18} />
               </a>
               <a
-                href="#"
+                href="mailto:quantica.fest@gmail.com"
                 className="w-10 h-10 flex items-center justify-center border border-border hover:border-primary hover:text-primary transition-colors"
               >
                 <IoMailOpenSharp size={18} />

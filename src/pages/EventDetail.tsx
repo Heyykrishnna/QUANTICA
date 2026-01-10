@@ -833,7 +833,7 @@ disqualification.
     prizePool: "₹15,000",
     teams: "48",
     format: "1v1",
-    entryFee: "₹150",
+    entryFee: "Free",
     image: "https://res.cloudinary.com/dxo4ulvnf/image/upload/v1768036271/fifa_d267yz.jpg",
     color: "cyan",
     registrationUrl: "https://unstop.com/c/sage-rishihood-university-1848390",
@@ -963,9 +963,9 @@ The Organising Team and Match Officials reserve complete authority over the tour
 decisions taken shall be final and binding, and no disputes will be entertained after the
 conclusion of a match.`,
   },
-  f125: {
-    title: "F1 25",
-    game: "F1 25",
+  f126: {
+    title: "F1 26",
+    game: "F1 26",
     tagline: "The Ultimate Racing Experience",
     date: "7-8 Feb 2026",
     time: "11:00 AM - 9:00 PM",
@@ -994,7 +994,7 @@ conclusion of a match.`,
       { day: "Day 2 (Feb 8)", events: "Semi Finals & Finals" },
     ],
     registerLink: "#register",
-    rulebook: "/rulebook/f125-rules.pdf",
+    rulebook: "/rulebook/f126-rules.pdf",
     rulebookText: `QUANTICA FEST
 
 F1 25 – Tournament Rulebook
@@ -1293,7 +1293,6 @@ const EventDetail = () => {
         </div>
       </section>
       { }
-      {slug !== 'generalpass' && (
       <section className="py-12 bg-card border-y border-border">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
@@ -1322,7 +1321,7 @@ const EventDetail = () => {
               <Trophy className={`w-6 h-6 ${textColor}`} />
               <div>
                 <p className="text-foreground font-semibold">
-                  {(event as any).prizePool}
+                  {event.prizePool}
                 </p>
                 <p className="text-muted-foreground text-xs">Prize Pool</p>
               </div>
@@ -1340,9 +1339,7 @@ const EventDetail = () => {
           </div>
         </div>
       </section>
-      )}
       { }
-      {slug !== 'generalpass' && (
       <section className="py-24">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -1359,7 +1356,7 @@ const EventDetail = () => {
                 Prize Distribution
               </h3>
               <div className="space-y-4">
-                {(event as any).prizeDistribution.map((prize: any, index: number) => (
+                {event.prizeDistribution.map((prize, index) => (
                   <div
                     key={index}
                     className="flex justify-between items-center py-3 border-b border-border last:border-0"
@@ -1386,7 +1383,7 @@ const EventDetail = () => {
                 Schedule
               </h3>
               <div className="space-y-4">
-                {(event as any).schedule.map((item: any, index: number) => (
+                {event.schedule.map((item, index) => (
                   <div key={index} className="py-3 border-b border-border last:border-0">
                     <p className="text-foreground font-semibold">{item.day}</p>
                     <p className="text-muted-foreground text-sm">
@@ -1410,7 +1407,7 @@ const EventDetail = () => {
                 Rules & Guidelines
               </h3>
               <div className="space-y-3">
-                {(event as any).rules.map((rule: any, index: number) => (
+                {event.rules.map((rule, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <Check className={`w-4 h-4 ${textColor} mt-0.5 flex-shrink-0`} />
                     <span className="text-muted-foreground text-sm">{rule}</span>
@@ -1421,9 +1418,7 @@ const EventDetail = () => {
           </div>
         </div>
       </section>
-      )}
       { }
-      {slug !== 'generalpass' && (
       <section className="py-12 bg-card relative border-y border-border">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -1436,9 +1431,9 @@ const EventDetail = () => {
               <h3 className={`text-2xl font-bold text-foreground ${textColor}`}>
                 OFFICIAL RULEBOOK
               </h3>
-              {!(event as any).rulebookText && (event as any).rulebook && (
+              {!(event as any).rulebookText && event.rulebook && (
                 <a
-                  href={(event as any).rulebook}
+                  href={event.rulebook}
                   target="_blank"
                   rel="noreferrer"
                   className={`text-xs uppercase tracking-wider ${textColor} hover:underline`}
@@ -1460,7 +1455,7 @@ const EventDetail = () => {
                 </div>
               ) : (
                 <iframe
-                  src={`${(event as any).rulebook}#toolbar=0&navpanes=0&scrollbar=0`}
+                  src={`${event.rulebook}#toolbar=0&navpanes=0&scrollbar=0`}
                   className="w-full h-full"
                   title={`${event.title} Rulebook`}
                 />
@@ -1474,9 +1469,7 @@ const EventDetail = () => {
           </motion.div>
         </div>
       </section>
-      )}
       { }
-      {event.registrationUrl && slug !== 'generalpass' && (
       <section id="register" className="py-24 bg-card relative">
         <div className="absolute inset-0 grid-bg opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
@@ -1491,7 +1484,7 @@ const EventDetail = () => {
             </h2>
             <p className="text-muted-foreground mb-6">
               Entry Fee: <span className="text-foreground font-bold">{event.entryFee}</span> |
-              Format: <span className="text-foreground font-bold">{(event as any).format}</span>
+              Format: <span className="text-foreground font-bold">{event.format}</span>
             </p>
             <p className="text-muted-foreground mb-8">
               Limited slots available. Register now to secure your spot in {event.title}.
@@ -1507,9 +1500,7 @@ const EventDetail = () => {
           </motion.div>
         </div>
       </section>
-      )}
     </PageTransition>
   );
 };
 export default EventDetail;
-
