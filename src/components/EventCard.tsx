@@ -51,7 +51,7 @@ const EventCard = ({
           />
           <div className="absolute inset-0 bg-background/20" />
           <div className="absolute top-0 left-0 w-48 h-48 bg-[radial-gradient(circle_at_top_left,rgba(0,0,0,0.95)_0%,transparent_70%)] pointer-events-none" />
-          
+
           <div className="absolute top-4 left-4 drop-shadow-[0_16px_32px_rgba(0,0,0,0.85)]">
             <img
               src={gameLogo}
@@ -83,7 +83,7 @@ const EventCard = ({
               View Details
               <ArrowRight size={16} />
             </Link>
-            {/* {registrationUrl && (
+            {registrationUrl && (
               <a
                 href={registrationUrl}
                 target="_blank"
@@ -92,7 +92,7 @@ const EventCard = ({
               >
                 <span>Register Now</span>
               </a>
-            )} */}
+            )}
           </div>
         </div>
       </div>

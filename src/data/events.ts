@@ -22,7 +22,7 @@ export const events = [
         slug: "valorant",
         color: "magenta" as const,
         status: "registration starting soon",
-        registrationUrl: "https://forms.gle/valorant2026",
+        registrationUrl: "https://unstop.com/o/K3XE1FN?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events",
         gameLogo: "https://upload.wikimedia.org/wikipedia/commons/f/fc/Valorant_logo_-_pink_color_version.svg",
     },
     {
@@ -35,7 +35,7 @@ export const events = [
         slug: "freefire",
         color: "cyan" as const,
         status: "registration starting soon",
-        registrationUrl: "https://forms.gle/freefire2026",
+        registrationUrl: "https://unstop.com/o/sAkQy9Z?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Competitions",
         gameLogo: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1768044638/gold_FF_max_logo_u0xyeq.png",
     },
     {
@@ -48,7 +48,7 @@ export const events = [
         slug: "efootball",
         color: "cyan" as const,
         status: "registration starting soon",
-        registrationUrl: "https://forms.gle/efootball2026",
+        registrationUrl: "https://unstop.com/o/2Y96fSD?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events",
         gameLogo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/EFootball_2022_logo_colored.svg/2048px-EFootball_2022_logo_colored.svg.png",
     },
     {
@@ -87,7 +87,7 @@ export const events = [
         slug: "f126",
         color: "cyan" as const,
         status: "registration starting soon",
-        registrationUrl: "https://forms.gle/f126",
+        registrationUrl: "https://unstop.com/o/rt2R94J?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events",
         gameLogo: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1768044450/F1_25_logo_e5d3qt.png",
     },
     {
@@ -100,7 +100,7 @@ export const events = [
         slug: "clashroyale",
         color: "cyan" as const,
         status: "registration starting soon",
-        registrationUrl: "https://forms.gle/clashroyale",
+        registrationUrl: "https://unstop.com/o/gra7Eck?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events",
         gameLogo: "https://1000logos.net/wp-content/uploads/2021/02/Clash-Royale-emblem.png",
     },
 ];
