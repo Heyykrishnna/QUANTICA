@@ -206,12 +206,12 @@ const Events = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <Calendar className="w-8 h-8 text-primary mx-auto mb-2" />
-              <p className="text-foreground font-semibold">Feburary 2026</p>
-              <p className="text-muted-foreground text-sm">Event Period</p>
+              <p className="text-foreground font-semibold">7-8 February 2026</p>
+              <p className="text-muted-foreground text-sm">Lan Finals</p>
             </div>
             <div>
               <MapPin className="w-8 h-8 text-secondary mx-auto mb-2" />
-              <p className="text-foreground font-semibold">Delhi NCR</p>
+              <p className="text-foreground font-semibold">Rishihood University</p>
               <p className="text-muted-foreground text-sm">Location</p>
             </div>
             <div>
@@ -221,8 +221,8 @@ const Events = () => {
             </div>
             <div>
               <Users className="w-8 h-8 text-secondary mx-auto mb-2" />
-              <p className="text-foreground font-semibold">144+ Teams</p>
-              <p className="text-muted-foreground text-sm">Expected</p>
+              <p className="text-foreground font-semibold">₹10L+</p>
+              <p className="text-muted-foreground text-sm">In-Kind Prize Pool Support</p>
             </div>
           </div>
         </div>

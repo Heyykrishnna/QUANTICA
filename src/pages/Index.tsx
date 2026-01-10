@@ -74,8 +74,9 @@ const Index = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            Where legends are born. The ultimate battleground for esports
-            warriors. Are you ready to claim your glory?
+            Built for competitors. Driven by skill. Defined by champions.
+            <br/>
+            <span className="text-primary">Organised by SAGE</span>
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
