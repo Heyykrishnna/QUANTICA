@@ -23,6 +23,14 @@ const games: Game[] = [
     type: 'iframe'
   },
   {
+    id: "dragonball",
+    name: "Dragon Ball Z",
+    icon: "https://i.pinimg.com/736x/3c/e1/a3/3ce1a31efac15a71472b00dadff0882a.jpg",
+    url: "https://www.retrogames.cc/embed/28096-dragon-ball-z-supersonic-warriors-k-projectg.html",
+    color: "#ff3700ff",
+    type: 'iframe'
+  },
+  {
     id: "Dodgeball",
     name: "Nekketsu Koukou Dodgeball Bu",
     icon: "https://s.pacn.ws/1/p/56/pa.93194.1.png?v=jhuzbe&width=800&crop=682,787",
