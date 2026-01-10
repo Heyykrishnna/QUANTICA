@@ -18,11 +18,11 @@ const sponsors = [
 	// 	logo: "https://www.svgrepo.com/show/303227/redbull-logo.svg",
 	// 	link: "https://www.redbull.com",
 	// },
-	{
-		name: "Meta Space",
-		logo: "https://metaspacechain.b-cdn.net/img/logo.png",
-		link: "https://metaspacechain.com/",
-	},
+	// {
+	// 	name: "Meta Space",
+	// 	logo: "https://metaspacechain.b-cdn.net/img/logo.png",
+	// 	link: "https://metaspacechain.com/",
+	// },
 	{
 		name: "Unstop",
 		logo: "https://d8it4huxumps7.cloudfront.net/uploads/images/unstop/svg/unstop-logo.svg",
