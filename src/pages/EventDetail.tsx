@@ -1273,7 +1273,12 @@ const EventDetail = () => {
             <p className="text-xl text-muted-foreground mb-8">
               {event.tagline}
             </p>
-            <a href={event.registerLink} className="cyber-btn inline-block">
+           <a
+              href="https://unstop.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cyber-btn inline-block"
+            >
               Register Now
             </a>
           </motion.div>
@@ -1293,8 +1298,8 @@ const EventDetail = () => {
             <div className="flex items-center gap-3">
               <Clock className={`w-6 h-6 ${textColor}`} />
               <div>
-                <p className="text-foreground font-semibold">{event.time}</p>
-                <p className="text-muted-foreground text-xs">Time</p>
+                <p className="text-foreground font-semibold">30th Jan</p>
+                <p className="text-muted-foreground text-xs">Registration Deadline</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
