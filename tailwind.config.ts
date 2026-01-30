@@ -120,6 +120,7 @@ export default {
         "slide-up": "slide-up 0.5s ease-out forwards",
         marquee: "marquee 3s linear infinite",
         "marquee-fast": "marquee 1s linear infinite",
+        "marquee-slow": "marquee 120s linear infinite",
         "glitch-1": "glitch-1 2s infinite linear alternate-reverse",
         "glitch-2": "glitch-2 3s infinite linear alternate-reverse",
       },

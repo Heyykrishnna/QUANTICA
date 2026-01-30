@@ -13,6 +13,7 @@ import PastTournaments from "@/components/PastTournaments";
 import FeedbackSection from "@/components/FeedbackSection";
 import InfiniteGallery from "@/components/InfiniteGallery";
 import ExpandableCardDemo from "@/components/expandable-card-demo-grid";
+import EventMarquee from "@/components/EventMarquee";
 import {
   Carousel,
   CarouselContent,
@@ -30,10 +31,11 @@ const stats = [
 ];
 const Index = () => {
   const [isHovering, setIsHovering] = useState(false);
-  
+
   return (
     <PageTransition>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-20">
+      <EventMarquee />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-20">
         <div className="absolute inset-0 z-0">
           <video
             autoPlay
@@ -165,10 +167,10 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       <section className="relative bg-gradient-to-b from-card to-background overflow-hidden">
         <div className="absolute inset-0 grid-bg opacity-5" />
-          <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 relative z-10">
           <div
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
@@ -191,7 +193,7 @@ const Index = () => {
                 <span className="relative z-10 text-primary-foreground uppercase tracking-[0.3em] flex items-center gap-3" style={{ transform: "skewX(3deg)" }}>
                   <GlitchText text="See What's On" />
                 </span>
-                
+
                 <motion.div
                   className="absolute inset-0 opacity-20"
                   animate={{
@@ -203,14 +205,14 @@ const Index = () => {
                     backgroundSize: "100% 4px",
                   }}
                 />
-                
+
                 {/* Corner accent lines */}
                 <div className="absolute top-0 left-4 w-12 h-0.5 bg-primary/50" />
                 <div className="absolute bottom-0 right-4 w-12 h-0.5 bg-primary/50" />
                 <div className="absolute top-0 left-0 w-0.5 h-8 bg-primary/50" style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%)" }} />
                 <div className="absolute bottom-0 right-0 w-0.5 h-8 bg-primary/50" style={{ clipPath: "polygon(0 0, 100% 100%, 0 100%)" }} />
               </motion.button>
-              
+
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: isHovering ? 1 : 0.6 }}
@@ -220,63 +222,63 @@ const Index = () => {
                 {isHovering ? "Live Beats. Electric Nights. Real Energy." : "Hover. Unlock the Next Drop."}
               </motion.p>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, height: 0, marginTop: 0 }}
-              animate={{ 
+              animate={{
                 opacity: isHovering ? 1 : 0,
                 height: isHovering ? "auto" : 0,
                 marginTop: isHovering ? 48 : 0,
               }}
-              transition={{ 
+              transition={{
                 duration: 0.5,
                 ease: [0.4, 0, 0.2, 1],
               }}
               className="overflow-hidden"
             >
-            <motion.div
-              initial={{ y: 20, scale: 0.95 }}
-              animate={{ 
-                y: isHovering ? 0 : 20,
-                scale: isHovering ? 1 : 0.95,
-              }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="relative"
-            >
-              {/* Glassmorphism container */}
-              <div className="relative backdrop-blur-xl bg-background/40 border border-primary/20 rounded-3xl p-8 shadow-2xl">
-                {/* Animated gradient border */}
-                <motion.div
-                  className="absolute inset-0 rounded-3xl opacity-50"
-                  animate={{
-                    background: isHovering
-                      ? [
+              <motion.div
+                initial={{ y: 20, scale: 0.95 }}
+                animate={{
+                  y: isHovering ? 0 : 20,
+                  scale: isHovering ? 1 : 0.95,
+                }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="relative"
+              >
+                {/* Glassmorphism container */}
+                <div className="relative backdrop-blur-xl bg-background/40 border border-primary/20 rounded-3xl p-8 shadow-2xl">
+                  {/* Animated gradient border */}
+                  <motion.div
+                    className="absolute inset-0 rounded-3xl opacity-50"
+                    animate={{
+                      background: isHovering
+                        ? [
                           "linear-gradient(45deg, transparent, rgba(var(--primary-rgb, 59, 130, 246), 0.3), transparent)",
                           "linear-gradient(90deg, transparent, rgba(var(--secondary-rgb, 168, 85, 247), 0.3), transparent)",
                           "linear-gradient(135deg, transparent, rgba(var(--primary-rgb, 59, 130, 246), 0.3), transparent)",
                         ]
-                      : "linear-gradient(45deg, transparent, transparent, transparent)"
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  style={{ pointerEvents: "none" }}
-                />
-                
-                {/* Corner accents */}
-                <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-primary rounded-tl-3xl" />
-                <div className="absolute top-0 right-0 w-20 h-20 border-r-2 border-t-2 border-secondary rounded-tr-3xl" />
-                <div className="absolute bottom-0 left-0 w-20 h-20 border-l-2 border-b-2 border-secondary rounded-bl-3xl" />
-                <div className="absolute bottom-0 right-0 w-20 h-20 border-r-2 border-b-2 border-primary rounded-br-3xl" />
-                
-                <div className="relative z-10">
-                  <ExpandableCardDemo />
+                        : "linear-gradient(45deg, transparent, transparent, transparent)"
+                    }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    style={{ pointerEvents: "none" }}
+                  />
+
+                  {/* Corner accents */}
+                  <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-primary rounded-tl-3xl" />
+                  <div className="absolute top-0 right-0 w-20 h-20 border-r-2 border-t-2 border-secondary rounded-tr-3xl" />
+                  <div className="absolute bottom-0 left-0 w-20 h-20 border-l-2 border-b-2 border-secondary rounded-bl-3xl" />
+                  <div className="absolute bottom-0 right-0 w-20 h-20 border-r-2 border-b-2 border-primary rounded-br-3xl" />
+
+                  <div className="relative z-10">
+                    <ExpandableCardDemo />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
       </section>
-      
+
       <section className="py-24 relative" id="tournaments">
         <div className="absolute inset-0 grid-bg opacity-10" />
         <div className="container mx-auto px-4 relative z-10">
