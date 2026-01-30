@@ -27,7 +27,6 @@ const eventData = {
     entryFee: "Free",
     image: "https://res.cloudinary.com/dxo4ulvnf/image/upload/v1768036375/bgmi_xs2dud.jpg",
     color: "cyan",
-    registrationUrl: "https://unstop.com/o/LAH4Pbq?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events",
     prizeDistribution: [
       { place: "1st Place", prize: "₹30,000" },
       { place: "2nd Place", prize: "₹12,500" },
@@ -199,7 +198,6 @@ Carry your name — with INGLU Esports beside it. 🔥`,
     entryFee: "Free",
     image: "https://res.cloudinary.com/dxo4ulvnf/image/upload/v1768036269/valorant_wvxtwf.jpg",
     color: "magenta",
-    registrationUrl: "https://unstop.com/o/K3XE1FN?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events",
     prizeDistribution: [
       { place: "1st Place", prize: "₹25,000" },
       { place: "2nd Place", prize: "₹7,000" },
@@ -485,7 +483,6 @@ Carry your name — with INGLU Esports beside it. 🔥`,
     entryFee: "Free",
     image: "https://res.cloudinary.com/dxo4ulvnf/image/upload/v1768036270/ff_bclrl6.jpg",
     color: "cyan",
-    registrationUrl: "https://unstop.com/o/sAkQy9Z?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Competitions",
     prizeDistribution: [
       { place: "1st Place", prize: "₹26,000" },
       { place: "2nd Place", prize: "₹7,000" },
@@ -1441,14 +1438,16 @@ const EventDetail = () => {
             <p className="text-xl text-muted-foreground mb-8">
               {event.tagline}
             </p>
-            <a
-              href={event.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cyber-btn inline-block"
-            >
-              Register Now
-            </a>
+            {(event as any).registrationUrl && (
+              <a
+                href={(event as any).registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cyber-btn inline-block"
+              >
+                Register Now
+              </a>
+            )}
           </motion.div>
         </div>
       </section>
@@ -1667,14 +1666,16 @@ const EventDetail = () => {
             <p className="text-muted-foreground mb-8">
               Limited slots available. Register now to secure your spot in {event.title}.
             </p>
-            <a
-              href={event.registrationUrl}
+            {(event as any).registrationUrl && (
+              <a
+                href={(event as any).registrationUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="cyber-btn inline-block"
             >
               Register via Unstop
             </a>
+            )}
           </motion.div>
         </div>
       </section>
