@@ -106,8 +106,8 @@ const Index = () => {
             <Link to="/events" className="cyber-btn">
               <span>Register Now</span>
             </Link>
-            <Link to="/about" className="cyber-btn-outline">
-              <span>Learn More</span>
+            <Link to="/results" className="cyber-btn-outline">
+              <span>View Results</span>
             </Link>
           </motion.div>
         </div>
