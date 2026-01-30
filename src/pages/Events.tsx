@@ -10,6 +10,8 @@ import { events as allEvents } from "@/data/events";
 import { useRef, useState, useLayoutEffect, useEffect } from "react";
 import GeneralPassSection from "@/components/GeneralPassSection";
 import RoadmapTimeline from "../components/RoadmapTimeline";
+import EventSchedule from "../components/EventSchedule";
+import EventDetailsModal from "../components/EventDetailsModal";
 
 type MiniGameLite = {
   title: string;
@@ -181,6 +183,24 @@ const MiniCard = ({ m }: { m: MiniGameLite }) => {
 
 const Events = () => {
   const [showRoadmap, setShowRoadmap] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const uniqueGameEvents = allEvents
+    .filter((event) => !event.slug.toLowerCase().includes('semi'))
+    .filter((event, index, self) =>
+      index === self.findIndex((e) => e.game === event.game)
+    );
+
+  const handleEventClick = (event: any) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedEvent(null), 300);
+  };
 
   return (
     <PageTransition>
@@ -287,6 +307,37 @@ const Events = () => {
         </div>
       </section> */}
 
+      {/* <section className="py-24 relative bg-card">
+        <div className="absolute inset-0 grid-bg opacity-5" />
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <p className="text-primary uppercase tracking-[0.3em] text-sm mb-4">
+              Timeline
+            </p>
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-4">
+              <GlitchText text="EVENT SCHEDULE" />
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Check out when your favorite games are happening
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <EventSchedule events={allEvents} onEventClick={handleEventClick} />
+          </motion.div>
+        </div>
+      </section> */}
+
       {/* Game Mode Selection */}
       <section className="pt-24 relative">
         <div className="container mx-auto px-4">
@@ -297,7 +348,7 @@ const Events = () => {
             Powered By <span className="text-secondary">Unstop</span>
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {allEvents.map((event, index) => (
+            {uniqueGameEvents.map((event, index) => (
               <motion.div
                 key={event.slug}
                 initial={{ opacity: 0, y: 30 }}
@@ -394,6 +445,13 @@ const Events = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Event Details Modal */}
+      <EventDetailsModal
+        event={selectedEvent}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </PageTransition >
   );
 };
