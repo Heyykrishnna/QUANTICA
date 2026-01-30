@@ -104,7 +104,14 @@ const EventSchedule = ({ events, onEventClick }: EventScheduleProps) => {
     return acc;
   }, {} as Record<string, Event[]>);
 
-  const days = Object.keys(eventsByDay).sort();
+  const days = Object.keys(eventsByDay).sort((a, b) => {
+    const [dayA, monthA, yearA] = a.split('/').map(Number);
+    const [dayB, monthB, yearB] = b.split('/').map(Number);
+    
+    if (yearA !== yearB) return yearA - yearB;
+    if (monthA !== monthB) return monthA - monthB;
+    return dayA - dayB;
+  });
   const LANE_HEIGHT = 100; // Height per lane in pixels
 
   return (

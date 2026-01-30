@@ -307,7 +307,7 @@ const Events = () => {
         </div>
       </section> */}
 
-      {/* <section className="py-24 relative bg-card">
+      <section className="py-24 relative bg-card">
         <div className="absolute inset-0 grid-bg opacity-5" />
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -336,7 +336,7 @@ const Events = () => {
             <EventSchedule events={allEvents} onEventClick={handleEventClick} />
           </motion.div>
         </div>
-      </section> */}
+      </section>
 
       {/* Game Mode Selection */}
       <section className="pt-24 relative">
