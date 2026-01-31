@@ -210,7 +210,7 @@ const EventSchedule = ({ events, onEventClick }: EventScheduleProps) => {
                         <div className="px-3 py-2 h-full flex flex-col justify-between">
                           <div>
                             <p className="font-bold text-sm line-clamp-1">
-                              {event.title}
+                              {event.game}
                             </p>
                             <p className="text-[10px] opacity-85 mt-0.5">
                               {event.venue}

@@ -86,7 +86,7 @@ export const events = [
 	},
 	{
 		title: "BGMI",
-		game: "BGMI",
+		game: "BGMI - Semi Finals",
 		date: "7 Feb 2026",
 		targetDate: "2026-02-07T11:00:00",
 		startTime: "11:00 AM",
@@ -113,7 +113,7 @@ export const events = [
 	},
 	{
 		title: "BGMI",
-		game: "BGMI",
+		game: "BGMI - Finals",
 		date: "8 Feb 2026",
 		targetDate: "2026-02-08T14:00:00",
 		startTime: "2:00 PM",
