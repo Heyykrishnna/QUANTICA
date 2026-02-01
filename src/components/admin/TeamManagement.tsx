@@ -46,10 +46,12 @@ const TeamManagement = ({ preSelectedEventId }: TeamManagementProps = {}) => {
   const fetchEvents = async () => {
     try {
       const { data } = await api.get<Event[]>('/events');
-      setEvents(data);
+      // Ensure data is an array before setting state
+      setEvents(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching events", error);
       toast.error("Failed to fetch events");
+      setEvents([]); // Set to empty array on error
     }
   };
 
@@ -126,7 +128,7 @@ const TeamManagement = ({ preSelectedEventId }: TeamManagementProps = {}) => {
             className="w-full px-4 py-3 bg-background border-2 border-border focus:border-primary outline-none text-foreground"
           >
             <option value="">Choose an event...</option>
-            {events.map((event) => (
+            {Array.isArray(events) && events.map((event) => (
               <option key={event.id} value={event.id}>
                 {event.name}
               </option>

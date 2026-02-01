@@ -14,6 +14,8 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Leaderboard from "./pages/Leaderboard";
 import Admin from "./pages/Admin";
+import RegistrationDesk from "./pages/RegistrationDesk";
+import AdminRegistration from "./pages/AdminRegistration";
 import PlayArena from "./pages/PlayArena";
 import GeneralPass from "./pages/GeneralPass";
 import NotFound from "./pages/NotFound";
@@ -44,6 +46,8 @@ const AnimatedRoutes = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/result" element={<Leaderboard />} />
         <Route path="/admin" element={<Admin />} />
+        {/* <Route path="/registration-desk" element={<RegistrationDesk />} />
+        <Route path="/admin/registration" element={<AdminRegistration />} /> */}
         <Route path="/play-arena" element={<PlayArena />} />
 
         {/* CA Portal Routes */}
@@ -58,6 +62,21 @@ const AnimatedRoutes = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
+  );
+};
+
+const Layout = () => {
+  const location = useLocation();
+  const showFooter = location.pathname !== '/registration-desk';
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main>
+        <AnimatedRoutes />
+      </main>
+      {showFooter && <Footer />}
+    </div>
   );
 };
 const App = () => {
@@ -116,13 +135,7 @@ const App = () => {
         {!isMobile && <TargetCursor targetSelector="button, a.cyber-btn, a.cyber-btn-outline, .cursor-target" />}
         <BrowserRouter>
           <SmoothScroll>
-            <div className="min-h-screen bg-background">
-              <Navbar />
-              <main>
-                <AnimatedRoutes />
-              </main>
-              <Footer />
-            </div>
+            <Layout />
             <Analytics />
           </SmoothScroll>
         </BrowserRouter>
