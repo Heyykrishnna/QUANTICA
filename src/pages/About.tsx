@@ -298,7 +298,7 @@ const additionalTeams = [
       {
         name: "Chirag Antil",
         role: "Operations Team",
-        image: "https://ik.imagekit.io/vdigjljlu/Upload%20a%20Clear%20Photograph%20(File%20responses)/IMG_20251219_013526_478(1)%20-%20Chirag%20Antil.jpg?updatedAt=1769665004071",
+        image: "https://ik.imagekit.io/jbckhvkvo/IMG_20251219_013527_126.jpg",
         linkedin: "https://www.linkedin.com/in/chiragantil",
         email: "chirag.a25125@nst.rishihood.edu.in",
       },
