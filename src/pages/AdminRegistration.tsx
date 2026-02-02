@@ -17,7 +17,7 @@ const AdminRegistration = () => {
   const [showEventFilter, setShowEventFilter] = useState(false);
 
   // Fetch teams from API
-  const { data: teams = [], isLoading } = useQuery({
+  const { data: rawTeams = [], isLoading } = useQuery({
     queryKey: ['admin-registration-teams', filter, selectedEventFilter, searchQuery],
     queryFn: () => registrationService.getTeams({
       eventId: selectedEventFilter !== 'all' ? selectedEventFilter : undefined,
@@ -28,6 +28,8 @@ const AdminRegistration = () => {
     // Polling for admin dashboard to keep it live
     refetchInterval: 5000
   });
+
+  const teams = Array.isArray(rawTeams) ? rawTeams : [];
 
   // Get unique events for filter
   const uniqueEvents = useMemo(() => {

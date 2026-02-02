@@ -24,7 +24,7 @@ const RegistrationDesk = () => {
   const [showEventFilter, setShowEventFilter] = useState(false);
 
   // Fetch teams from API
-  const { data: teams = [], isLoading } = useQuery({
+  const { data: rawTeams = [], isLoading } = useQuery({
     queryKey: ['registration-teams', selectedEventFilter, searchQuery],
     queryFn: () => registrationService.getTeams({
       eventId: selectedEventFilter !== 'all' ? selectedEventFilter : undefined,
@@ -33,6 +33,9 @@ const RegistrationDesk = () => {
     // Keep data fresh but allow background updates
     staleTime: 1000 * 30,
   });
+
+  // Safe check to ensure teams is an array
+  const teams = Array.isArray(rawTeams) ? rawTeams : [];
 
   // Update team mutation
   const updateTeamMutation = useMutation({

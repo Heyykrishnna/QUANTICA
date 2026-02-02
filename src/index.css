@@ -763,3 +763,75 @@
 .retro-glow {
   animation: retro-glow 2s ease-in-out infinite;
 }
+
+/* 3D Card Effects */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Custom Animations */
+@keyframes shine {
+  0% {
+    transform: translateX(-150%) skewX(12deg);
+  }
+  100% {
+    transform: translateX(150%) skewX(12deg);
+  }
+}
+
+.animate-shine {
+  animation: shine 1.5s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+@keyframes swing {
+  0% { transform: rotate(5deg); }
+  50% { transform: rotate(-5deg); }
+  100% { transform: rotate(5deg); }
+}
+
+.animate-swing {
+  animation: swing 3s ease-in-out infinite;
+}
+
+.lanyard-braid {
+  background-image: repeating-linear-gradient(
+      45deg,
+      hsla(0, 0%, 100%, 0.1) 0px,
+      hsla(0, 0%, 100%, 0.1) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      hsla(0, 0%, 100%, 0.1) 0px,
+      hsla(0, 0%, 100%, 0.1) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  background-size: 8px 8px;
+}

@@ -10,7 +10,7 @@ const streams = [
     viewers: "12.5K",
     isLive: false,
     embedId: "Dx7Q2p_a9WA",
-    thumbnail: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1768193111/ChatGPT_Image_Jan_12_2026_10_13_13_AM_egnjcp.png",
+    thumbnail: "https://ik.imagekit.io/jbckhvkvo/ChatGPT_Image_Jan_12_2026_10_13_13_AM_egnjcp.png",
     channel: "QUANTICA Official",
   },
   {
@@ -20,7 +20,7 @@ const streams = [
     viewers: "8.2K",
     isLive: false,
     embedId: "FGuCoDKRF5w",
-    thumbnail: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1768193111/ChatGPT_Image_Jan_12_2026_10_13_13_AM_egnjcp.png",
+    thumbnail: "https://ik.imagekit.io/jbckhvkvo/ChatGPT_Image_Jan_12_2026_10_13_13_AM_egnjcp.png",
     channel: "QUANTICA Esports",
   },
   // {
