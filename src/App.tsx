@@ -46,8 +46,8 @@ const AnimatedRoutes = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/result" element={<Leaderboard />} />
         <Route path="/admin" element={<Admin />} />
-        {/* <Route path="/registration-desk" element={<RegistrationDesk />} />
-        <Route path="/admin/registration" element={<AdminRegistration />} /> */}
+        <Route path="/registration-desk" element={<RegistrationDesk />} />
+        <Route path="/admin/registration" element={<AdminRegistration />} />
         <Route path="/play-arena" element={<PlayArena />} />
 
         {/* CA Portal Routes */}

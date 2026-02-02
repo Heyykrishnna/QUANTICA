@@ -47,7 +47,7 @@ const GeneralPass = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
         </div>
         <div className="absolute inset-0 scanlines pointer-events-none" />
-        
+
         <div className="container mx-auto px-4 relative z-10 mt-40">
           <Link
             to="/events"
@@ -56,7 +56,7 @@ const GeneralPass = () => {
             <ArrowLeft size={16} />
             Back to Events
           </Link>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -71,7 +71,7 @@ const GeneralPass = () => {
             <p className="text-md md:text-lg text-muted-foreground mb-8 max-w-2xl">
               Experience the ultimate gaming festival. Spectate battles, enjoy the vibe, and be part of the legacy.
             </p>
-            
+
             <div className="flex flex-wrap gap-4">
               <a
                 href="https://unstop.com/o/gra7Eck?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events"
@@ -116,7 +116,7 @@ const GeneralPass = () => {
                 className="bg-background/50 border border-border p-6 hover:border-primary/50 transition-colors group clip-corner"
               >
                 <div className="mb-4 bg-black/40 w-64 h-64 flex items-center justify-center rounded-sm mb-4">
-                  <img src={feature.src} alt={feature.title} className="w-64 h-64 object-cover"/>
+                  <img src={feature.src} alt={feature.title} className="w-64 h-64 object-cover" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
                   {feature.title}
@@ -142,13 +142,13 @@ const GeneralPass = () => {
                 <MapPin className="w-8 h-8 text-secondary" />
                 Event Details
               </h3>
-              
+
               <div className="space-y-6">
                 <div className="flex gap-4 items-start p-4 border-l-2 border-primary bg-card/30">
                   <div className="min-w-[100px]">
                     <span className="text-sm text-muted-foreground uppercase tracking-wider block mb-1">Venue</span>
                     <span className="font-bold text-foreground">Rishihood University</span>
-                    <br/>
+                    <br />
                     <span className="text-sm text-muted-foreground">Sonipat, Delhi NCR</span>
                   </div>
                 </div>
@@ -157,19 +157,19 @@ const GeneralPass = () => {
                   <div className="min-w-[100px]">
                     <span className="text-sm text-muted-foreground uppercase tracking-wider block mb-1">Timings</span>
                     <span className="font-bold text-foreground">10:00 AM - 08:00 PM</span>
-                    <br/>
+                    <br />
                     <span className="text-muted-foreground">Gates open at 9:00 AM on both days.</span>
                   </div>
                 </div>
 
                 <div className="flex gap-4 items-start p-4 border-l-2 border-primary bg-card/30">
-                    <div className="min-w-[100px]">
-                        <span className="text-sm text-muted-foreground uppercase tracking-wider block mb-1">Price</span>
-                        <span className="font-bold text-foreground text-xl">₹100</span>
-                        <div className="text-sm text-muted-foreground flex items-center pt-2">
-                            <span className="bg-green-500/10 text-green-500 px-2 py-0.5 rounded text-xs border border-green-500/20">Early Bird Offer</span>
-                        </div>
+                  <div className="min-w-[100px]">
+                    <span className="text-sm text-muted-foreground uppercase tracking-wider block mb-1">Price</span>
+                    <span className="font-bold text-foreground text-xl">₹100</span>
+                    <div className="text-sm text-muted-foreground flex items-center pt-2">
+                      <span className="bg-green-500/10 text-green-500 px-2 py-0.5 rounded text-xs border border-green-500/20">Early Bird Offer</span>
                     </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -190,13 +190,13 @@ const GeneralPass = () => {
                   </li>
                 ))}
               </ul>
-              
+
               <div className="mt-8 pt-8 border-t border-border">
                 <p className="text-sm text-secondary mb-4">
                   By purchasing this pass, you agree to follow the code of conduct and university regulations.
                 </p>
                 <a
-                  href="https://unstop.com/o/gra7Eck?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events"
+                  href="https://unstop.com/p/quantica-2026-general-entry-pass-quantica-2026-sage-rishihood-university-1621633?utm_medium=Share&utm_source=deepacha45082&utm_campaign=Workshops"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="cyber-btn w-full text-center block"

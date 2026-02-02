@@ -104,13 +104,6 @@ const additionalTeams = [
         linkedin: "https://www.linkedin.com/in/arit-dey-39412136b/",
         email: "arit.d25002@design.rishihood.edu.in",
       },
-      {
-        name: "Prabhas",
-        role: "Design Team",
-        image: "https://ik.imagekit.io/vdigjljlu/Upload%20a%20Clear%20Photograph%20(File%20responses)/IMG_20260111_014558_083%20-%20Prabhas%20Kumar.jpg?updatedAt=1769665003142",
-        linkedin: "https://www.linkedin.com/in/prabhas-kumar-17129237a/",
-        email: "prabhas.k25056@csds.rishihood.edu.in",
-      },
     ],
   },
   {
@@ -276,11 +269,11 @@ const additionalTeams = [
         email: "aayush.k25011@nst.rishihood.edu.in",
       },
       {
-        name: "Saurabh",
+        name: "Subrat Kumar Sahu",
         role: "Events Team",
-        image: "https://ik.imagekit.io/vdigjljlu/Upload%20a%20Clear%20Photograph%20(File%20responses)/8FFDD2D9-1FD4-4C8F-8846-5A29A0C52094%20-%20Saurabh.jpeg",
-        linkedin: "https://www.linkedin.com/in/saurabh-yadav-53327a37a/",
-        email: "saurabh.25415@nst.rishihood.edu.in",
+        image: "https://ik.imagekit.io/vdigjljlu/Upload%20a%20Clear%20Photograph%20(File%20responses)/WhatsApp%20Image%202026-01-29%20at%2017.52.32.jpeg?updatedAt=1770010291789",
+        linkedin: "https://www.linkedin.com/me?trk=p_mwlite_feed-secondary_nav",
+        email: "subrat.s25547@nst.rishihood.edu.in",
       },
       {
         name: "Chirag Tyagi",

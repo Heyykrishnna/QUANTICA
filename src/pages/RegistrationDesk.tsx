@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import PageTransition from '../components/PageTransition';
 import GlitchText from '../components/GlitchText';
 import TeamListItem from '../components/registration/TeamListItem';
@@ -7,12 +8,13 @@ import TeamDetailsPanel from '../components/registration/TeamDetailsPanel';
 import OTPVerificationModal from '../components/registration/OTPVerificationModal';
 import TeamMembersModal from '../components/registration/TeamMembersModal';
 import { RegistrationTeam, VerificationStatus } from '../types/registration';
-import { dummyRegistrationTeams, generateSimulatedOTP, verifyOTP } from '../data/registrationData';
+import { generateSimulatedOTP, verifyOTP } from '../data/registrationData';
+import { registrationService } from '../services/registrationService';
 import { ClipboardList, Sparkles, Search, Filter, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const RegistrationDesk = () => {
-  const [teams, setTeams] = useState<RegistrationTeam[]>(dummyRegistrationTeams);
+  const queryClient = useQueryClient();
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [isOTPModalOpen, setIsOTPModalOpen] = useState(false);
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
@@ -21,9 +23,37 @@ const RegistrationDesk = () => {
   const [selectedEventFilter, setSelectedEventFilter] = useState<string>('all');
   const [showEventFilter, setShowEventFilter] = useState(false);
 
+  // Fetch teams from API
+  const { data: teams = [], isLoading } = useQuery({
+    queryKey: ['registration-teams', selectedEventFilter, searchQuery],
+    queryFn: () => registrationService.getTeams({
+      eventId: selectedEventFilter !== 'all' ? selectedEventFilter : undefined,
+      search: searchQuery || undefined
+    }),
+    // Keep data fresh but allow background updates
+    staleTime: 1000 * 30,
+  });
+
+  // Update team mutation
+  const updateTeamMutation = useMutation({
+    mutationFn: (data: { id: string; updates: any }) =>
+      registrationService.updateTeam(data.id, data.updates),
+    onSuccess: (updatedTeam) => {
+      queryClient.setQueryData(['registration-teams', selectedEventFilter, searchQuery], (old: RegistrationTeam[] | undefined) => {
+        return old ? old.map(t => t.id === updatedTeam.id ? updatedTeam : t) : [];
+      });
+      // Also invalidate to ensure full sync
+      queryClient.invalidateQueries({ queryKey: ['registration-teams'] });
+      toast.success('Team updated successfully');
+    },
+    onError: () => {
+      toast.error('Failed to update team');
+    }
+  });
+
   const selectedTeam = teams.find(t => t.id === selectedTeamId) || null;
 
-  // Get unique events for filter
+  // Get unique events for filter (derive from loaded teams or could be separate API)
   const uniqueEvents = useMemo(() => {
     const events = new Map<string, string>();
     teams.forEach(team => {
@@ -34,28 +64,29 @@ const RegistrationDesk = () => {
     return Array.from(events.entries()).map(([id, name]) => ({ id, name }));
   }, [teams]);
 
-  // Filter and search teams
-  const filteredTeams = useMemo(() => {
-    return teams.filter(team => {
-      // Event filter
-      if (selectedEventFilter !== 'all' && team.eventId !== selectedEventFilter) {
-        return false;
-      }
+  // Filter logic is now partially handled by API, but client-side filtering 
+  // can still apply for rapid interactions if we fetch all. 
+  // However, since we are passing filters to API, the 'teams' array is already filtered.
+  // BUT: The current API implementation returns filtered results. 
+  // Frontend code logic below was filtering `teams`. 
+  // Let's rely on the API for filtering to avoid double filtering mismatches, 
+  // OR if we fetch ALL teams initially, we filter locally.
+  // Given the `queryKey` includes filters, `teams` is already filtered.
+  // We can just use `teams` directly as `filteredTeams`.
 
-      // Search filter (team name or lead name)
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase();
-        const matchesTeamName = team.teamName.toLowerCase().includes(query);
-        const matchesLeadName = team.teamLeadName.toLowerCase().includes(query);
-        return matchesTeamName || matchesLeadName;
-      }
-
-      return true;
-    });
-  }, [teams, searchQuery, selectedEventFilter]);
+  const filteredTeams = teams;
 
   const handleUpdateTeam = (updatedTeam: RegistrationTeam) => {
-    setTeams(teams.map(t => t.id === updatedTeam.id ? updatedTeam : t));
+    // We need to extract what actually changed or send the whole object updates
+    // The API expects specific fields.
+    updateTeamMutation.mutate({
+      id: updatedTeam.id,
+      updates: {
+        checkInStatus: updatedTeam.checkInStatus,
+        verificationStatus: updatedTeam.verificationStatus,
+        members: updatedTeam.members
+      }
+    });
   };
 
   const handleToggleMember = (memberIndex: number) => {
@@ -75,6 +106,8 @@ const RegistrationDesk = () => {
 
   const handleOpenOTPModal = () => {
     if (selectedTeam) {
+      // For now still using simulated OTP generation on frontend
+      // In future move to backend
       const otp = generateSimulatedOTP(selectedTeam.teamLeadPhone);
       setGeneratedOTP(otp);
       setIsOTPModalOpen(true);
@@ -82,32 +115,41 @@ const RegistrationDesk = () => {
     }
   };
 
+  const verifyOTPMutation = useMutation({
+    mutationFn: (data: { id: string; status: VerificationStatus }) =>
+      registrationService.verifyTeam(data.id, data.status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['registration-teams'] });
+      toast.success('Phone number verified successfully!');
+    }
+  });
+
   const handleVerifyOTP = async (enteredOTP: string): Promise<boolean> => {
     if (!selectedTeam) return false;
 
     const isValid = verifyOTP(selectedTeam.teamLeadPhone, enteredOTP, generatedOTP);
 
     if (isValid) {
-      const updatedTeam = {
-        ...selectedTeam,
-        verificationStatus: VerificationStatus.Verified
-      };
-      handleUpdateTeam(updatedTeam);
-      toast.success('Phone number verified successfully!');
+      verifyOTPMutation.mutate({
+        id: selectedTeam.id,
+        status: VerificationStatus.Verified
+      });
       return true;
     }
 
     return false;
   };
 
-  const checkedInCount = teams.filter(t => t.isCheckedIn).length;
+  const checkedInCount = teams.filter(t => t.isCheckedIn).length; // This might be inaccurate if paginated/filtered. 
+  // Ideally backend should return counts. For now, it counts what's loaded.
+
 
   return (
     <PageTransition>
       <section className="min-h-screen pt-24 pb-4 relative overflow-hidden flex flex-col">
         <div className="absolute inset-0 grid-bg opacity-20" />
         <div className="absolute inset-0 scanlines pointer-events-none" />
-        
+
         {/* Animated Background Elements */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <motion.div
@@ -212,11 +254,10 @@ const RegistrationDesk = () => {
                 <span className="text-xs font-bold uppercase tracking-wider text-primary">Event:</span>
                 <button
                   onClick={() => setSelectedEventFilter('all')}
-                  className={`px-3 py-1.5 text-xs font-bold uppercase border-2 transition-all ${
-                    selectedEventFilter === 'all'
+                  className={`px-3 py-1.5 text-xs font-bold uppercase border-2 transition-all ${selectedEventFilter === 'all'
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'bg-background text-foreground border-border hover:border-primary'
-                  }`}
+                    }`}
                 >
                   All Events ({teams.length})
                 </button>
@@ -226,11 +267,10 @@ const RegistrationDesk = () => {
                     <button
                       key={event.id}
                       onClick={() => setSelectedEventFilter(event.id)}
-                      className={`px-3 py-1.5 text-xs font-bold uppercase border-2 transition-all ${
-                        selectedEventFilter === event.id
+                      className={`px-3 py-1.5 text-xs font-bold uppercase border-2 transition-all ${selectedEventFilter === event.id
                           ? 'bg-primary text-primary-foreground border-primary'
                           : 'bg-background text-foreground border-border hover:border-primary'
-                      }`}
+                        }`}
                     >
                       {event.name} ({count})
                     </button>
@@ -302,7 +342,7 @@ const RegistrationDesk = () => {
               transition={{ delay: 0.4 }}
               className="lg:col-span-2 h-full"
             >
-            <div className="bg-gradient-to-br from-card via-background to-card border-2 border-border p-8 h-full overflow-y-auto shadow-2xl shadow-primary/10">
+              <div className="bg-gradient-to-br from-card via-background to-card border-2 border-border p-8 h-full overflow-y-auto shadow-2xl shadow-primary/10">
                 <TeamDetailsPanel
                   team={selectedTeam}
                   onUpdateTeam={handleUpdateTeam}

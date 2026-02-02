@@ -1,20 +1,33 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 import PageTransition from '../components/PageTransition';
 import GlitchText from '../components/GlitchText';
 import TeamMembersModal from '../components/registration/TeamMembersModal';
 import { RegistrationTeam, CheckInStatus, VerificationStatus } from '../types/registration';
-import { dummyRegistrationTeams } from '../data/registrationData';
+import { registrationService } from '../services/registrationService';
 import { CheckCircle, Clock, LogOut, Shield, Phone, Users, Filter, Sparkles, TrendingUp, Search, X } from 'lucide-react';
 
 const AdminRegistration = () => {
-  const [teams] = useState<RegistrationTeam[]>(dummyRegistrationTeams);
   const [filter, setFilter] = useState<'all' | 'checked_in' | 'pending' | 'checked_out'>('all');
   const [selectedTeam, setSelectedTeam] = useState<RegistrationTeam | null>(null);
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEventFilter, setSelectedEventFilter] = useState<string>('all');
   const [showEventFilter, setShowEventFilter] = useState(false);
+
+  // Fetch teams from API
+  const { data: teams = [], isLoading } = useQuery({
+    queryKey: ['admin-registration-teams', filter, selectedEventFilter, searchQuery],
+    queryFn: () => registrationService.getTeams({
+      eventId: selectedEventFilter !== 'all' ? selectedEventFilter : undefined,
+      status: filter !== 'all' ? filter : undefined,
+      search: searchQuery || undefined
+    }),
+    staleTime: 1000 * 30,
+    // Polling for admin dashboard to keep it live
+    refetchInterval: 5000
+  });
 
   // Get unique events for filter
   const uniqueEvents = useMemo(() => {
@@ -27,30 +40,12 @@ const AdminRegistration = () => {
     return Array.from(events.entries()).map(([id, name]) => ({ id, name }));
   }, [teams]);
 
-  // Filter teams by status, event, and search
-  const filteredTeams = useMemo(() => {
-    return teams.filter(team => {
-      // Status filter
-      if (filter === 'checked_in' && team.checkInStatus !== CheckInStatus.CheckedIn) return false;
-      if (filter === 'checked_out' && team.checkInStatus !== CheckInStatus.CheckedOut) return false;
-      if (filter === 'pending' && team.checkInStatus !== CheckInStatus.NotCheckedIn) return false;
+  // Teams are already filtered by the API based on params, so we use them directly.
+  // Note: If we want client-side filtering responsiveness without refetching on every keystroke,
+  // we could fetch ALL and filter locally. But for scale, API filtering is better.
+  // Given we passed params to API, `teams` IS the filtered list.
 
-      // Event filter
-      if (selectedEventFilter !== 'all' && team.eventId !== selectedEventFilter) {
-        return false;
-      }
-
-      // Search filter (team name or lead name)
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase();
-        const matchesTeamName = team.teamName.toLowerCase().includes(query);
-        const matchesLeadName = team.teamLeadName.toLowerCase().includes(query);
-        return matchesTeamName || matchesLeadName;
-      }
-
-      return true;
-    });
-  }, [teams, filter, searchQuery, selectedEventFilter]);
+  const filteredTeams = teams;
 
   const handleViewMembers = (team: RegistrationTeam) => {
     setSelectedTeam(team);
@@ -197,41 +192,37 @@ const AdminRegistration = () => {
               <span className="text-sm font-bold uppercase tracking-wider text-primary">Status:</span>
               <button
                 onClick={() => setFilter('all')}
-                className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${
-                  filter === 'all'
+                className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${filter === 'all'
                     ? 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/50'
                     : 'bg-background text-foreground border-border hover:border-primary'
-                }`}
+                  }`}
               >
                 All ({stats.total})
               </button>
               <button
                 onClick={() => setFilter('checked_in')}
-                className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${
-                  filter === 'checked_in'
+                className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${filter === 'checked_in'
                     ? 'bg-green-500 text-white border-green-500 shadow-lg shadow-green-500/50'
                     : 'bg-background text-foreground border-border hover:border-green-500'
-                }`}
+                  }`}
               >
                 Checked In ({stats.checkedIn})
               </button>
               <button
                 onClick={() => setFilter('pending')}
-                className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${
-                  filter === 'pending'
+                className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${filter === 'pending'
                     ? 'bg-yellow-500 text-black border-yellow-500 shadow-lg shadow-yellow-500/50'
                     : 'bg-background text-foreground border-border hover:border-yellow-500'
-                }`}
+                  }`}
               >
                 Pending ({stats.pending})
               </button>
               <button
                 onClick={() => setFilter('checked_out')}
-                className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${
-                  filter === 'checked_out'
+                className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${filter === 'checked_out'
                     ? 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/50'
                     : 'bg-background text-foreground border-border hover:border-blue-500'
-                }`}
+                  }`}
               >
                 Checked Out ({stats.checkedOut})
               </button>
@@ -255,43 +246,41 @@ const AdminRegistration = () => {
 
             {/* Event Filters */}
             <AnimatePresence>
-            {showEventFilter && (
-              <motion.div 
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="flex items-center gap-3 flex-wrap border-t border-border pt-4 overflow-hidden"
-              >
-                <Filter className="w-6 h-6 text-purple-500" />
-                <span className="text-sm font-bold uppercase tracking-wider text-purple-500">Event:</span>
-                <button
-                  onClick={() => setSelectedEventFilter('all')}
-                  className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all ${
-                    selectedEventFilter === 'all'
-                      ? 'bg-purple-500 text-white border-purple-500'
-                      : 'bg-background text-foreground border-border hover:border-purple-500'
-                  }`}
+              {showEventFilter && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="flex items-center gap-3 flex-wrap border-t border-border pt-4 overflow-hidden"
                 >
-                  All Events ({teams.length})
-                </button>
-                {uniqueEvents.map(event => {
-                  const count = teams.filter(t => t.eventId === event.id).length;
-                  return (
-                    <button
-                      key={event.id}
-                      onClick={() => setSelectedEventFilter(event.id)}
-                      className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all ${
-                        selectedEventFilter === event.id
-                          ? 'bg-purple-500 text-white border-purple-500'
-                          : 'bg-background text-foreground border-border hover:border-purple-500'
+                  <Filter className="w-6 h-6 text-purple-500" />
+                  <span className="text-sm font-bold uppercase tracking-wider text-purple-500">Event:</span>
+                  <button
+                    onClick={() => setSelectedEventFilter('all')}
+                    className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all ${selectedEventFilter === 'all'
+                        ? 'bg-purple-500 text-white border-purple-500'
+                        : 'bg-background text-foreground border-border hover:border-purple-500'
                       }`}
-                    >
-                      {event.name} ({count})
-                    </button>
-                  );
-                })}
-              </motion.div>
-            )}
+                  >
+                    All Events ({teams.length})
+                  </button>
+                  {uniqueEvents.map(event => {
+                    const count = teams.filter(t => t.eventId === event.id).length;
+                    return (
+                      <button
+                        key={event.id}
+                        onClick={() => setSelectedEventFilter(event.id)}
+                        className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all ${selectedEventFilter === event.id
+                            ? 'bg-purple-500 text-white border-purple-500'
+                            : 'bg-background text-foreground border-border hover:border-purple-500'
+                          }`}
+                      >
+                        {event.name} ({count})
+                      </button>
+                    );
+                  })}
+                </motion.div>
+              )}
             </AnimatePresence>
 
             {/* Results Count */}
@@ -412,11 +401,11 @@ const AdminRegistration = () => {
                           <td className="px-6 py-4 text-sm text-muted-foreground font-mono">
                             {team.checkInTime
                               ? new Date(team.checkInTime).toLocaleString('en-IN', {
-                                  day: '2-digit',
-                                  month: 'short',
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })
+                                day: '2-digit',
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })
                               : '-'}
                           </td>
                         </motion.tr>
