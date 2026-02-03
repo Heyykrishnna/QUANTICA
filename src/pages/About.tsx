@@ -80,7 +80,7 @@ const additionalTeams = [
       {
         name: "Yatharth Khandelwal",
         role: "Tech Team",
-        image: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1768237165/Yatharth_uwywey.png",
+        image: "https://ik.imagekit.io/jbckhvkvo/Yatharth.png",
         linkedin: "https://www.linkedin.com/in/khandelwalyatharth/",
         email: "yatharth.k25530@nst.rishihood.edu.in",
       },
