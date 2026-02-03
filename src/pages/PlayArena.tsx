@@ -17,7 +17,7 @@ const games: Game[] = [
   {
     id: "superbros",
     name: "Super Luigi Bros",
-    icon: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1767979054/mario-8bit_qrnhc1.jpg",
+    icon: "https://ik.imagekit.io/jbckhvkvo/mario-8bit_qrnhc1.jpg",
     url: "https://www.retrogames.cc/embed/43803-super-luigi-bros-by-thenintendude64.html",
     color: "#2196F3",
     type: 'iframe',
@@ -44,7 +44,7 @@ const games: Game[] = [
   {
     id: "tekken",
     name: "Tekken 3",
-    icon: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1767979054/tekken_rf6z2n.jpg",
+    icon: "https://ik.imagekit.io/jbckhvkvo/ChatGPT%20Image%20Feb%203,%202026,%2009_34_00%20AM.png",
     url: "https://www.retrogames.cc/embed/40238-tekken-3.html",
     color: "#4CAF50",
     type: 'iframe',
@@ -53,7 +53,7 @@ const games: Game[] = [
   {
     id: "contra",
     name: "Contra",
-    icon: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1767979054/contra-8bit_lb9cij.jpg",
+    icon: "https://ik.imagekit.io/jbckhvkvo/contra-8bit_lb9cij.jpg",
     url: "https://www.retrogames.cc/embed/16841-contra-usa.html",
     color: "#2196F3",
     type: 'iframe',
@@ -62,7 +62,7 @@ const games: Game[] = [
   {
     id: "bomberman",
     name: "Bomberman",
-    icon: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1768043728/WhatsApp_Image_2026-01-10_at_16.44.17_1_fzommt.jpg",
+    icon: "https://ik.imagekit.io/jbckhvkvo/WhatsApp_Image_2026-01-10_at_16.44.17_1_fzommt.jpg",
     url: "https://www.retrogames.cc/embed/20688-bomberman-japan.html",
     color: "#f321d4ff",
     type: 'iframe',
@@ -71,7 +71,7 @@ const games: Game[] = [
   {
     id: "streetfighter",
     name: "Street Fighter",
-    icon: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1768043728/WhatsApp_Image_2026-01-10_at_16.44.17_s30y6b.jpg",
+    icon: "https://ik.imagekit.io/jbckhvkvo/WhatsApp_Image_2026-01-10_at_16.44.17_s30y6b.jpg",
     url: "https://www.retrogames.cc/embed/10042-street-fighter-ii-champion-edition-yyc-bootleg-set-2-920313-etc-bootleg.html",
     color: "#f36021ff",
     type: 'iframe',
