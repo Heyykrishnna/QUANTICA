@@ -12,17 +12,22 @@ const sponsors = [
 		link: "https://esportsfederation.in/",
 		className: "scale-20",
 	},
-
-	// {
-	// 	name: "Red Bull",
-	// 	logo: "https://www.svgrepo.com/show/303227/redbull-logo.svg",
-	// 	link: "https://www.redbull.com",
-	// },
+	{
+		name: "Red Bull",
+		logo: "https://www.svgrepo.com/show/303227/redbull-logo.svg",
+		link: "https://www.redbull.com",
+	},
 	// {
 	// 	name: "Meta Space",
 	// 	logo: "https://metaspacechain.b-cdn.net/img/logo.png",
 	// 	link: "https://metaspacechain.com/",
 	// },
+	{
+		name: "ENVY Fragrances",
+		logo: "https://envyfragrances.com/cdn/shop/files/ENVY-Logo-NEW-01.png?height=72&v=1749030853",
+		link: "https://envyfragrances.com/",
+		className: "scale-80",
+	},
 	{
 		name: "Unstop",
 		logo: "https://d8it4huxumps7.cloudfront.net/uploads/images/unstop/svg/unstop-logo.svg",
@@ -35,18 +40,36 @@ const sponsors = [
 		link: "https://ingluglobal.in/",
 		className: "scale-120",
 	},
-	// {
-	// 	name: "ASUS",
-	// 	logo: "https://upload.wikimedia.org/wikipedia/commons/2/2e/ASUS_Logo.svg",
-	// 	link: "https://www.asus.com",
-	// 	className: "brightness-0 invert",
-	// },
-	// {
-	// 	name: "Acer",
-	// 	logo: "https://images.acer.com/is/content/acer/acer-4",
-	// 	link: "https://www.acer.com",
-	// 	className: "scale-150",
-	// },
+	{
+		name: "Burger Singh",
+		logo: "https://www.burgersinghonline.com/wp-content/themes/burger-singh/front/images/logo-v=0.1.png",
+		link: "https://www.burgersinghonline.com/",
+		className: "scale-120",
+	},
+	{
+		name: "Prera",
+		logo: "https://ik.imagekit.io/jbckhvkvo/PRERA.jpg",
+		link: "https://www.instagram.com/prera_official/",
+		className: "scale-120",
+	},
+	{
+		name: "Truscholar",
+		logo: "https://framerusercontent.com/images/E6CZSGneOrMTibzmJbhUNuyivDk.svg?width=193&height=34",
+		link: "https://www.truscholar.io/",
+		className: "scale-120",
+	},
+	{
+		name: "Hell Energy",
+		logo: "https://optim.tildacdn.one/tild3734-6539-4366-b133-653032393935/-/resize/450x/-/format/webp/HELL_ENERGY_logo.png.webp",
+		link: "https://www.hellenergy.com/in/",
+		className: "scale-150",
+	},
+	{
+		name: "7th Heaven",
+		logo: "https://ik.imagekit.io/jbckhvkvo/ChatGPT%20Image%20Feb%204,%202026,%2003_20_52%20AM.png",
+		link: "https://www.7thheaven.in/",
+		className: "scale-140",
+	},
 	// {
 	// 	name: "ASUS",
 	// 	logo: "https://upload.wikimedia.org/wikipedia/commons/2/2e/ASUS_Logo.svg",

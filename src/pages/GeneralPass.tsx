@@ -115,7 +115,7 @@ const GeneralPass = () => {
                 transition={{ delay: index * 0.1 }}
                 className="bg-background/50 border border-border p-6 hover:border-primary/50 transition-colors group clip-corner"
               >
-                <div className="mb-4 bg-black/40 w-64 h-64 flex items-center justify-center rounded-sm mb-4">
+                <div className="mb-4 bg-black/40 w-64 h-64 flex items-center justify-center rounded-sm">
                   <img src={feature.src} alt={feature.title} className="w-64 h-64 object-cover" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
