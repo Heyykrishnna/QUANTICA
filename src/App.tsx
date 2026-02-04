@@ -31,6 +31,8 @@ import SmoothScroll from "./components/SmoothScroll";
 import AudioController from "./components/AudioController";
 import GlitchOverlay from "./components/GlitchOverlay";
 import TargetCursor from "./components/TargetCursor";
+import ArtistReveal from "./pages/ArtistReveal";
+import ArtistRevealPopup from "./components/ArtistRevealPopup";
 
 const queryClient = new QueryClient();
 const AnimatedRoutes = () => {
@@ -49,6 +51,7 @@ const AnimatedRoutes = () => {
         <Route path="/registration-desk" element={<RegistrationDesk />} />
         <Route path="/admin/registration" element={<AdminRegistration />} />
         <Route path="/play-arena" element={<PlayArena />} />
+        <Route path="/artist-reveal" element={<ArtistReveal />} />
 
         {/* CA Portal Routes */}
         {/* <Route path="/ca/register" element={<CARegister />} />
@@ -136,6 +139,7 @@ const App = () => {
         <BrowserRouter>
           <SmoothScroll>
             <Layout />
+            <ArtistRevealPopup />
             <Analytics />
           </SmoothScroll>
         </BrowserRouter>

@@ -4,11 +4,14 @@ import { Volume2, VolumeX, Music, Zap } from "lucide-react";
 const HOVER_SOUND = "data:audio/wav;base64,UklGRl9vT19teleXiZGYAAAAAABAAAAAAAAAAAAAAABEQVRh";
 const CLICK_SOUND = "data:audio/wav;base64,UklGRl9vT19teleXiZGYAAAAAABAAAAAAAAAAAAAAABEQVRh";
 const AMBIENT_TRACKS = [
-  "https://res.cloudinary.com/dqh5g2nmn/video/upload/v1767786643/PUBG_MOBILE__THEME_MUSIC_Versi_Okestra_rvcr3t.mp3",
-  "https://res.cloudinary.com/dqh5g2nmn/video/upload/v1767786388/rage-of-the-streets-207459_lxuagg.mp3",
-  "https://res.cloudinary.com/dqh5g2nmn/video/upload/v1767786388/cyberpunk-437545_xdlnpz.mp3",
+  "https://ik.imagekit.io/jbckhvkvo/QUANTICA-AGGRESSIVE-GU.mp3",
+  "https://ik.imagekit.io/jbckhvkvo/QUANTICA-BEAT.mp3",
+  "https://ik.imagekit.io/jbckhvkvo/QUANTICA-AGGRESSIVE.mp3",
+  "https://ik.imagekit.io/jbckhvkvo/QUANTICA-BGM.mp3",
+  "https://ik.imagekit.io/jbckhvkvo/QUANTICA-HEAR.mp3",
+  "https://ik.imagekit.io/jbckhvkvo/QUANTICA-BGM2.mp3",
 ];
-const AudioController = () => {
+  const AudioController = () => {
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [isSfxOn, setIsSfxOn] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
