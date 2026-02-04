@@ -86,7 +86,7 @@ export const events = [
 	},
 	{
 		title: "BGMI",
-		game: "BGMI - Semi Finals",
+		game: "BGMI",
 		date: "7 Feb 2026",
 		targetDate: "2026-02-07T11:00:00",
 		startTime: "11:00 AM",
@@ -106,36 +106,36 @@ export const events = [
 		},
 		prizePool: "₹50,000",
 		image: "https://ik.imagekit.io/vdigjljlu/bgmi.jpeg?updatedAt=1769276558264",
-		slug: "bgmi-semifinals",
+		slug: "bgmi",
 		color: "cyan" as const,
 		status: "Registration Closed",
 		gameLogo: "https://trybgmi.com/assets/images/bgmi_logo.webp",
 	},
-	{
-		title: "BGMI",
-		game: "BGMI - Finals",
-		date: "8 Feb 2026",
-		targetDate: "2026-02-08T14:00:00",
-		startTime: "2:00 PM",
-		endTime: "6:00 PM",
-		day: "01/02/26",
-		venue: "Main Arena",
-		groups: ["Group A", "Group B"],
-		teamLists: {
-			"Group A": ["Elite Squad", "Apex Predators", "Titan Force", "Storm Breakers", "Phoenix Warriors", "Shadow Legends"],
-			"Group B": ["Team Thunder", "Venom Strike", "Savage Kings", "Night Hunters", "Fire Dragons", "Ice Wolves"]
-		},
-		groupTimes: {
-			"Group A": "2:00 PM - 4:00 PM",
-			"Group B": "4:00 PM - 6:00 PM"
-		},
-		prizePool: "₹1,00,000",
-		image: "https://ik.imagekit.io/vdigjljlu/bgmi.jpeg?updatedAt=1769276558264",
-		slug: "bgmi",
-		color: "magenta" as const,
-		status: "Registration Closed",
-		gameLogo: "https://trybgmi.com/assets/images/bgmi_logo.webp",
-	},
+	// {
+	// 	title: "BGMI",
+	// 	game: "BGMI - Finals",
+	// 	date: "8 Feb 2026",
+	// 	targetDate: "2026-02-08T14:00:00",
+	// 	startTime: "2:00 PM",
+	// 	endTime: "6:00 PM",
+	// 	day: "01/02/26",
+	// 	venue: "Main Arena",
+	// 	groups: ["Group A", "Group B"],
+	// 	teamLists: {
+	// 		"Group A": ["Elite Squad", "Apex Predators", "Titan Force", "Storm Breakers", "Phoenix Warriors", "Shadow Legends"],
+	// 		"Group B": ["Team Thunder", "Venom Strike", "Savage Kings", "Night Hunters", "Fire Dragons", "Ice Wolves"]
+	// 	},
+	// 	groupTimes: {
+	// 		"Group A": "2:00 PM - 4:00 PM",
+	// 		"Group B": "4:00 PM - 6:00 PM"
+	// 	},
+	// 	prizePool: "₹1,00,000",
+	// 	image: "https://ik.imagekit.io/vdigjljlu/bgmi.jpeg?updatedAt=1769276558264",
+	// 	slug: "bgmi",
+	// 	color: "magenta" as const,
+	// 	status: "Registration Closed",
+	// 	gameLogo: "https://trybgmi.com/assets/images/bgmi_logo.webp",
+	// },
 	{
 		title: "Valorant",
 		game: "Valorant",
