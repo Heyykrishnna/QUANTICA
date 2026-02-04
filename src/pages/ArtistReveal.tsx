@@ -12,7 +12,7 @@ import CountdownTimer from "@/components/CountdownTimer";
 
 const artistsDay1 = [
   {
-    name: "SAARANG + JAMMING NIGHT",
+    name: "SAARANG",
     tag: "Music Band",
     time: "7:00 PM - 8:30 PM",
     bio: "A precision-engineered blend of basslines and neon synth stabs. Every drop hits like a system reboot.",
