@@ -579,7 +579,7 @@ const ArtistReveal = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className="absolute top-4 right-4 p-2 text-muted-foreground hover:text-foreground"
+                className="absolute top-3 right-3 p-2 text-muted-foreground hover:text-foreground z-50 bg-background/80 rounded-full backdrop-blur-sm border border-primary/20 transition-all hover:bg-primary/20"
                 onClick={() => setSelectedArtist(null)}
                 aria-label="Close artist details"
               >

@@ -68,7 +68,7 @@ const ArtistRevealPopup = () => {
                 
                 <button 
                   onClick={handleClose}
-                  className="absolute top-4 right-4 text-muted-foreground hover:text-white transition-colors z-20 group"
+                  className="absolute top-4 right-4 text-muted-foreground hover:text-white transition-colors z-50 group bg-black/50 p-2 rounded-full border border-primary/20 backdrop-blur-sm"
                 >
                   <X className="w-6 h-6 group-hover:rotate-90 transition-transform" />
                 </button>
