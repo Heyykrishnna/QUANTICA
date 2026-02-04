@@ -92,7 +92,11 @@ const ArtistReveal = () => {
   const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
-    if (showAudio && audioRef.current) {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
+    }
+
+    if ((showAudio || isRevealed) && audioRef.current) {
       audioRef.current.play().then(() => {
         setIsMuted(false);
       }).catch((e) => {
@@ -100,10 +104,11 @@ const ArtistReveal = () => {
         setIsMuted(true);
       });
     }
-  }, [showAudio]);
+  }, [showAudio, isRevealed]);
 
   const handleManualPlay = () => {
     if (audioRef.current) {
+        audioRef.current.volume = 0.3;
         audioRef.current.play().then(() => {
              setIsMuted(false);
         });

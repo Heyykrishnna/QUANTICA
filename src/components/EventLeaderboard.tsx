@@ -12,6 +12,8 @@ interface EventLeaderboardProps {
 const EventLeaderboard = ({ eventSlug, eventName }: EventLeaderboardProps) => {
   const { teams, loading, error } = useLeaderboard(eventSlug);
 
+  const isBattleRoyale = eventName.toLowerCase().includes('bgmi') || eventName.toLowerCase().includes('free fire') || eventName.toLowerCase().includes('pubg');
+
   const getRankColor = (rank: number) => {
     if (rank === 1) return "text-yellow-400";
     if (rank === 2) return "text-gray-300";
@@ -77,6 +79,11 @@ const EventLeaderboard = ({ eventSlug, eventName }: EventLeaderboardProps) => {
             <th className="py-2 px-2 md:py-4 md:px-4 text-center text-primary uppercase tracking-wider text-xs md:text-sm hidden sm:table-cell">
               Kills
             </th>
+            {isBattleRoyale && (
+              <th className="py-2 px-2 md:py-4 md:px-4 text-center text-primary uppercase tracking-wider text-xs md:text-sm hidden sm:table-cell">
+                Pos Pts
+              </th>
+            )}
             <th className="py-2 px-2 md:py-4 md:px-4 text-center text-primary uppercase tracking-wider text-xs md:text-sm">
               Pts
             </th>
@@ -123,6 +130,11 @@ const EventLeaderboard = ({ eventSlug, eventName }: EventLeaderboardProps) => {
                 <td className="py-2 px-2 md:py-4 md:px-4 text-center text-muted-foreground hidden sm:table-cell text-sm md:text-base">
                   {team.totalKills}
                 </td>
+                {isBattleRoyale && (
+                  <td className="py-2 px-2 md:py-4 md:px-4 text-center text-muted-foreground hidden sm:table-cell text-sm md:text-base">
+                    {(team.totalPoints || 0) - (team.totalKills || 0)}
+                  </td>
+                )}
                 <td className="py-2 px-2 md:py-4 md:px-4 text-center font-bold text-secondary text-base md:text-lg">
                   {team.totalPoints}
                 </td>

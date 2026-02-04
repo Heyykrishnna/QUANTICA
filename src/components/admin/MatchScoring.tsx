@@ -433,7 +433,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
         <div className="mt-8">
           <h3 className="text-xl font-bold mb-4 text-foreground">Recent Matches</h3>
           <div className="space-y-2">
-            {matches.slice(0, 5).map((match) => (
+            {matches.map((match) => (
               <div
                 key={match.id}
                 className="flex items-center justify-between bg-card border border-border p-3"
