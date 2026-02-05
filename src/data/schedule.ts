@@ -133,7 +133,7 @@ export const scheduleEvents: ScheduleEvent[] = [
         endTime: "5:00 PM",
         venue: "Main Arena",
         color: "theme-yellow",
-        slug: "bgmi-finals",
+        slug: "bgmi",
         image: "https://ik.imagekit.io/vdigjljlu/bgmi.jpeg?updatedAt=1769276558264",
         gameLogo: "https://trybgmi.com/assets/images/bgmi_logo.webp",
         groups: ["Group A", "Group B"],
@@ -216,7 +216,7 @@ export const scheduleEvents: ScheduleEvent[] = [
         venue: "Atrium",
         color: "neon-green",
         slug: "casual-games-day-1",
-        image: "https://ik.imagekit.io/vdigjljlu/casual-games.jpeg",
+        image: "https://ik.imagekit.io/jbckhvkvo/Explore%20the%20elegance%20and%20strategy%20of%20a%20chess%20game%20through%20this%20artistic%20representation%20for%20the%20daily%20theme%20hosted%20by%20@@monai_art%20for.%20%E2%99%9F%EF%B8%8F_%20_ChessArt%20_StrategicBeauty%20_TimelessGame%20_chess%20_chessgame%20_aiartwork%20_aiartcommuity%20_neuraldreamer",
     },
     {
         title: "Saarang",
@@ -227,7 +227,7 @@ export const scheduleEvents: ScheduleEvent[] = [
         venue: "Atrium (Main Stage)",
         color: "electric-blue",
         slug: "saarang",
-        image: "https://ik.imagekit.io/vdigjljlu/cultural.jpeg",
+        image: "https://ik.imagekit.io/jbckhvkvo/SnapInsta.to_533485623_17890325007305427_6001201176540970019_n.jpg",
     },
     {
         title: "DJ Night",
@@ -238,7 +238,7 @@ export const scheduleEvents: ScheduleEvent[] = [
         venue: "Atrium (Main Stage)",
         color: "theme-orange",
         slug: "dj-night-day-1",
-        image: "https://ik.imagekit.io/vdigjljlu/dj.jpeg",
+        image: "https://ik.imagekit.io/jbckhvkvo/SnapInsta.to_542870573_17854072368521008_1066930159959735392_n.jpg",
     },
     // -------- Cultural Events Day 2: 08 Feb 2026 --------
     {
@@ -250,7 +250,7 @@ export const scheduleEvents: ScheduleEvent[] = [
         venue: "Open Gaming Area",
         color: "neon-green",
         slug: "casual-games-day-2",
-        image: "https://ik.imagekit.io/vdigjljlu/casual-games.jpeg",
+        image: "https://ik.imagekit.io/jbckhvkvo/Explore%20the%20elegance%20and%20strategy%20of%20a%20chess%20game%20through%20this%20artistic%20representation%20for%20the%20daily%20theme%20hosted%20by%20@@monai_art%20for.%20%E2%99%9F%EF%B8%8F_%20_ChessArt%20_StrategicBeauty%20_TimelessGame%20_chess%20_chessgame%20_aiartwork%20_aiartcommuity%20_neuraldreamer",
     },
     {
         title: "Flute Boxer's",
@@ -261,7 +261,7 @@ export const scheduleEvents: ScheduleEvent[] = [
         venue: "Main Stage",
         color: "cyan",
         slug: "flute-boxers",
-        image: "https://ik.imagekit.io/vdigjljlu/flute-boxer.jpeg",
+        image: "https://ik.imagekit.io/jbckhvkvo/Screenshot%202026-02-05%20at%208.17.02%E2%80%AFPM.heic",
     },
     {
         title: "Concert",
@@ -272,7 +272,7 @@ export const scheduleEvents: ScheduleEvent[] = [
         venue: "Main Stage",
         color: "magenta",
         slug: "concert-night",
-        image: "https://ik.imagekit.io/vdigjljlu/concert.jpeg",
+        image: "https://ik.imagekit.io/jbckhvkvo/YUNGBLUD.jpeg",
     },
     {
         title: "DJ Night",
@@ -283,6 +283,6 @@ export const scheduleEvents: ScheduleEvent[] = [
         venue: "Main Stage",
         color: "theme-red",
         slug: "dj-night",
-        image: "https://ik.imagekit.io/vdigjljlu/dj.jpeg",
+        image: "https://ik.imagekit.io/jbckhvkvo/Our%20talented%20DJ_s.jpeg",
     },
 ];

@@ -46,7 +46,7 @@ export const events = [
 		},
 		prizePool: "₹1,00,000",
 		image: "https://ik.imagekit.io/vdigjljlu/bgmi.jpeg?updatedAt=1769276558264",
-		slug: "bgmi-finals",
+		slug: "bgmi",
 		color: "theme-yellow" as const,
 		status: "Registration Closed",
 		gameLogo: "https://trybgmi.com/assets/images/bgmi_logo.webp",
