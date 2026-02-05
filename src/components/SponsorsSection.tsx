@@ -1,16 +1,16 @@
-import { motion } from "framer-motion";
+import { motion, scale } from "framer-motion";
 import { useEffect, useState } from "react";
 const sponsors = [
 	{
 		name: "Garena",
-		logo: "https://upload.wikimedia.org/wikipedia/en/1/13/GarenaLogo.png",
+		logo: "https://ik.imagekit.io/jbckhvkvo/FFM_Community%20India%20logo%201.svg",
 		link: "https://www.garena.com",
+		className: 'scale-80'
 	},
 	{
 		name: "ESFI",
 		logo: "https://esportsfederation.in/images/ESFI_Full_logo-White.png",
 		link: "https://esportsfederation.in/",
-		className: "scale-20",
 	},
 	{
 		name: "Red Bull",
