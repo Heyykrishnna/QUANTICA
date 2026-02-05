@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
-import { Save, Play, CheckCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { Save, Play, CheckCircle, Target } from "lucide-react";
 import toast from "react-hot-toast";
 import {
   AlertDialog,
@@ -292,53 +293,58 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg md:text-2xl font-bold text-foreground">Match Scoring</h2>
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-1 flex items-center gap-3">
+            <Target className="w-7 h-7 text-cyan-400" />
+            Match Scoring
+          </h2>
+          <p className="text-sm text-gray-400">
+            {editingMatch ? `Editing Match #${matchNumber}` : `Creating Match #${matchNumber}`}
+          </p>
+        </div>
+        
         <div className="flex items-center gap-3">
-          <span className="text-xs md:text-sm text-muted-foreground">
-            {editingMatch ? `Editing Match #${matchNumber}` : `Match #${matchNumber}`}
-          </span>
           {editingMatch && (
             <button
               onClick={handleCancelEdit}
-              className="px-2 py-1 md:px-4 md:py-2 bg-card border-2 border-border hover:border-red-500 text-foreground text-xs md:text-sm"
+              className="px-4 py-2 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 rounded-lg transition-all duration-200 flex items-center gap-2"
             >
-              <div className="flex items-center gap-2">
-                <GiTireIronCross className="w-4 h-4" />
-                <div className="hidden md:block">Cancel</div>
-              </div>
+              <GiTireIronCross className="w-4 h-4" />
+              <span className="hidden md:inline">Cancel</span>
             </button>
           )}
           <button
             onClick={handleSaveMatch}
             disabled={saving || !selectedEvent}
-            className="glitch-btn bg-primary text-primary-foreground px-3 py-2 md:px-4 md:py-2 flex items-center gap-2 disabled:opacity-50 text-xs md:text-sm"
+            className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white rounded-lg font-bold flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all duration-200"
           >
             {saving ? (
               <>
-                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary-foreground"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
                 Saving...
               </>
             ) : (
               <>
                 <Save className="w-5 h-5" />
-                <div className="hidden md:block">Save Match</div>
+                <span className="hidden md:inline">Save Match</span>
               </>
             )}
           </button>
         </div>
       </div>
 
+      {/* Event Selector */}
       {!preSelectedEventId && (
-        <div>
-          <label className="block text-sm font-bold uppercase tracking-wider text-primary mb-2">
+        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-xl p-4">
+          <label className="block text-sm font-bold uppercase tracking-wider text-cyan-400 mb-2">
             Select Event
           </label>
           <select
             value={selectedEvent}
             onChange={(e) => handleEventChange(e.target.value)}
-
-            className="w-full px-4 py-3 bg-background border-2 border-border focus:border-primary outline-none text-foreground"
+            className="w-full px-4 py-3 bg-black/60 border border-white/10 rounded-lg focus:border-cyan-500 outline-none text-white"
           >
             <option value="">Choose an event...</option>
             {events.map((event) => (
@@ -350,112 +356,157 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
         </div>
       )}
 
+      {/* Scoring Table */}
       {selectedEvent && teams.length > 0 ? (
-        <div className="bg-card border-2 border-border overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-muted">
-              <tr>
-                <th className="px-2 py-2 md:px-4 md:py-3 text-left text-primary uppercase tracking-wider text-xs md:text-sm">Team</th>
-                {isBattleRoyale(selectedEvent) ? (
-                  <>
-                    <th className="px-2 py-2 md:px-4 md:py-3 text-center text-primary uppercase tracking-wider text-xs md:text-sm">Pos</th>
-                    <th className="px-2 py-2 md:px-4 md:py-3 text-center text-primary uppercase tracking-wider text-xs md:text-sm">Kills</th>
-                    <th className="px-2 py-2 md:px-4 md:py-3 text-center text-primary uppercase tracking-wider text-xs md:text-sm">Pts</th>
-                  </>
-                ) : (
-                  <th className="px-2 py-2 md:px-4 md:py-3 text-center text-primary uppercase tracking-wider text-xs md:text-sm">Points</th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {teams.map((team) => (
-                <tr key={team.id} className="border-t border-border hover:bg-muted/50">
-                  <td className="px-2 py-2 md:px-4 md:py-3 font-bold text-xs md:text-base">{team.name}</td>
+        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border-b border-white/10">
+                <tr>
+                  <th className="px-4 py-4 text-left text-cyan-400 uppercase tracking-wider text-sm font-bold">
+                    Team
+                  </th>
                   {isBattleRoyale(selectedEvent) ? (
                     <>
-                      <td className="px-2 py-2 md:px-4 md:py-3 text-center">
-                        <input
-                          type="number"
-                          min="0"
-                          value={scores[team.id]?.placement || 0}
-                          onFocus={(e) => e.target.select()}
-                          onChange={(e) =>
-                            handleScoreChange(team.id, 'placement', parseInt(e.target.value) || 0)
-                          }
-                          className="w-12 md:w-20 px-1 py-1 md:px-3 md:py-2 bg-background border-2 border-border focus:border-primary outline-none text-center text-foreground text-xs md:text-base no-spinner"
-                        />
-                      </td>
-                      <td className="px-2 py-2 md:px-4 md:py-3 text-center">
-                        <input
-                          type="number"
-                          min="0"
-                          value={scores[team.id]?.kills || 0}
-                          onFocus={(e) => e.target.select()}
-                          onChange={(e) =>
-                            handleScoreChange(team.id, 'kills', parseInt(e.target.value) || 0)
-                          }
-                          className="w-12 md:w-20 px-1 py-1 md:px-3 md:py-2 bg-background border-2 border-border focus:border-primary outline-none text-center text-foreground text-xs md:text-base no-spinner"
-                        />
-                      </td>
-                      <td className="px-2 py-2 md:px-4 md:py-3 text-center font-bold text-secondary text-xs md:text-base">
-                        {scores[team.id]?.points || 0}
-                      </td>
+                      <th className="px-4 py-4 text-center text-purple-400 uppercase tracking-wider text-sm font-bold">
+                        Position
+                      </th>
+                      <th className="px-4 py-4 text-center text-yellow-400 uppercase tracking-wider text-sm font-bold">
+                        Kills
+                      </th>
+                      <th className="px-4 py-4 text-center text-green-400 uppercase tracking-wider text-sm font-bold">
+                        Points
+                      </th>
                     </>
                   ) : (
-                    <td className="px-2 py-2 md:px-4 md:py-3 text-center">
-                      <input
-                        type="number"
-                        min="0"
-                        value={scores[team.id]?.points || 0}
-                        onFocus={(e) => e.target.select()}
-                        onChange={(e) =>
-                          handleScoreChange(team.id, 'points', parseInt(e.target.value) || 0)
-                        }
-                        className="w-16 md:w-20 px-2 py-2 bg-background border-2 border-border focus:border-primary outline-none text-center text-foreground text-xs md:text-base no-spinner"
-                      />
-                    </td>
+                    <th className="px-4 py-4 text-center text-cyan-400 uppercase tracking-wider text-sm font-bold">
+                      Points
+                    </th>
                   )}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {teams.map((team, index) => (
+                  <tr 
+                    key={team.id} 
+                    className={`
+                      border-b border-white/5 hover:bg-white/5 transition-colors
+                      ${index % 2 === 0 ? 'bg-black/20' : 'bg-transparent'}
+                    `}
+                  >
+                    <td className="px-4 py-3 font-bold text-white flex items-center gap-2">
+                      <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
+                      {team.name}
+                    </td>
+                    {isBattleRoyale(selectedEvent) ? (
+                      <>
+                        <td className="px-4 py-3 text-center">
+                          <input
+                            type="number"
+                            min="0"
+                            value={scores[team.id]?.placement || 0}
+                            onFocus={(e) => e.target.select()}
+                            onChange={(e) =>
+                              handleScoreChange(team.id, 'placement', parseInt(e.target.value) || 0)
+                            }
+                            className="w-20 px-3 py-2 bg-black/60 border-2 border-purple-500/30 rounded-lg focus:border-purple-500 outline-none text-center text-white font-bold transition-all hover:bg-black/80"
+                          />
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <input
+                            type="number"
+                            min="0"
+                            value={scores[team.id]?.kills || 0}
+                            onFocus={(e) => e.target.select()}
+                            onChange={(e) =>
+                              handleScoreChange(team.id, 'kills', parseInt(e.target.value) || 0)
+                            }
+                            className="w-20 px-3 py-2 bg-black/60 border-2 border-yellow-500/30 rounded-lg focus:border-yellow-500 outline-none text-center text-white font-bold transition-all hover:bg-black/80"
+                          />
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <div className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-green-500/20 to-cyan-500/20 border border-green-500/30 rounded-lg">
+                            <span className="text-2xl font-bold text-green-400">
+                              {scores[team.id]?.points || 0}
+                            </span>
+                          </div>
+                        </td>
+                      </>
+                    ) : (
+                      <td className="px-4 py-3 text-center">
+                        <input
+                          type="number"
+                          min="0"
+                          value={scores[team.id]?.points || 0}
+                          onFocus={(e) => e.target.select()}
+                          onChange={(e) =>
+                            handleScoreChange(team.id, 'points', parseInt(e.target.value) || 0)
+                          }
+                          className="w-24 px-3 py-2 bg-black/60 border-2 border-cyan-500/30 rounded-lg focus:border-cyan-500 outline-none text-center text-white font-bold transition-all hover:bg-black/80"
+                        />
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
-        <div className="text-center py-12 text-muted-foreground">
-          <div className="flex items-center justify-center">
-            <Play className="w-12 h-12 text-primary" />
-          </div>
-          <p>Select an event to start scoring</p>
+        <div className="text-center py-20 bg-black/40 backdrop-blur-md border border-white/10 rounded-xl">
+          <Play className="w-16 h-16 text-cyan-400 mx-auto mb-4 opacity-50" />
+          <p className="text-gray-400 text-lg">Select an event to start scoring</p>
         </div>
       )}
 
+      {/* Match History */}
       {matches.length > 0 && (
-        <div className="mt-8">
-          <h3 className="text-xl font-bold mb-4 text-foreground">Recent Matches</h3>
-          <div className="space-y-2">
-            {matches.map((match) => (
-              <div
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-green-400" />
+              Match History
+              <span className="text-sm text-gray-400 font-normal ml-2">({matches.length} total)</span>
+            </h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {matches.map((match, index) => (
+              <motion.div
                 key={match.id}
-                className="flex items-center justify-between bg-card border border-border p-3"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: Math.min(index * 0.03, 0.5) }}
+                className="bg-black/40 backdrop-blur-md border border-white/10 rounded-xl p-4 hover:border-cyan-500/30 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/20"
               >
-                <span className="font-bold">Match #{match.matchNumber}</span>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-purple-500 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                      <span className="text-white font-bold text-sm">#{match.matchNumber}</span>
+                    </div>
+                    <span className="font-bold text-white">Match {match.matchNumber}</span>
+                  </div>
+                  <CheckCircle className="w-5 h-5 text-green-400" />
+                </div>
+                
+                <div className="flex items-center gap-2 mb-3">
                   <button
                     onClick={() => handleEditMatch(match.id)}
-                    className="text-xs bg-primary/10 hover:bg-primary/20 text-primary px-2 py-1 rounded"
+                    className="flex-1 px-3 py-2 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-lg text-sm font-bold transition-all hover:scale-105 active:scale-95"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteMatch(match.id)}
-                    className="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-500 px-2 py-1 rounded"
+                    className="flex-1 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-sm font-bold transition-all hover:scale-105 active:scale-95"
                   >
                     Delete
                   </button>
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span className="text-sm text-muted-foreground hidden md:block">{match.status}</span>
                 </div>
-              </div>
+                
+                <div className="text-xs text-gray-500 uppercase tracking-wider">
+                  Status: <span className="text-green-400 font-bold">{match.status}</span>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>

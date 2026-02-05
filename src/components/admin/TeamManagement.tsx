@@ -179,14 +179,30 @@ const TeamManagement = ({ preSelectedEventId }: TeamManagementProps = {}) => {
           <p>No teams found. Add one to get started!</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {teams.map((team, index) => (
             <motion.div
               key={team.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              className="bg-card border-2 border-border p-4 clip-corner"
+              transition={{ 
+                delay: index * 0.05,
+                duration: 0.4,
+                ease: "easeOut"
+              }}
+              whileHover={{ 
+                scale: 1.03,
+                transition: { duration: 0.2 }
+              }}
+              className="
+                relative overflow-hidden rounded-2xl
+                bg-black/50 backdrop-blur-xl
+                border border-white/10
+                shadow-xl hover:shadow-2xl hover:shadow-cyan-500/30
+                transition-all duration-500
+                hover:border-cyan-500/50
+                group
+              "
             >
               <div className="flex items-start justify-between mb-3">
                 {editingTeam === team.id ? (
@@ -232,42 +248,10 @@ const TeamManagement = ({ preSelectedEventId }: TeamManagementProps = {}) => {
                     )}
                   </div>
                 )}
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setEditingTeam(editingTeam === team.id ? null : team.id)}
-                    className="p-2 hover:bg-primary/20 text-primary transition-colors"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteTeam(team.id)}
-                    className="p-2 hover:bg-red-500/20 text-red-500 transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 text-center mb-3">
-                <div>
-                  <div className="text-2xl font-bold text-secondary">{team.totalPoints}</div>
-                  <div className="text-xs text-muted-foreground">Points</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-primary">{team.wins}</div>
-                  <div className="text-xs text-muted-foreground">Wins</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-foreground">{team.totalKills}</div>
-                  <div className="text-xs text-muted-foreground">Kills</div>
-                </div>
-              </div>
-
-              {team.participants && team.participants.length > 0 && (
-                <div className="text-xs text-muted-foreground">
-                  <strong>Players:</strong> {team.participants.map(p => p.name).join(", ")}
-                </div>
-              )}
+              {/* Enhanced bottom accent line with gradient animation */}
+              <div className="h-1.5 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 group-hover:h-2 transition-all duration-300" />
             </motion.div>
           ))}
         </div>

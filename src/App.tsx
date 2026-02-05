@@ -15,6 +15,7 @@ import Contact from "./pages/Contact";
 import Leaderboard from "./pages/Leaderboard";
 import GameResult from "./pages/GameResult";
 import Admin from "./pages/Admin";
+import AdminDashboard from "./pages/AdminDashboard";
 import RegistrationDesk from "./pages/RegistrationDesk";
 import AdminRegistration from "./pages/AdminRegistration";
 import EventRegistration from "./pages/EventRegistration";
@@ -46,6 +47,7 @@ const AnimatedRoutes = () => {
         <Route path="/result" element={<Leaderboard />} />
         <Route path="/results/:gameSlug" element={<GameResult />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/registration-desk" element={<RegistrationDesk />} />
         <Route path="/admin/registration" element={<AdminRegistration />} />
         <Route path="/play-arena" element={<PlayArena />} />

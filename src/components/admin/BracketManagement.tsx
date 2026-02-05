@@ -373,15 +373,16 @@ const BracketManagement = ({ preSelectedEventId }: BracketManagementProps = {}) 
 
     return (
         <div className="space-y-6">
+            {/* Event Selector */}
             {!preSelectedEventId && (
-                <div>
-                    <label className="block text-sm font-bold uppercase tracking-wider text-primary mb-2">
+                <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-xl p-4">
+                    <label className="block text-sm font-bold uppercase tracking-wider text-cyan-400 mb-2">
                         Select Knockout Event
                     </label>
                     <select
                         value={selectedEvent}
                         onChange={(e) => setSelectedEvent(e.target.value)}
-                        className="w-full px-4 py-3 bg-background border-2 border-border focus:border-primary outline-none text-foreground"
+                        className="w-full px-4 py-3 bg-black/60 border border-white/10 rounded-lg focus:border-cyan-500 outline-none text-white"
                     >
                         <option value="">Choose an event...</option>
                         {events.map((event) => (
@@ -393,82 +394,99 @@ const BracketManagement = ({ preSelectedEventId }: BracketManagementProps = {}) 
                 </div>
             )}
 
+            {/* Controls Section */}
             {selectedEvent && (
-                <div className="bg-card border border-border p-4 rounded-lg flex flex-wrap gap-4 items-center justify-between">
-                    <div className="flex gap-4 items-center">
-                        <div>
-                            <h3 className="font-bold text-lg">Event Status</h3>
-                            <p className="text-xs text-muted-foreground hidden md:block">Set to "Ongoing" to show LIVE badge.</p>
+                <div className="bg-gradient-to-r from-black/40 to-purple-900/20 backdrop-blur-md border border-white/10 rounded-xl p-6">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                        <div className="flex flex-col md:flex-row gap-4 md:items-center">
+                            <div>
+                                <h3 className="font-bold text-lg text-white flex items-center gap-2">
+                                    <Trophy className="w-5 h-5 text-yellow-400" />
+                                    Event Status
+                                </h3>
+                                <p className="text-xs text-gray-400 hidden md:block mt-1">Set to "Ongoing" to show LIVE badge</p>
+                            </div>
+                            <select
+                                value={events.find(e => e.id === selectedEvent)?.status || 'upcoming'}
+                                onChange={async (e) => {
+                                    const newStatus = e.target.value;
+                                    try {
+                                        await api.put(`/events/${selectedEvent}`, { status: newStatus });
+                                        fetchEvents();
+                                        toast.success("Event status updated.");
+                                    } catch (error) {
+                                        console.error(error);
+                                        toast.error("Failed to update status.");
+                                    }
+                                }}
+                                className="bg-black/60 border border-white/10 px-4 py-2 rounded-lg text-sm text-white focus:border-cyan-500 outline-none"
+                            >
+                                <option value="upcoming">Upcoming</option>
+                                <option value="ongoing">Ongoing (Live)</option>
+                                <option value="completed">Completed</option>
+                            </select>
                         </div>
-                        <select
-                            value={events.find(e => e.id === selectedEvent)?.status || 'upcoming'}
-                            onChange={async (e) => {
-                                const newStatus = e.target.value;
-                                try {
-                                    await api.put(`/events/${selectedEvent}`, { status: newStatus });
-                                    fetchEvents();
-                                    toast.success("Event status updated.");
-                                } catch (error) {
-                                    console.error(error);
-                                    toast.error("Failed to update status.");
-                                }
-                            }}
-                            className="bg-background border border-border px-3 py-2 rounded text-[10px]"
-                        >
-                            <option value="upcoming">Upcoming</option>
-                            <option value="ongoing">Ongoing (Live)</option>
-                            <option value="completed">Completed</option>
-                        </select>
-                    </div>
 
-                    <div className="flex gap-2">
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <button
-                                    disabled={loading}
-                                    className="bg-primary hover:bg-primary/80 text-primary-foreground px-4 py-2 rounded font-bold text-sm disabled:opacity-50"
-                                >
-                                    {loading ? 'Generating...' : 'Generate Bracket'}
-                                </button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent className="bg-card border-border">
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Generate New Bracket?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        This action will permanently delete all existing matches and bracket data for this event.
-                                        A new bracket will be generated based on the current team list.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel className="bg-muted text-foreground hover:bg-muted/80">Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={generateBracket} className="bg-primary text-primary-foreground hover:bg-primary/90">
-                                        Continue
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                        <div className="flex gap-2">
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <button
+                                        disabled={loading}
+                                        className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:shadow-lg text-white px-6 py-2 rounded-lg font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                    >
+                                        {loading ? 'Generating...' : 'Generate Bracket'}
+                                    </button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="bg-card border-border">
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Generate New Bracket?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            This action will permanently delete all existing matches and bracket data for this event.
+                                            A new bracket will be generated based on the current team list.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel className="bg-muted text-foreground hover:bg-muted/80">Cancel</AlertDialogCancel>
+                                        <AlertDialogAction onClick={generateBracket} className="bg-primary text-primary-foreground hover:bg-primary/90">
+                                            Continue
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
                     </div>
                 </div>
             )}
 
+            {/* Bracket Display */}
             {selectedEvent && selectedEventSlug && (
-                <div className="border border-border rounded-lg p-4 bg-black/20 overflow-hidden">
-                    <div className="flex justify-between items-center mb-4">
-                        <p className="text-xs md:text-sm text-muted-foreground">
-                            Click names to edit. Click trophy to set winner. Byes are auto-handled.
-                        </p>
-                        <span className="text-xs font-mono bg-muted px-2 py-1 rounded">
-                            {teams.length} Teams • {matches.length} Matches
-                        </span>
+                <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-xl p-6 overflow-hidden">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-3">
+                        <div>
+                            <h3 className="text-xl font-bold text-white mb-1">Tournament Bracket</h3>
+                            <p className="text-xs md:text-sm text-gray-400">
+                                Click names to edit • Click trophy to set winner • Byes are auto-handled
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="px-3 py-1.5 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 rounded-lg">
+                                <span className="text-sm font-bold text-cyan-400">{teams.length} Teams</span>
+                            </div>
+                            <div className="px-3 py-1.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-lg">
+                                <span className="text-sm font-bold text-purple-400">{matches.length} Matches</span>
+                            </div>
+                        </div>
                     </div>
-                    <TournamentBracket
-                        eventSlug={selectedEventSlug}
-                        isEditable={true}
-                        onMatchUpdate={handleBracektUpdate}
-                        onTeamUpdate={handleTeamUpdate}
-                        teams={teams}
-                        matches={matches}
-                    />
+                    <div className="overflow-x-auto">
+                        <TournamentBracket
+                            eventSlug={selectedEventSlug}
+                            isEditable={true}
+                            onMatchUpdate={handleBracektUpdate}
+                            onTeamUpdate={handleTeamUpdate}
+                            teams={teams}
+                            matches={matches}
+                        />
+                    </div>
                 </div>
             )}
         </div>
