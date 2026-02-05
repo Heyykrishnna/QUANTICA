@@ -12,6 +12,11 @@ const sponsors = [
 		logo: "https://thebridge.in/h-upload/2022/06/01/29366-esfi-logo.jpg",
 		link: "https://esportsfederation.in/",
 	},
+	{
+		name: "Takumi",
+		logo: "https://ik.imagekit.io/jbckhvkvo/image%20187.png",
+		link: "https://www.instagram.com/takumi.sonipat/",
+	},
 	// {
 	// 	name: "Red Bull",
 	// 	logo: "https://www.svgrepo.com/show/303227/redbull-logo.svg",
