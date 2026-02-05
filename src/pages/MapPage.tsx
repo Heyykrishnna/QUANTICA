@@ -59,8 +59,8 @@ const MapPage = () => {
 
       <div className="container mx-auto px-4 z-10 flex flex-col items-center h-[85vh]">
         {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-4xl md:text-5xl font-bold font-display bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-600 mb-2 filter drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
+        <div className="text-center mb-12 mt-12">
+          <h1 className="text-4xl md:text-5xl font-bold font-display bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-600 mb-2 filter drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
             EVENT MAP
           </h1>
           <p className="text-gray-400 font-mono text-xs md:text-sm tracking-widest uppercase">
