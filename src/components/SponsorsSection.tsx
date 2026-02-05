@@ -60,7 +60,7 @@ const sponsors = [
 		name: "Prera",
 		logo: "https://ik.imagekit.io/jbckhvkvo/PRERA.jpg",
 		link: "https://www.instagram.com/prera_official/",
-		className: "scale-120",
+		className: "scale-120 invert",
 	},
 	{
 		name: "Truscholar",

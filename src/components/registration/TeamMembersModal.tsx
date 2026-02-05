@@ -26,7 +26,7 @@ const TeamMembersModal = ({ team, isOpen, onClose, onToggleMember, readOnly = fa
           className="absolute inset-0 bg-black/90 backdrop-blur-md"
           onClick={onClose}
         />
-        
+
         <motion.div
           initial={{ opacity: 0, scale: 0.9, rotateX: -15 }}
           animate={{ opacity: 1, scale: 1, rotateX: 0 }}
@@ -47,15 +47,49 @@ const TeamMembersModal = ({ team, isOpen, onClose, onToggleMember, readOnly = fa
           </button>
 
           <div className="mb-6">
-            <motion.h2 
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              className="text-3xl md:text-4xl font-bold text-primary mb-2 uppercase tracking-wider"
-            >
-              {team.teamName}
-            </motion.h2>
-            <motion.p 
+            <div className="flex items-center justify-between mb-4">
+              <motion.h2
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                className="text-2xl md:text-3xl font-bold text-primary uppercase tracking-wider flex items-center gap-3"
+              >
+                {team.logoUrl ? (
+                  <img src={team.logoUrl} alt="Team Logo" className="w-12 h-12 rounded-full border-2 border-primary object-cover" />
+                ) : null}
+                {team.teamName}
+              </motion.h2>
+              <div className="text-right">
+                <p className="text-xs text-muted-foreground uppercase tracking-widest">Team Lead</p>
+                <p className="font-bold text-foreground">{team.teamLeadName} <span className="text-primary text-xs">({team.teamLeadIgn})</span></p>
+              </div>
+            </div>
+
+            {/* Drop Locations for BGMI */}
+            {(team.dropErangel || team.dropMiramar || team.dropRondo) && (
+              <div className="bg-background/30 p-3 rounded-lg border border-border mb-4 grid grid-cols-3 gap-2 text-center">
+                {team.dropErangel && (
+                  <div>
+                    <p className="text-[10px] uppercase text-muted-foreground">Erangel</p>
+                    <p className="text-sm font-bold text-foreground">{team.dropErangel}</p>
+                  </div>
+                )}
+                {team.dropMiramar && (
+                  <div>
+                    <p className="text-[10px] uppercase text-muted-foreground">Miramar</p>
+                    <p className="text-sm font-bold text-foreground">{team.dropMiramar}</p>
+                  </div>
+                )}
+                {team.dropRondo && (
+                  <div>
+                    <p className="text-[10px] uppercase text-muted-foreground">Rondo</p>
+                    <p className="text-sm font-bold text-foreground">{team.dropRondo}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <motion.p
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -75,8 +109,8 @@ const TeamMembersModal = ({ team, isOpen, onClose, onToggleMember, readOnly = fa
                 className={`
                   relative group
                   ${readOnly ? '' : 'cursor-pointer'}
-                  ${member.isChecked 
-                    ? 'bg-gradient-to-r from-green-500/20 via-green-500/10 to-transparent border-green-500' 
+                  ${member.isChecked
+                    ? 'bg-gradient-to-r from-green-500/20 via-green-500/10 to-transparent border-green-500'
                     : 'bg-background/50 border-border hover:border-primary'}
                   border-2 p-4 transition-all duration-300
                   ${!readOnly && 'hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/20'}
@@ -98,19 +132,32 @@ const TeamMembersModal = ({ team, isOpen, onClose, onToggleMember, readOnly = fa
                       />
                     </motion.div>
                   )}
-                  
+
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <User className="w-5 h-5 text-primary" />
                       <span className="font-bold text-lg text-foreground">{member.name}</span>
                     </div>
-                    {member.role && (
-                      <div className="text-sm text-muted-foreground mt-1 ml-7">
-                        {member.role}
-                      </div>
-                    )}
+                    <div className="ml-7 space-y-1">
+                      {member.ign && (
+                        <div className="text-sm text-muted-foreground font-mono">
+                          IGN: <span className="text-white">{member.ign}</span>
+                        </div>
+                      )}
+                      {member.role && (
+                        <div className="text-xs text-primary/80 uppercase tracking-widest font-bold">
+                          {member.role}
+                        </div>
+                      )}
+                      {(member.email || member.phone) && (
+                        <div className="text-xs text-muted-foreground flex gap-3">
+                          {member.email && <span>{member.email}</span>}
+                          {member.phone && <span>{member.phone}</span>}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  
+
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}

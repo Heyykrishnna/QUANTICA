@@ -12,6 +12,7 @@ export interface Team {
   totalKills: number | null;
   wins: number | null;
   rank: number | null;
+  group?: string | null;
   participants: { name: string }[];
 }
 

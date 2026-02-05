@@ -92,9 +92,9 @@ const TeamManagement = ({ preSelectedEventId }: TeamManagementProps = {}) => {
     }
   };
 
-  const handleUpdateTeam = async (teamId: string, newName: string) => {
+  const handleUpdateTeam = async (teamId: string, newName: string, newGroup?: string) => {
     try {
-      await api.put(`/teams/${teamId}`, { name: newName });
+      await api.put(`/teams/${teamId}`, { name: newName, ...(newGroup !== undefined && { group: newGroup }) });
       setEditingTeam(null);
       refetch(); // Refetch teams with calculated stats
       toast.success("Team updated");
@@ -190,20 +190,47 @@ const TeamManagement = ({ preSelectedEventId }: TeamManagementProps = {}) => {
             >
               <div className="flex items-start justify-between mb-3">
                 {editingTeam === team.id ? (
-                  <input
-                    type="text"
-                    defaultValue={team.name}
-                    onBlur={(e) => handleUpdateTeam(team.id, e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        handleUpdateTeam(team.id, e.currentTarget.value);
-                      }
-                    }}
-                    className="flex-1 px-2 py-1 bg-background border-2 border-primary outline-none text-foreground font-bold"
-                    autoFocus
-                  />
+                  <div className="flex gap-2 flex-1 mr-4">
+                    <input
+                      type="text"
+                      defaultValue={team.name}
+                      placeholder="Team Name"
+                      onBlur={(e) => {
+                        // Only update if both fields are handled, might be tricky with onBlur. 
+                        // Better to use a save button or keypress. 
+                        // For simplicity, let's just stick to Enter key or add a save button icon.
+                      }}
+                      id={`name-${team.id}`}
+                      className="flex-1 px-2 py-1 bg-background border-2 border-primary outline-none text-foreground font-bold"
+                      autoFocus
+                    />
+                    <input
+                      type="text"
+                      defaultValue={team.group || ""}
+                      placeholder="Group (A, B...)"
+                      id={`group-${team.id}`}
+                      className="w-20 px-2 py-1 bg-background border-2 border-primary outline-none text-foreground font-bold uppercase"
+                    />
+                    <button
+                      onClick={() => {
+                        const nameInput = document.getElementById(`name-${team.id}`) as HTMLInputElement;
+                        const groupInput = document.getElementById(`group-${team.id}`) as HTMLInputElement;
+                        handleUpdateTeam(team.id, nameInput.value, groupInput.value);
+                      }}
+                      className="p-1 bg-primary text-black"
+                    >
+                      <Save className="w-4 h-4" />
+                    </button>
+                  </div>
                 ) : (
-                  <h3 className="font-bold text-lg text-foreground">{team.name}</h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-bold text-lg text-foreground">{team.name}</h3>
+                    {team.group && (
+                      <span className="px-2 py-0.5 bg-secondary/20 text-secondary text-xs font-bold uppercase rounded border border-secondary/30">
+                        Group {team.group}
+                      </span>
+                    )}
+                  </div>
                 )}
                 <div className="flex gap-2">
                   <button

@@ -1528,7 +1528,7 @@ const EventDetail = () => {
                 ))}
               </div>
             </motion.div>
-            { }
+            {/* Schedule */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -1669,12 +1669,12 @@ const EventDetail = () => {
             {(event as any).registrationUrl && (
               <a
                 href={(event as any).registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cyber-btn inline-block"
-            >
-              Register via Unstop
-            </a>
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cyber-btn inline-block"
+              >
+                Register via Unstop
+              </a>
             )}
           </motion.div>
         </div>

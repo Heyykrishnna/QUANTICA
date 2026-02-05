@@ -9,7 +9,6 @@ import GlitchText from "@/components/GlitchText";
 import { events as allEvents } from "@/data/events";
 import { scheduleEvents } from "../data/schedule";
 import { useRef, useState, useLayoutEffect, useEffect } from "react";
-import GeneralPassSection from "@/components/GeneralPassSection";
 import RoadmapTimeline from "../components/RoadmapTimeline";
 import EventSchedule from "../components/EventSchedule";
 import EventDetailsModal from "../components/EventDetailsModal";
@@ -255,7 +254,7 @@ const Events = () => {
         </div>
       </section>
 
-      <GeneralPassSection />
+
 
       <section className="py-24 relative bg-card">
         <div className="absolute inset-0 grid-bg opacity-5" />

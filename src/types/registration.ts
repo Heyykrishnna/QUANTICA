@@ -2,6 +2,9 @@ export interface TeamMember {
   name: string;
   isChecked: boolean;
   role?: string;
+  ign?: string;
+  email?: string;
+  phone?: string;
 }
 
 export enum VerificationStatus {
@@ -29,5 +32,11 @@ export interface RegistrationTeam {
   members: TeamMember[];
   verificationStatus: VerificationStatus;
   checkInStatus: CheckInStatus;
+  teamLeadIgn?: string;
+  teamLeadEmail?: string;
+  logoUrl?: string;
+  dropErangel?: string;
+  dropMiramar?: string;
+  dropRondo?: string;
 }
 
