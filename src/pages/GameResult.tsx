@@ -92,7 +92,7 @@ const GameResult = () => {
                 </div>
 
                 <div className="container mx-auto px-4 relative z-10">
-                    <Link to="/results" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-8 transition-colors">
+                    <Link to="/result" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-8 transition-colors">
                         <ArrowLeft className="w-4 h-4" /> Back to Results Hub
                     </Link>
 
