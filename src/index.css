@@ -31,6 +31,9 @@
     --magenta: 330 100% 50%;
     --electric-blue: 220 100% 60%;
     --neon-green: 120 100% 50%;
+    --theme-orange: 30 100% 50%;
+    --theme-yellow: 50 100% 50%;
+    --theme-red: 0 100% 60%;
   }
   .dark {
     --background: 0 0% 3%;

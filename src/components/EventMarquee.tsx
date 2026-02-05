@@ -1,10 +1,33 @@
 import { useEffect, useState } from "react";
-import { schedule, ScheduleItem } from "@/data/schedule";
-import { parseISO, isWithinInterval } from "date-fns";
+import { scheduleEvents, ScheduleEvent } from "../data/schedule";
+
+// Helper function to parse the schedule's date format (DD/MM/YY and time like "10:00 AM")
+const parseDateTime = (dayStr: string, timeStr: string): Date => {
+    const [day, month, year] = dayStr.split('/').map(Number);
+    const fullYear = 2000 + year; // Assuming 2-digit year means 20XX
+
+    // Parse time string like "10:00 AM" or "5:30 PM"
+    const timeMatch = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!timeMatch) {
+        return new Date(fullYear, month - 1, day);
+    }
+
+    let hours = parseInt(timeMatch[1], 10);
+    const minutes = parseInt(timeMatch[2], 10);
+    const period = timeMatch[3].toUpperCase();
+
+    if (period === 'PM' && hours !== 12) {
+        hours += 12;
+    } else if (period === 'AM' && hours === 12) {
+        hours = 0;
+    }
+
+    return new Date(fullYear, month - 1, day, hours, minutes);
+};
 
 const EventMarquee = () => {
-    const [liveEvents, setLiveEvents] = useState<ScheduleItem[]>([]);
-    const [upcomingEvents, setUpcomingEvents] = useState<ScheduleItem[]>([]);
+    const [liveEvents, setLiveEvents] = useState<ScheduleEvent[]>([]);
+    const [upcomingEvents, setUpcomingEvents] = useState<ScheduleEvent[]>([]);
 
     useEffect(() => {
         const checkLiveEvents = () => {
@@ -12,10 +35,10 @@ const EventMarquee = () => {
             // For testing, uncomment to override time:
             // const now = new Date("2026-02-07T11:00:00"); 
 
-            const currentLive = schedule.filter(item => {
-                const start = parseISO(item.start);
-                const end = parseISO(item.end);
-                return isWithinInterval(now, { start, end });
+            const currentLive = scheduleEvents.filter(item => {
+                const start = parseDateTime(item.day, item.startTime);
+                const end = parseDateTime(item.day, item.endTime);
+                return now >= start && now <= end;
             });
 
             if (currentLive.length > 0) {
@@ -24,19 +47,15 @@ const EventMarquee = () => {
             } else {
                 setLiveEvents([]);
                 // Find next upcoming day
-                const allUpcoming = schedule
-                    .filter(item => parseISO(item.start) > now)
-                    .sort((a, b) => parseISO(a.start).getTime() - parseISO(b.start).getTime());
+                const allUpcoming = scheduleEvents
+                    .filter(item => parseDateTime(item.day, item.startTime) > now)
+                    .sort((a, b) => parseDateTime(a.day, a.startTime).getTime() - parseDateTime(b.day, b.startTime).getTime());
 
                 if (allUpcoming.length > 0) {
                     // Get all events happening on the same day as the first upcoming event
-                    const nextEventStart = parseISO(allUpcoming[0].start);
-                    // Use date string comparison for simplicity "YYYY-MM-DD"
-                    const targetDateStr = nextEventStart.toISOString().split('T')[0];
+                    const targetDay = allUpcoming[0].day;
 
-                    const nextDayEvents = allUpcoming.filter(item => {
-                        return parseISO(item.start).toISOString().startsWith(targetDateStr);
-                    });
+                    const nextDayEvents = allUpcoming.filter(item => item.day === targetDay);
                     setUpcomingEvents(nextDayEvents);
                 } else {
                     setUpcomingEvents([]);
@@ -70,7 +89,7 @@ const EventMarquee = () => {
                                         {item.title}
                                     </span>
                                     <span className="text-primary/100 text-xs">
-                                        {new Date(item.start).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        {item.day} {item.startTime}
                                     </span>
                                 </div>
                             ))}

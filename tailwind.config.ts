@@ -56,6 +56,9 @@ export default {
         magenta: "hsl(var(--magenta))",
         "electric-blue": "hsl(var(--electric-blue))",
         "neon-green": "hsl(var(--neon-green))",
+        "theme-orange": "hsl(var(--theme-orange))",
+        "theme-yellow": "hsl(var(--theme-yellow))",
+        "theme-red": "hsl(var(--theme-red))",
       },
       borderRadius: {
         lg: "var(--radius)",

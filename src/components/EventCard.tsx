@@ -10,7 +10,7 @@ interface EventCardProps {
   prizePool: string;
   image: string;
   slug: string;
-  color: "cyan" | "magenta";
+  color: "cyan" | "magenta" | "theme-yellow" | "theme-orange" | "theme-red" | "electric-blue";
   showCountdown?: boolean;
   registrationUrl?: string;
   gameLogo: string;
@@ -29,8 +29,16 @@ const EventCard = ({
   registrationUrl,
   gameLogo,
 }: EventCardProps) => {
-  const borderColor = color === "cyan" ? "border-primary" : "border-secondary";
-  const textColor = color === "cyan" ? "text-primary" : "text-secondary";
+  const colorClassMap: Record<string, { border: string; text: string }> = {
+    cyan: { border: "border-primary", text: "text-primary" },
+    magenta: { border: "border-secondary", text: "text-secondary" },
+    "theme-yellow": { border: "border-theme-yellow", text: "text-theme-yellow" },
+    "theme-orange": { border: "border-theme-orange", text: "text-theme-orange" },
+    "theme-red": { border: "border-theme-red", text: "text-theme-red" },
+    "electric-blue": { border: "border-electric-blue", text: "text-electric-blue" },
+  };
+
+  const { border: borderColor, text: textColor } = colorClassMap[color] || colorClassMap.cyan;
 
   return (
     <motion.div

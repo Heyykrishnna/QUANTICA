@@ -7,6 +7,7 @@ import EventCard from "../components/EventCard";
 import ExpandableCardDemo from "@/components/ui/expandable-card-demo-grid";
 import GlitchText from "@/components/GlitchText";
 import { events as allEvents } from "@/data/events";
+import { scheduleEvents } from "../data/schedule";
 import { useRef, useState, useLayoutEffect, useEffect } from "react";
 import GeneralPassSection from "@/components/GeneralPassSection";
 import RoadmapTimeline from "../components/RoadmapTimeline";
@@ -256,7 +257,7 @@ const Events = () => {
 
       <GeneralPassSection />
 
-      {/* <section>
+      <section>
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -305,9 +306,9 @@ const Events = () => {
             )}
           </AnimatePresence >
         </div>
-      </section> */}
+      </section>
 
-      {/* <section className="py-24 relative bg-card">
+      <section className="py-24 relative bg-card">
         <div className="absolute inset-0 grid-bg opacity-5" />
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -333,10 +334,10 @@ const Events = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <EventSchedule events={allEvents} onEventClick={handleEventClick} />
+            <EventSchedule events={scheduleEvents} onEventClick={handleEventClick} />
           </motion.div>
         </div>
-      </section> */}
+      </section>
 
       {/* Game Mode Selection */}
       <section className="pt-24 relative">

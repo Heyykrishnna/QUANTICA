@@ -1,30 +1,12 @@
 import { motion } from "framer-motion";
-
-interface Event {
-  title: string;
-  game: string;
-  date: string;
-  startTime?: string;
-  endTime?: string;
-  day?: string;
-  venue?: string;
-  teams?: string;
-  format?: string;
-  prizePool: string;
-  groups?: string[];
-  teamLists?: Record<string, string[]>;
-  image: string;
-  gameLogo?: string;
-  color: "cyan" | "magenta";
-  slug: string;
-}
+import { ScheduleEvent } from "@/data/schedule";
 
 interface EventScheduleProps {
-  events: Event[];
-  onEventClick: (event: Event) => void;
+  events: ScheduleEvent[];
+  onEventClick: (event: ScheduleEvent) => void;
 }
 
-interface PositionedEvent extends Event {
+interface PositionedEvent extends ScheduleEvent {
   lane: number;
   startPos: number;
   width: number;
@@ -33,18 +15,18 @@ interface PositionedEvent extends Event {
 const EventSchedule = ({ events, onEventClick }: EventScheduleProps) => {
   // Timeline: 9AM to 11PM with 2-hour intervals
   const times = ["9AM", "11AM", "1PM", "3PM", "5PM", "7PM", "9PM", "11PM"];
-  
+
   // Helper to convert time string to hour (24-hour format)
   const timeToHour = (timeStr: string): number => {
     const match = timeStr.match(/(\d+):?(\d*)\s*(AM|PM)/i);
     if (!match) return 9;
-    
+
     let hour = parseInt(match[1]);
     const isPM = match[3].toUpperCase() === "PM";
-    
+
     if (isPM && hour !== 12) hour += 12;
     if (!isPM && hour === 12) hour = 0;
-    
+
     return hour;
   };
 
@@ -62,34 +44,44 @@ const EventSchedule = ({ events, onEventClick }: EventScheduleProps) => {
   };
 
   // Assign lanes to events to prevent overlap
-  const assignLanes = (dayEvents: Event[]): PositionedEvent[] => {
+  const assignLanes = (dayEvents: ScheduleEvent[]): PositionedEvent[] => {
     const positioned: PositionedEvent[] = [];
-    
+    const MIN_WIDTH_PERCENT = 15; // Minimum visual width percentage
+    const MIN_WIDTH_HOURS = (MIN_WIDTH_PERCENT / 100) * 14; // Convert to hours (14 hour timeline)
+
     dayEvents.forEach(event => {
       if (!event.startTime || !event.endTime) return;
-      
+
       const startPos = getTimePosition(event.startTime);
       const endPos = getTimePosition(event.endTime);
-      const width = endPos - startPos;
-      
+      const actualWidth = endPos - startPos;
+      // Use the visual width (with minimum) for overlap detection
+      const visualWidth = Math.max(actualWidth, MIN_WIDTH_HOURS);
+
       // Find the lowest available lane
       let lane = 0;
       let foundLane = false;
-      
+
       while (!foundLane) {
         const eventsInLane = positioned.filter(e => e.lane === lane);
-        const hasOverlap = eventsInLane.some(e => eventsOverlap({ startPos, width }, { startPos: e.startPos, width: e.width }));
-        
+        // Check overlap using visual widths
+        const hasOverlap = eventsInLane.some(e => {
+          const eVisualWidth = Math.max(e.width, MIN_WIDTH_HOURS);
+          const e1End = startPos + visualWidth;
+          const e2End = e.startPos + eVisualWidth;
+          return !(e1End <= e.startPos || e2End <= startPos);
+        });
+
         if (!hasOverlap) {
           foundLane = true;
         } else {
           lane++;
         }
       }
-      
-      positioned.push({ ...event, lane, startPos, width });
+
+      positioned.push({ ...event, lane, startPos, width: actualWidth });
     });
-    
+
     return positioned;
   };
 
@@ -102,12 +94,12 @@ const EventSchedule = ({ events, onEventClick }: EventScheduleProps) => {
       acc[event.day].push(event);
     }
     return acc;
-  }, {} as Record<string, Event[]>);
+  }, {} as Record<string, ScheduleEvent[]>);
 
   const days = Object.keys(eventsByDay).sort((a, b) => {
     const [dayA, monthA, yearA] = a.split('/').map(Number);
     const [dayB, monthB, yearB] = b.split('/').map(Number);
-    
+
     if (yearA !== yearB) return yearA - yearB;
     if (monthA !== monthB) return monthA - monthB;
     return dayA - dayB;
@@ -126,7 +118,7 @@ const EventSchedule = ({ events, onEventClick }: EventScheduleProps) => {
                 Date
               </div>
             </div>
-            
+
             {/* Time headers */}
             <div className="flex-1 grid gap-0" style={{ gridTemplateColumns: `repeat(${times.length}, 1fr)` }}>
               {times.map((time, i) => (
@@ -160,10 +152,10 @@ const EventSchedule = ({ events, onEventClick }: EventScheduleProps) => {
                 <div className="w-32 flex-shrink-0 pr-3 bg-muted/30 border-r border-border/30">
                   <div className="p-3">
                     <p className="text-base font-bold text-foreground">
-                      {day.split('/')[0]}/{day.split('/')[1]}
+                      {parseInt(day.split('/')[0])} Feb
                     </p>
                     <p className="text-xs text-muted-foreground uppercase tracking-wide mt-0.5">
-                      {new Date(2026, parseInt(day.split('/')[1]) - 1, parseInt(day.split('/')[0])).toLocaleDateString('en-US', { weekday: 'short' })}
+                      {new Date(2026, parseInt(day.split('/')[1]) - 1, parseInt(day.split('/')[0])).toLocaleDateString('en-US', { weekday: 'long' })}
                     </p>
                   </div>
                 </div>
@@ -182,14 +174,35 @@ const EventSchedule = ({ events, onEventClick }: EventScheduleProps) => {
 
                   {/* Event blocks */}
                   {positionedEvents.map((event, index) => {
-                    const colorClass =
-                      event.color === "cyan"
-                        ? "bg-cyan/95 hover:bg-cyan border-cyan/80 text-black"
-                        : "bg-magenta/95 hover:bg-magenta border-magenta/80 text-white";
-                    
+                    let colorClass = "";
+                    switch (event.color) {
+                      case "magenta":
+                        colorClass = "bg-magenta/95 hover:bg-magenta border-magenta/80 text-white";
+                        break;
+                      case "neon-green":
+                        colorClass = "bg-neon-green/95 hover:bg-neon-green border-neon-green/80 text-black";
+                        break;
+                      case "electric-blue":
+                        colorClass = "bg-electric-blue/95 hover:bg-electric-blue border-electric-blue/80 text-white";
+                        break;
+                      case "theme-orange":
+                        colorClass = "bg-theme-orange/95 hover:bg-theme-orange border-theme-orange/80 text-black";
+                        break;
+                      case "theme-yellow":
+                        colorClass = "bg-theme-yellow/95 hover:bg-theme-yellow border-theme-yellow/80 text-black";
+                        break;
+                      case "theme-red":
+                        colorClass = "bg-theme-red/95 hover:bg-theme-red border-theme-red/80 text-white";
+                        break;
+                      default: // cyan
+                        colorClass = "bg-cyan/95 hover:bg-cyan border-cyan/80 text-black";
+                    }
+
                     // Calculate position as percentage of total 14 hours (9AM to 11PM)
                     const leftPercent = (event.startPos / 14) * 100;
-                    const widthPercent = (event.width / 14) * 100;
+                    const rawWidthPercent = (event.width / 14) * 100;
+                    // Minimum width of 15% to ensure short events are readable
+                    const widthPercent = Math.max(rawWidthPercent, 15);
 
                     return (
                       <motion.button
