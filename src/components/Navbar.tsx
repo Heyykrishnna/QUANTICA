@@ -3,8 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 const navLinks = [
-	{ name: "HOME", path: "/" },
 	{ name: "EVENTS", path: "/events" },
+	{ name: "MAP", path: "/map" },
 	{ name: "ARENA", path: "/play-arena" },
 	{ name: "RESULT", path: "/result" },
 	{ name: "ABOUT", path: "/about" },
