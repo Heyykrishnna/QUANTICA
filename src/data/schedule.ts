@@ -25,7 +25,7 @@ export const scheduleEvents: ScheduleEvent[] = [
         day: "07/02/26",
         startTime: "10:00 AM",
         endTime: "5:00 PM",
-        venue: "Main Arena",
+        venue: "501, 502, 503, 504, 506, 507, 508, 509 & 405 Labs",
         color: "theme-yellow",
         slug: "bgmi-semifinals",
         image: "https://ik.imagekit.io/vdigjljlu/bgmi.jpeg?updatedAt=1769276558264",
@@ -37,18 +37,18 @@ export const scheduleEvents: ScheduleEvent[] = [
             "Group C": ["Titan Force", "Savage Kings", "Fire Dragons", "Ice Wolves"]
         },
         groupTimes: {
-            "Group A": "11:00 AM - 12:30 PM",
-            "Group B": "1:00 PM - 2:30 PM",
-            "Group C": "3:00 PM - 4:00 PM"
+            "Group A": "501 Lab, 508 Lab, 509 Lab",
+            "Group B": "502 Lab, 503 Lab, 507 Lab",
+            "Group C": "504 Lab, 506 Lab, 405 Lab"
         },
     },
     {
         title: "Free Fire MAX",
-        game: "Free Fire",
+        game: "Free Fire - Semi Finals",
         day: "07/02/26",
         startTime: "10:00 AM",
         endTime: "5:30 PM",
-        venue: "Main Arena",
+        venue: "103, 104, 105, 303, 304, 403, 408, 409, 410, 411 Labs",
         color: "theme-orange",
         slug: "freefire",
         image: "https://ik.imagekit.io/vdigjljlu/ff.jpeg?updatedAt=1769276556496",
@@ -61,10 +61,10 @@ export const scheduleEvents: ScheduleEvent[] = [
             "Group D": ["Airdrop Hunters", "Final Circle", "SCAR Squad", "VSS Venom"]
         },
         groupTimes: {
-            "Group A": "6:00 PM - 6:45 PM",
-            "Group B": "6:45 PM - 7:15 PM",
-            "Group C": "7:15 PM - 7:45 PM",
-            "Group D": "7:45 PM - 8:00 PM"
+            "Group A": "408 Lab, 409 Lab",
+            "Group B": "410 Lab, 411 Lab",
+            "Group C": "403 Lab, 303 Lab, 304 Lab",
+            "Group D": "103 Lab, 104 Lab, 105 Lab"
         },
     },
     {
@@ -164,7 +164,7 @@ export const scheduleEvents: ScheduleEvent[] = [
         day: "08/02/26",
         startTime: "10:00 AM",
         endTime: "1:00 PM",
-        venue: "E-Sports Arena",
+        venue: "Performing Arts 214",
         color: "theme-red",
         slug: "valorant-semis",
         image: "https://ik.imagekit.io/vdigjljlu/valorant.jpeg?updatedAt=1769276556703",
@@ -176,8 +176,8 @@ export const scheduleEvents: ScheduleEvent[] = [
         day: "08/02/26",
         startTime: "1:00 PM",
         endTime: "5:00 PM",
-        venue: "E-Sports Arena",
-        color: "theme-red",
+        venue: "Performing Arts 214",
+        color: "theme-yellow",
         slug: "valorant-finals",
         image: "https://ik.imagekit.io/vdigjljlu/valorant.jpeg?updatedAt=1769276556703",
         gameLogo: "https://upload.wikimedia.org/wikipedia/commons/f/fc/Valorant_logo_-_pink_color_version.svg",
@@ -188,7 +188,7 @@ export const scheduleEvents: ScheduleEvent[] = [
         day: "08/02/26",
         startTime: "10:00 AM",
         endTime: "5:00 PM",
-        venue: "Robotics Lab",
+        venue: "Atrium",
         color: "theme-red",
         slug: "f125",
         image: "https://ik.imagekit.io/vdigjljlu/f1.jpeg?updatedAt=1769276557113",
