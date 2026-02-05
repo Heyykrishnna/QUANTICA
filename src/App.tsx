@@ -33,6 +33,7 @@ import GlitchOverlay from "./components/GlitchOverlay";
 import TargetCursor from "./components/TargetCursor";
 import ArtistReveal from "./pages/ArtistReveal";
 import ArtistRevealPopup from "./components/ArtistRevealPopup";
+import MapPage from "./pages/MapPage";
 
 const queryClient = new QueryClient();
 const AnimatedRoutes = () => {
@@ -52,7 +53,7 @@ const AnimatedRoutes = () => {
         <Route path="/admin/registration" element={<AdminRegistration />} />
         <Route path="/play-arena" element={<PlayArena />} />
         <Route path="/artist-reveal" element={<ArtistReveal />} />
-
+        <Route path="/map" element={<MapPage />} />
         {/* CA Portal Routes */}
         {/* <Route path="/ca/register" element={<CARegister />} />
         <Route path="/ca/login" element={<CALogin />} />
