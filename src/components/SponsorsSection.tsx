@@ -9,23 +9,23 @@ const sponsors = [
 	},
 	{
 		name: "ESFI",
-		logo: "https://esportsfederation.in/images/ESFI_Full_logo-White.png",
+		logo: "https://thebridge.in/h-upload/2022/06/01/29366-esfi-logo.jpg",
 		link: "https://esportsfederation.in/",
 	},
-	{
-		name: "Red Bull",
-		logo: "https://www.svgrepo.com/show/303227/redbull-logo.svg",
-		link: "https://www.redbull.com",
-	},
+	// {
+	// 	name: "Red Bull",
+	// 	logo: "https://www.svgrepo.com/show/303227/redbull-logo.svg",
+	// 	link: "https://www.redbull.com",
+	// },
 	// {
 	// 	name: "Meta Space",
 	// 	logo: "https://metaspacechain.b-cdn.net/img/logo.png",
 	// 	link: "https://metaspacechain.com/",
 	// },
 	{
-		name: "ENVY Fragrances",
-		logo: "https://envyfragrances.com/cdn/shop/files/ENVY-Logo-NEW-01.png?height=72&v=1749030853",
-		link: "https://envyfragrances.com/",
+		name: "Denver",
+		logo: "https://denverformen.com/cdn/shop/files/Denver_Horizontal_Logo_Final_1.png?v=1648750177&width=500",
+		link: "https://denverformen.com/",
 		className: "scale-80",
 	},
 	{
@@ -84,7 +84,7 @@ const sponsors = [
 	// },
 	{
 		name: "Meta Nova",
-		logo: "https://metanovaesports.com/wp-content/uploads/2025/12/New-Project-2.png",
+		logo: "https://metanovaesports.com/wp-content/uploads/2026/01/cropped-1__3_-removebg-preview-1.png",
 		link: "https://metanovaesports.com/",
 		className: "scale-150",
 	},
@@ -94,6 +94,13 @@ const sponsors = [
 		link: "https://evepaper.com/",
 		className: "scale-100 brightness-0 invert",
 	},
+	{
+		name: "Ginni Chaap",
+		logo: "https://ik.imagekit.io/jbckhvkvo/Screenshot%202026-02-05%20at%206.18.04%E2%80%AFPM%201.png",
+		link: "https://www.instagram.com/ginnichaap/",
+		className: "scale-100",
+	},
+
 	// {
 	// 	name: "PlayStation",
 	// 	logo: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Playstation_logo_colour.svg",
