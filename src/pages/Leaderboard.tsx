@@ -1,28 +1,61 @@
-import { motion } from "framer-motion";
-import { Trophy, Users, Activity, PlayCircle, Clock, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Trophy, Users, Activity, PlayCircle, Clock, ChevronRight, MapPin, ChevronLeft } from "lucide-react";
 import PageTransition from "../components/PageTransition";
 import GlitchText from "../components/GlitchText";
 import LiveTicker from "../components/LiveTicker";
 import { events } from "../data/events";
+import { scheduleEvents } from "../data/schedule";
+import { useState, useEffect } from "react";
 
-// Helper to determine status
+// Helper to determine status based on schedule
 type Event = typeof events[0];
+type ScheduleEvent = typeof scheduleEvents[0];
 
-const getStatus = (event: Event) => {
-  // Check if within 7-8 Feb range (simplified for demo)
-  // In production, compare with new Date()
-  // For demo/dev: 
-  // If today is 7th or 8th Feb -> Live
-  // Since we can't easily fake server time here, we'll just show the date unless we add a manual override.
-  // However, user said "events will be live from 7th till 8th", implying they want to see "7-8 Feb" mostly.
-  return {
-    isLive: false,
-    text: event.date // "7-8 Feb 2026"
+const getEventStatus = (scheduleEvent: ScheduleEvent | undefined) => {
+  if (!scheduleEvent) return { status: 'upcoming', label: 'Upcoming', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20', borderColor: 'border-yellow-500/30' };
+
+  const now = new Date();
+
+  // Parse the day format "DD/MM/YY"
+  const [day, month, year] = scheduleEvent.day.split('/').map(Number);
+  const eventDate = new Date(2000 + year, month - 1, day);
+
+  // Parse start and end times
+  const parseTime = (timeStr: string, baseDate: Date) => {
+    const [time, period] = timeStr.split(' ');
+    let [hours, minutes] = time.split(':').map(Number);
+    if (period === 'PM' && hours !== 12) hours += 12;
+    if (period === 'AM' && hours === 12) hours = 0;
+    return new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), hours, minutes);
   };
+
+  const startTime = parseTime(scheduleEvent.startTime, eventDate);
+  const endTime = parseTime(scheduleEvent.endTime, eventDate);
+
+  if (now < startTime) {
+    return { status: 'upcoming', label: 'Upcoming', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20', borderColor: 'border-yellow-500/30' };
+  } else if (now >= startTime && now <= endTime) {
+    return { status: 'live', label: 'Live', color: 'text-red-400', bgColor: 'bg-red-500/20', borderColor: 'border-red-500/30' };
+  } else {
+    return { status: 'ended', label: 'Ended', color: 'text-gray-400', bgColor: 'bg-gray-500/20', borderColor: 'border-gray-500/30' };
+  }
 };
 
 const Leaderboard = () => {
-  const featuredEvent = events.find(e => e.slug === "bgmi") || events[0];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const featuredEvent = events[currentIndex];
+
+  // Auto-rotate carousel every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % events.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
 
   return (
     <PageTransition>
@@ -37,34 +70,80 @@ const Leaderboard = () => {
 
         <div className="container mx-auto px-4 relative z-10">
 
-          {/* Hero / Featured Section */}
+          {/* Hero / Featured Carousel */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-20"
           >
             <div className="relative rounded-2xl overflow-hidden border border-primary/30 shadow-[0_0_50px_rgba(139,92,246,0.15)] group">
+              {/* Background Image with AnimatePresence */}
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={featuredEvent.slug}
+                  src={featuredEvent.image}
+                  alt="Featured Event"
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 0.5, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 0.7 }}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+              </AnimatePresence>
               <div className="absolute inset-0 bg-black/60 z-10" />
-              <img
-                src={featuredEvent.image}
-                alt="Featured Event"
-                className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700"
-              />
 
               <div className="relative z-20 p-8 md:p-16 flex flex-col items-start justify-end min-h-[400px]">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/20 text-primary border border-primary/50 text-xs font-bold uppercase tracking-widest rounded mb-4">
-                  Main Event
-                </div>
-                <h1 className="text-5xl md:text-7xl font-bold mb-4 uppercase text-white drop-shadow-lg">
-                  {featuredEvent.game}
-                </h1>
-                <p className="text-xl text-gray-200 max-w-2xl mb-8 border-l-4 border-primary pl-4">
-                  {featuredEvent.title} - The battle begins soon. Check out the teams and brackets.
-                </p>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={featuredEvent.slug + "-content"}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -30 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/20 text-primary border border-primary/50 text-xs font-bold uppercase tracking-widest rounded mb-4">
+                      Featured Event
+                    </div>
+                    <h1 className="text-5xl md:text-7xl font-bold mb-4 uppercase text-white drop-shadow-lg">
+                      {featuredEvent.game}
+                    </h1>
+                    <p className="text-xl text-gray-200 max-w-2xl mb-8 border-l-4 border-primary pl-4">
+                      {featuredEvent.title} - Prize Pool: <span className="text-green-400 font-bold">{featuredEvent.prizePool || 'TBA'}</span>
+                    </p>
 
-                <a href={`/results/${featuredEvent.slug}`} className="glitch-btn px-8 py-4 bg-primary text-black font-bold uppercase tracking-wider hover:bg-white transition-colors flex items-center gap-2">
-                  View Board <ChevronRight className="w-5 h-5" />
-                </a>
+                    <a href={`/results/${featuredEvent.slug}`} className="glitch-btn px-8 py-4 bg-primary text-black font-bold uppercase tracking-wider hover:bg-white transition-colors flex items-center gap-2">
+                      View Board <ChevronRight className="w-5 h-5" />
+                    </a>
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Carousel Navigation Dots */}
+                <div className="absolute bottom-6 right-6 flex items-center gap-2">
+                  {events.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => goToSlide(idx)}
+                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === currentIndex
+                          ? 'bg-primary w-8'
+                          : 'bg-white/30 hover:bg-white/50'
+                        }`}
+                    />
+                  ))}
+                </div>
+
+                {/* Navigation Arrows */}
+                <button
+                  onClick={() => setCurrentIndex((prev) => (prev - 1 + events.length) % events.length)}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 border border-white/20 flex items-center justify-center text-white hover:bg-primary hover:text-black transition-all opacity-0 group-hover:opacity-100"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setCurrentIndex((prev) => (prev + 1) % events.length)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 border border-white/20 flex items-center justify-center text-white hover:bg-primary hover:text-black transition-all opacity-0 group-hover:opacity-100"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
               </div>
             </div>
           </motion.div>
@@ -89,7 +168,10 @@ const Leaderboard = () => {
           {/* Game Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event, index) => {
-              const { isLive, text } = getStatus(event);
+              // Find matching schedule event to get timing
+              const scheduleEvent = scheduleEvents.find(s => s.slug === event.slug || s.slug.startsWith(event.slug));
+              const eventTime = scheduleEvent ? `${scheduleEvent.startTime} - ${scheduleEvent.endTime}` : event.date;
+              const statusInfo = getEventStatus(scheduleEvent);
               return (
                 <motion.div
                   key={event.slug}
@@ -103,15 +185,10 @@ const Leaderboard = () => {
 
                       {/* Status Badge */}
                       <div className="absolute top-4 right-4 z-20">
-                        {isLive ? (
-                          <span className="px-3 py-1 bg-red-500/90 text-white text-[10px] font-bold uppercase tracking-widest rounded flex items-center gap-2 shadow-lg">
-                            <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" /> Live
-                          </span>
-                        ) : (
-                          <span className="px-3 py-1 bg-black/60 text-muted-foreground text-[10px] font-bold uppercase tracking-widest rounded backdrop-blur-md border border-white/10">
-                            {text}
-                          </span>
-                        )}
+                        <span className={`px-3 py-1 ${statusInfo.bgColor} ${statusInfo.color} border ${statusInfo.borderColor} text-[10px] font-bold uppercase tracking-widest rounded flex items-center gap-2 backdrop-blur-md`}>
+                          {statusInfo.status === 'live' && <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />}
+                          {statusInfo.label}
+                        </span>
                       </div>
 
                       {/* Image Area */}
@@ -135,24 +212,33 @@ const Leaderboard = () => {
 
                       {/* Content Area */}
                       <div className="p-6 flex-1 flex flex-col">
-                        <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div className="grid grid-cols-3 gap-3 mb-6">
                           <div className="bg-primary/5 rounded p-3 border border-primary/10">
-                            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Fee</div>
-                            <div className="text-xl font-mono font-bold text-primary flex items-center gap-2">
-                              Free
+                            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Time</div>
+                            <div className="text-sm font-mono font-bold text-primary flex items-center gap-1">
+                              <Clock className="w-3 h-3 opacity-50" />
+                              {eventTime}
+                            </div>
+                          </div>
+                          <div className="bg-primary/5 rounded p-3 border border-primary/10">
+                            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Prize Pool</div>
+                            <div className="text-sm font-mono font-bold text-green-400 flex items-center gap-1">
+                              {event.prizePool || 'TBA'}
                             </div>
                           </div>
                           <div className="bg-primary/5 rounded p-3 border border-primary/10">
                             <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Groups</div>
-                            <div className="text-xl font-mono font-bold text-foreground flex items-center gap-2">
-                              <Trophy className="w-4 h-4 opacity-50" /> {event.groups?.length || 1}
+                            <div className="text-lg font-mono font-bold text-foreground flex items-center gap-1">
+                              <Trophy className="w-3 h-3 opacity-50" /> {event.groups?.length || 1}
                             </div>
                           </div>
                         </div>
 
                         <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between text-xs text-muted-foreground group-hover:text-white transition-colors">
-                          <span className="flex items-center gap-2">
-                            <Clock className="w-3 h-3" /> Coming Soon
+                          <span className={`flex items-center gap-2 font-semibold ${statusInfo.color}`}>
+                            {statusInfo.status === 'live' && <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />}
+                            {statusInfo.status === 'upcoming' && <Clock className="w-3 h-3" />}
+                            {statusInfo.label}
                           </span>
                           <span className="uppercase font-bold tracking-wider text-primary flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                             Results <ChevronRight className="w-3 h-3" />
