@@ -64,7 +64,7 @@ const Leaderboard = () => {
         <div className="absolute inset-0 scanlines pointer-events-none opacity-50" />
 
         {/* Ticker */}
-        <div className="mt-8 mb-8">
+        <div className="mb-8">
           <LiveTicker />
         </div>
 
