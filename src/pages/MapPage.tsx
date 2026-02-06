@@ -49,7 +49,7 @@ const MapPage = () => {
 
   return (
     <div className="min-h-screen bg-background pt-20 pb-10 flex flex-col items-center justify-center relative overflow-hidden">
-      
+
       {/* Animated Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-background to-background" />
@@ -69,13 +69,12 @@ const MapPage = () => {
         </div>
 
         {/* Map Container */}
-        <div 
+        <div
           ref={mapContainerRef}
-          className={`relative w-full h-full border border-cyan-500/30 rounded-xl overflow-hidden bg-black/80 shadow-[0_0_30px_rgba(34,211,238,0.1)] backdrop-blur-sm ${
-            isFullscreen ? 'rounded-none' : ''
-          }`}
+          className={`relative w-full h-full border border-cyan-500/30 rounded-xl overflow-hidden bg-black/80 shadow-[0_0_30px_rgba(34,211,238,0.1)] backdrop-blur-sm ${isFullscreen ? 'rounded-none' : ''
+            }`}
         >
-          
+
           {/* Corner Accents */}
           <div className="absolute top-0 left-0 w-8 md:w-16 h-8 md:h-16 border-t-2 border-l-2 border-cyan-500 rounded-tl-xl z-20 pointer-events-none" />
           <div className="absolute top-0 right-0 w-8 md:w-16 h-8 md:h-16 border-t-2 border-r-2 border-purple-500 rounded-tr-xl z-20 pointer-events-none" />
@@ -84,33 +83,34 @@ const MapPage = () => {
 
           <TransformWrapper
             initialScale={1}
-            minScale={0.5}
+            minScale={0.3}
             maxScale={5}
             centerOnInit={true}
             wheel={{ step: 0.15 }}
             doubleClick={{ mode: 'zoomIn' }}
             panning={{ velocityDisabled: false }}
+            pinch={{ step: 5 }}
           >
             {({ zoomIn, zoomOut, resetTransform, centerView }) => (
               <div className="w-full h-full flex flex-col relative">
-                
+
                 {/* Control Panel */}
                 <div className="absolute bottom-6 right-6 z-30 flex flex-col gap-2 p-3 bg-black/90 backdrop-blur-md rounded-lg border border-white/10 shadow-lg">
-                  <button 
+                  <button
                     onClick={() => zoomIn()}
                     className="p-2.5 hover:bg-cyan-500/20 rounded-md transition-all duration-200 text-cyan-400 hover:scale-110 active:scale-95"
                     title="Zoom In"
                   >
                     <ZoomIn size={20} />
                   </button>
-                  <button 
+                  <button
                     onClick={() => zoomOut()}
                     className="p-2.5 hover:bg-purple-500/20 rounded-md transition-all duration-200 text-purple-400 hover:scale-110 active:scale-95"
                     title="Zoom Out"
                   >
                     <ZoomOut size={20} />
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
                       resetTransform();
                       centerView(1, 300);
@@ -121,7 +121,7 @@ const MapPage = () => {
                     <RotateCcw size={20} />
                   </button>
                   <div className="w-full h-px bg-white/10 my-1" />
-                  <button 
+                  <button
                     onClick={toggleFullscreen}
                     className="p-2.5 hover:bg-green-500/20 rounded-md transition-all duration-200 text-green-400 hover:scale-110 active:scale-95"
                     title="Toggle Fullscreen"
@@ -151,24 +151,23 @@ const MapPage = () => {
                 </div>
 
                 {/* Map Image with Interactive Zones */}
-                <TransformComponent 
-                  wrapperClass="!w-full !h-full cursor-grab active:cursor-grabbing bg-[#0a0a0a]" 
+                <TransformComponent
+                  wrapperClass="!w-full !h-full cursor-grab active:cursor-grabbing bg-[#0a0a0a]"
                   contentClass="!w-full !h-full flex items-center justify-center"
                 >
                   <div className="relative inline-block">
                     {/* Main Map Image - Replace with your actual map URL */}
-                    <img 
-                      src="https://ik.imagekit.io/jbckhvkvo/WhatsApp%20Image%202026-02-05%20at%2023.44.14.jpeg" 
-                      alt="Event Venue Map" 
-                      className="w-auto h-auto max-w-none object-contain select-none rounded-lg shadow-2xl"
-                      style={{ 
-                        maxHeight: '75vh', 
-                        maxWidth: '90vw',
-                        minWidth: '800px'
+                    <img
+                      src="https://ik.imagekit.io/jbckhvkvo/WhatsApp%20Image%202026-02-05%20at%2023.44.14.jpeg"
+                      alt="Event Venue Map"
+                      className="w-auto h-auto max-w-none object-contain select-none rounded-lg shadow-2xl touch-none"
+                      style={{
+                        maxHeight: '75vh',
+                        maxWidth: '95vw'
                       }}
                       draggable={false}
                     />
-                    
+
                     {/* Interactive Zones Overlay */}
                     <div className="absolute inset-0 w-full h-full pointer-events-none">
                       {mapZones.map((zone) => (
@@ -179,7 +178,7 @@ const MapPage = () => {
                           style={zone.style}
                         >
                           {/* Zone Highlight Effect */}
-                          <div 
+                          <div
                             className="w-full h-full border-2 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center rounded-lg"
                             style={{
                               backgroundColor: zone.color,
@@ -216,11 +215,11 @@ const MapPage = () => {
         <DialogContent className="bg-black/95 border border-white/10 backdrop-blur-xl text-white max-w-md">
           <DialogHeader>
             <div className="flex items-center gap-3 mb-2">
-              <div 
-                className="p-2.5 rounded-lg bg-opacity-20 border-2" 
-                style={{ 
-                  backgroundColor: selectedZone?.color, 
-                  borderColor: selectedZone?.borderColor 
+              <div
+                className="p-2.5 rounded-lg bg-opacity-20 border-2"
+                style={{
+                  backgroundColor: selectedZone?.color,
+                  borderColor: selectedZone?.borderColor
                 }}
               >
                 <MapPin className="w-5 h-5" style={{ color: selectedZone?.borderColor }} />
@@ -233,9 +232,9 @@ const MapPage = () => {
               {selectedZone?.description}
             </DialogDescription>
           </DialogHeader>
-          
+
           <Separator className="bg-white/10 my-3" />
-          
+
           <ScrollArea className="max-h-[60vh]">
             <div className="space-y-4 py-2">
               <div className="bg-white/5 p-4 rounded-lg border border-white/5">
@@ -249,14 +248,14 @@ const MapPage = () => {
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Badge 
-                  variant="outline" 
+                <Badge
+                  variant="outline"
                   className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
                 >
                   Live Updates
                 </Badge>
-                <Badge 
-                  variant="outline" 
+                <Badge
+                  variant="outline"
                   className="border-purple-500/30 text-purple-400 hover:bg-purple-500/10"
                 >
                   24/7 Access
