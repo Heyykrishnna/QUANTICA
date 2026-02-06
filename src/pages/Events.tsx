@@ -12,6 +12,7 @@ import { useRef, useState, useLayoutEffect, useEffect } from "react";
 import RoadmapTimeline from "../components/RoadmapTimeline";
 import EventSchedule from "../components/EventSchedule";
 import EventDetailsModal from "../components/EventDetailsModal";
+import GeneralPassSection from "@/components/GeneralPassSection";
 
 type MiniGameLite = {
   title: string;
@@ -254,7 +255,7 @@ const Events = () => {
         </div>
       </section>
 
-
+      <GeneralPassSection />
 
       <section className="py-24 relative bg-card">
         <div className="absolute inset-0 grid-bg opacity-5" />
