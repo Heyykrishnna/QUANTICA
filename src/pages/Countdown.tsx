@@ -7,7 +7,7 @@ import { Fireworks } from "fireworks-js";
 const TARGET_DATE = "2026-02-07T00:00:00";
 const BACKGROUND_VIDEO_URL = ["https://ik.imagekit.io/puc7mghnh/COUNTDOWN.mp4",
   "https://ik.imagekit.io/puc7mghnh/SnapInsta.to_AQNbinJ-s547XKEq5giRr4NfJroAQ90AST849Hx707phatX_EFYq9jz2lu99Uapy-9aejpg2DUCI5HigwntLLW0vYG5xujMziMPUAHQ.mp4",
-  "https://ik.imagekit.io/jbckhvkvo/SnapInsta.to_AQPf41psJ83H9xWRzz7sjOSJA6DCQWc3yzrPFRnmYzJluUWaRKn_i5lLew2BoggpB5g517R587Oco5XJ1mWt6g3-DGzJ2wceSTD6kQk.mp4",
+  "https://ik.imagekit.io/puc7mghnh/COUNT-BGV.mp4",
 ];
 const BACKGROUND_AUDIO_URL = "https://ik.imagekit.io/jbckhvkvo/QUANTICA-BGM.mp3";
 const FIREWORK_AUDIO_URL = "https://ik.imagekit.io/jbckhvkvo/freesound_community-fireworks-close-29630.mp3";
@@ -201,7 +201,7 @@ const Countdown = () => {
         <div className="absolute inset-0">
           <video
             ref={videoRef}
-            className="countdown-video"
+            className="countdown-video opacity-80"
             autoPlay
             muted={totalSeconds <= 10}
             playsInline
@@ -233,7 +233,7 @@ const Countdown = () => {
         />
 
         <div
-          className={`relative z-10 min-h-screen flex flex-col items-center justify-center px-4 text-center ${
+          className={`relative ${isLive ? 'z-[60]' : 'z-10'} min-h-screen flex flex-col items-center justify-center px-4 text-center ${
             isLive ? "countdown-live-center" : ""
           }`}
         >
@@ -284,12 +284,27 @@ const Countdown = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.6 }}
+                style={{
+                  position: 'relative',
+                  zIndex: 70,
+                  textShadow: '0 0 40px rgba(0, 255, 255, 0.9), 0 0 80px rgba(0, 255, 255, 0.7), 0 0 120px rgba(0, 255, 255, 0.5), 0 0 160px rgba(0, 255, 255, 0.3)'
+                }}
               >
-                <span className="live-eyebrow">SYSTEM OVERRIDE</span>
-                <span className="live-title glitch-intense" data-text="QUANTICA IS LIVE">
+                <span className="live-eyebrow" style={{
+                  filter: 'brightness(2) contrast(1.5)',
+                  textShadow: '0 0 20px rgba(0, 255, 255, 1), 0 0 40px rgba(0, 255, 255, 0.8)'
+                }}>SYSTEM OVERRIDE</span>
+                <span className="live-title glitch-intense" data-text="QUANTICA IS LIVE" style={{
+                  filter: 'brightness(2.5) contrast(2)',
+                  color: '#ffffff',
+                  WebkitTextStroke: '2px rgba(255, 255, 255, 0.8)'
+                }}>
                   QUANTICA IS LIVE
                 </span>
-                <span className="live-subtitle">Lock in. The game has begun.</span>
+                <span className="live-subtitle" style={{
+                  filter: 'brightness(2) contrast(1.5)',
+                  textShadow: '0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(0, 255, 255, 0.6)'
+                }}>Lock in. The game has begun.</span>
               </motion.div>
             )}
           </AnimatePresence>

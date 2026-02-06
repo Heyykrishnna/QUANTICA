@@ -34,6 +34,7 @@ const stats = [
 
 const Index = () => {
   const [isHovering, setIsHovering] = useState(false);
+  const [isEventLive, setIsEventLive] = useState(false);
   const fireworksContainerRef = useRef<HTMLDivElement | null>(null);
   const fireworkAudioRef = useRef<HTMLAudioElement | null>(null);
   const fireworksInstanceRef = useRef<Fireworks | null>(null);
@@ -46,6 +47,7 @@ const Index = () => {
       const now = new Date().getTime();
       const target = new Date(TARGET_DATE).getTime();
       const distance = target - now;
+      setIsEventLive(distance <= 0);
 
       if (distance <= 0) {
         if (fireworksContainerRef.current && !fireworksInstanceRef.current) {
@@ -163,12 +165,32 @@ const Index = () => {
             transition={{ delay: 0.6 }}
             className="mb-12"
           >
-            <p className="text-sm text-muted-foreground uppercase tracking-wider mb-4">
-              Next Event Starts In
-            </p>
-            <a href="/countdown">
-              <CountdownTimer targetDate={TARGET_DATE} color="cyan" />
-            </a>
+            {isEventLive ? (
+              <div className="flex flex-col items-center justify-center">
+                <div className="flex items-center gap-4 md:gap-6 mb-4">
+                  <div className="relative flex h-3 w-3 md:h-4 md:w-4">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 md:h-4 md:w-4 bg-red-500"></span>
+                  </div>
+                  <GlitchText 
+                    text="LIVE NOW" 
+                    className="text-xl md:text-2xl font-bold tracking-widest text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+                  />
+                </div>
+                <p className="text-red-400/80 uppercase tracking-[0.4em] text-xs md:text-[20px] animate-pulse">
+                  Stream is Live Below
+                </p>
+              </div>
+            ) : (
+              <>
+                <p className="text-sm text-muted-foreground uppercase tracking-wider mb-4">
+                  Next Event Starts In
+                </p>
+                <a href="/countdown">
+                  <CountdownTimer targetDate={TARGET_DATE} color="cyan" />
+                </a>
+              </>
+            )}
           </motion.div>
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center"

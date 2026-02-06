@@ -12,6 +12,7 @@ export interface Team {
   totalKills: number | null;
   wins: number | null;
   rank: number | null;
+  positionPoints: number | null;
   group?: string | null;
   participants: { name: string }[];
 }
@@ -121,6 +122,7 @@ export function useLeaderboard(eventSlug: string) {
           return {
             ...team,
             totalPoints: stats.totalPoints,
+            positionPoints: stats.totalPoints - stats.totalKills,
             totalKills: stats.totalKills,
             wins: stats.wins,
           };

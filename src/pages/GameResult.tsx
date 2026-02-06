@@ -197,10 +197,10 @@ const GameResult = () => {
                         <div className="bg-card/30 border border-primary/20 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl min-h-[300px]">
                             <div className="grid grid-cols-12 gap-2 md:gap-4 p-5 bg-black/40 border-b border-primary/20 font-bold text-xs md:text-sm uppercase tracking-widest text-muted-foreground">
                                 <div className="col-span-1 text-center">Rank</div>
-                                <div className="col-span-6 md:col-span-5">Team Details</div>
-                                <div className="col-span-3 md:col-span-2 text-center text-white">Total Kills</div>
+                                <div className="col-span-5 md:col-span-4">Team Details</div>
+                                <div className="col-span-2 text-center text-white">Total Kills</div>
+                                <div className="col-span-2 text-center text-secondary">Pos Pts</div>
                                 <div className="col-span-2 text-center text-primary">Points</div>
-                                <div className="col-span-2 text-center hidden md:block">Status</div>
                             </div>
 
                             <div className="divide-y divide-white/5">
@@ -209,7 +209,7 @@ const GameResult = () => {
                                     Array.from({ length: 5 }).map((_, i) => (
                                         <div key={i} className="grid grid-cols-12 gap-4 p-4 animate-pulse">
                                             <div className="col-span-1 bg-white/5 h-6 rounded"></div>
-                                            <div className="col-span-5 bg-white/5 h-6 rounded"></div>
+                                            <div className="col-span-4 bg-white/5 h-6 rounded"></div>
                                             <div className="col-span-2 bg-white/5 h-6 rounded"></div>
                                             <div className="col-span-2 bg-white/5 h-6 rounded"></div>
                                             <div className="col-span-2 bg-white/5 h-6 rounded"></div>
@@ -248,7 +248,7 @@ const GameResult = () => {
                                                     </span>
                                                 </div>
 
-                                                <div className="col-span-6 md:col-span-5">
+                                                <div className="col-span-5 md:col-span-4">
                                                     <div className="font-bold text-base md:text-lg text-white group-hover:text-primary transition-colors flex items-center gap-2">
                                                         {team.name}
                                                         {isTop3 && <Trophy className="w-3 h-3 text-yellow-500" />}
@@ -258,24 +258,18 @@ const GameResult = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className="col-span-3 md:col-span-2 text-center font-mono text-base md:text-lg text-gray-300">
+                                                <div className="col-span-2 text-center font-mono text-base md:text-lg text-gray-300">
                                                     {team.totalKills || 0}
+                                                </div>
+
+                                                <div className="col-span-2 text-center font-mono text-base md:text-lg text-secondary">
+                                                    {team.positionPoints || 0}
                                                 </div>
 
                                                 <div className="col-span-2 text-center">
                                                     <span className="font-mono text-lg md:text-2xl font-bold text-primary">
                                                         {team.totalPoints || 0}
                                                     </span>
-                                                </div>
-
-                                                <div className="col-span-2 text-center hidden md:block">
-                                                    {isQualified ? (
-                                                        <span className="inline-block px-3 py-1 bg-green-500/20 text-green-400 border border-green-500/30 rounded text-[10px] font-bold uppercase tracking-wider">
-                                                            Qualified
-                                                        </span>
-                                                    ) : (
-                                                        <span className="text-muted-foreground text-xs opacity-30">-</span>
-                                                    )}
                                                 </div>
                                             </motion.div>
                                         );

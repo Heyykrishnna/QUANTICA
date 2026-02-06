@@ -1,16 +1,17 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { RegistrationTeam } from '../../types/registration';
-import { X, CheckCircle, XCircle, User } from 'lucide-react';
+import { RegistrationTeam, CheckInStatus } from '../../types/registration';
+import { X, CheckCircle, XCircle, User, LogIn, LogOut } from 'lucide-react';
 
 interface TeamMembersModalProps {
   team: RegistrationTeam;
   isOpen: boolean;
   onClose: () => void;
   onToggleMember?: (memberIndex: number) => void;
+  onStatusUpdate?: (status: CheckInStatus) => void;
   readOnly?: boolean;
 }
 
-const TeamMembersModal = ({ team, isOpen, onClose, onToggleMember, readOnly = false }: TeamMembersModalProps) => {
+const TeamMembersModal = ({ team, isOpen, onClose, onToggleMember, onStatusUpdate, readOnly = false }: TeamMembersModalProps) => {
   if (!isOpen) return null;
 
   const checkedCount = team.members.filter(m => m.isChecked).length;
@@ -188,12 +189,35 @@ const TeamMembersModal = ({ team, isOpen, onClose, onToggleMember, readOnly = fa
             transition={{ delay: 0.3 }}
             className="mt-6 pt-6 border-t-2 border-border"
           >
-            <button
-              onClick={onClose}
-              className="w-full glitch-btn bg-primary text-primary-foreground py-4 px-6 font-bold uppercase tracking-wider hover:bg-primary/90 transition-all"
-            >
-              Close
-            </button>
+            <div className="flex gap-4">
+              <button
+                onClick={onClose}
+                className="flex-1 glitch-btn bg-primary text-primary-foreground py-4 px-6 font-bold uppercase tracking-wider hover:bg-primary/90 transition-all"
+              >
+                Close
+              </button>
+              
+              {onStatusUpdate && (
+                <>
+                  {team.checkInStatus !== CheckInStatus.CheckedIn && (
+                    <button
+                      onClick={() => onStatusUpdate(CheckInStatus.CheckedIn)}
+                      className="flex-1 glitch-btn bg-green-500 text-white py-4 px-6 font-bold uppercase tracking-wider hover:bg-green-600 transition-all flex items-center justify-center gap-2"
+                    >
+                      <LogIn className="w-4 h-4" /> Check In
+                    </button>
+                  )}
+                  {team.checkInStatus === CheckInStatus.CheckedIn && (
+                    <button
+                      onClick={() => onStatusUpdate(CheckInStatus.CheckedOut)}
+                      className="flex-1 glitch-btn bg-blue-500 text-white py-4 px-6 font-bold uppercase tracking-wider hover:bg-blue-600 transition-all flex items-center justify-center gap-2"
+                    >
+                      <LogOut className="w-4 h-4" /> Check Out
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
           </motion.div>
         </motion.div>
       </div>

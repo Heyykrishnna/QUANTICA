@@ -12,6 +12,11 @@ export const registrationService = {
         return response.data;
     },
 
+    createTeam: async (data: Omit<RegistrationTeam, 'id' | 'checkInStatus' | 'verificationStatus'>): Promise<RegistrationTeam> => {
+        const response = await api.post('/registration/teams', data);
+        return response.data;
+    },
+
     updateTeam: async (
         id: string,
         data: {
@@ -27,5 +32,9 @@ export const registrationService = {
     verifyTeam: async (id: string, status: VerificationStatus): Promise<RegistrationTeam> => {
         const response = await api.post(`/registration/teams/${id}/verify`, { status });
         return response.data;
+    },
+
+    deleteTeam: async (id: string): Promise<void> => {
+        await api.delete(`/registration/teams/${id}`);
     },
 };
