@@ -31,6 +31,7 @@ import TargetCursor from "./components/TargetCursor";
 import ArtistReveal from "./pages/ArtistReveal";
 import ArtistRevealPopup from "./components/ArtistRevealPopup";
 import MapPage from "./pages/MapPage";
+import Countdown from "./pages/Countdown";
 
 const queryClient = new QueryClient();
 const AnimatedRoutes = () => {
@@ -53,6 +54,7 @@ const AnimatedRoutes = () => {
         <Route path="/play-arena" element={<PlayArena />} />
         <Route path="/artist-reveal" element={<ArtistReveal />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="/countdown" element={<Countdown />} />
 
 
         <Route path="*" element={<NotFound />} />

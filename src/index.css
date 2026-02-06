@@ -767,6 +767,287 @@
   animation: retro-glow 2s ease-in-out infinite;
 }
 
+/* Countdown page styling */
+.countdown-page {
+  font-family: "Press Start 2P", sans-serif;
+}
+
+.countdown-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  font-size: 0.7rem;
+  color: #00e5ff;
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
+}
+
+.countdown-title {
+  margin-top: 14px;
+  font-size: clamp(2rem, 4vw, 6rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.countdown-subtitle {
+  margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.countdown-timer {
+  display: grid;
+  margin: 40px;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  font-size: clamp(2.5rem, 10vw, 11rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  padding: 26px 50px;
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(3, 7, 18, 0.9), rgba(2, 0, 8, 0.5)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0.06) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  box-shadow:
+    0 0 45px rgba(0, 229, 255, 0.35),
+    0 0 80px rgba(255, 43, 214, 0.25),
+    inset 0 0 45px rgba(255, 0, 229, 0.2);
+  position: relative;
+  clip-path: polygon(3% 0%, 97% 0%, 100% 10%, 100% 90%, 97% 100%, 3% 100%, 0 90%, 0 10%);
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-segment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  gap: 10px;
+}
+
+.countdown-value {
+  text-shadow:
+    0 0 12px rgba(0, 229, 255, 0.8),
+    0 0 30px rgba(255, 43, 214, 0.5);
+}
+
+.countdown-unit {
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.countdown-timer::before,
+.countdown-timer::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.countdown-timer::after {
+  inset: 16px;
+  border-color: rgba(0, 229, 255, 0.35);
+}
+
+.countdown-sep {
+  color: #ff2bd6;
+  font-size: clamp(3rem, 6vw, 6rem);
+  text-shadow:
+    0 0 12px rgba(255, 43, 214, 0.7),
+    0 0 24px rgba(0, 229, 255, 0.5);
+}
+
+.countdown-live {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  text-transform: uppercase;
+  text-align: center;
+  max-width: min(720px, 92%);
+  margin: 0 auto;
+}
+
+.countdown-live-center {
+  gap: 16px;
+}
+
+.live-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  color: #facc15;
+  line-height: 1.4;
+}
+
+.live-title {
+  font-size: clamp(8rem, 5vw, 8rem);
+  letter-spacing: 0.12em;
+  color: #fff;
+  text-shadow:
+    0 0 20px rgba(250, 204, 21, 0.6),
+    0 0 40px rgba(255, 43, 214, 0.45);
+  line-height: 1.2;
+}
+
+.live-subtitle {
+  letter-spacing: 0.25em;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.5;
+}
+
+.countdown-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(140%) contrast(1.1);
+  animation: countdown-flicker 4s infinite;
+}
+
+.countdown-video-glitch {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(0, 229, 255, 0.2),
+    rgba(255, 43, 214, 0.2),
+    transparent 60%
+  );
+  mix-blend-mode: screen;
+  animation: countdown-glitch 2.6s infinite;
+  opacity: 0.6;
+}
+
+.countdown-noise {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+  opacity: 0.35;
+}
+
+/* Transition overlay when countdown ends */
+.countdown-transition {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  backdrop-filter: blur(1px);
+}
+
+.transition-scan {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 229, 255, 0.25) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  animation: transition-sweep 1.4s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.transition-glitch {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.1) 2px,
+      transparent 2px,
+      transparent 6px
+    ),
+    linear-gradient(120deg, rgba(255, 43, 214, 0.25), rgba(0, 229, 255, 0.2));
+  mix-blend-mode: screen;
+  animation: transition-glitch 2.2s ease-in-out infinite;
+  opacity: 0.45;
+}
+
+@keyframes countdown-glitch {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  20% {
+    transform: translate(2px, -1px) scale(1.01);
+  }
+  40% {
+    transform: translate(-3px, 2px) scale(1.02);
+  }
+  60% {
+    transform: translate(1px, 3px) scale(1.01);
+  }
+  80% {
+    transform: translate(-2px, -2px) scale(1);
+  }
+}
+
+@keyframes countdown-flicker {
+  0%,
+  100% {
+    filter: saturate(140%) contrast(1.1);
+  }
+  50% {
+    filter: saturate(160%) contrast(1.2) hue-rotate(6deg);
+  }
+}
+
+@keyframes transition-sweep {
+  0% {
+    transform: translateY(-60%);
+  }
+  50% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(60%);
+  }
+}
+
+@keyframes transition-glitch {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.4;
+  }
+  20% {
+    transform: translate(2px, -1px);
+    opacity: 0.55;
+  }
+  40% {
+    transform: translate(-2px, 2px);
+    opacity: 0.5;
+  }
+  60% {
+    transform: translate(1px, 1px);
+    opacity: 0.6;
+  }
+  80% {
+    transform: translate(-1px, -2px);
+    opacity: 0.45;
+  }
+}
+
 /* 3D Card Effects */
 .perspective-1000 {
   perspective: 1000px;

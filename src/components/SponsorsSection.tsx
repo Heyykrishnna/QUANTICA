@@ -22,11 +22,11 @@ const sponsors = [
 		logo: "https://play-lh.googleusercontent.com/5wei91oDawARajh0dDkWxuRZByTJYLS8TzxndGEfsIhA5Rc7M00FTdr3X4G1C-E5ZQxQ",
 		link: "https://jiogames.com/",
 	},
-	// {
-	// 	name: "Red Bull",
-	// 	logo: "https://www.svgrepo.com/show/303227/redbull-logo.svg",
-	// 	link: "https://www.redbull.com",
-	// },
+	{
+		name: "Red Bull",
+		logo: "https://www.svgrepo.com/show/303227/redbull-logo.svg",
+		link: "https://www.redbull.com",
+	},
 	// {
 	// 	name: "Meta Space",
 	// 	logo: "https://metaspacechain.b-cdn.net/img/logo.png",
@@ -60,7 +60,7 @@ const sponsors = [
 		name: "Prera",
 		logo: "https://ik.imagekit.io/jbckhvkvo/PRERA.jpg",
 		link: "https://www.instagram.com/prera_official/",
-		className: "scale-120 invert",
+		className: "scale-120",
 	},
 	{
 		name: "Truscholar",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
@@ -23,19 +23,89 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { events } from "@/data/events";
+import { Fireworks } from "fireworks-js";
+
 const stats = [
   { value: "₹1.5L+", label: "Total Prize Pool" },
   { value: "520+", label: "Teams Competing" },
   { value: "2000+", label: "Players" },
   { value: "10+", label: "Events" },
 ];
+
 const Index = () => {
   const [isHovering, setIsHovering] = useState(false);
+  const fireworksContainerRef = useRef<HTMLDivElement | null>(null);
+  const fireworkAudioRef = useRef<HTMLAudioElement | null>(null);
+  const fireworksInstanceRef = useRef<Fireworks | null>(null);
+
+  const TARGET_DATE = "2026-02-07T00:00:00";
+  const FIREWORK_AUDIO_URL = "https://ik.imagekit.io/jbckhvkvo/freesound_community-fireworks-close-29630.mp3";
+
+  useEffect(() => {
+    const checkTime = () => {
+      const now = new Date().getTime();
+      const target = new Date(TARGET_DATE).getTime();
+      const distance = target - now;
+
+      if (distance <= 0) {
+        if (fireworksContainerRef.current && !fireworksInstanceRef.current) {
+             const fireworks = new Fireworks(fireworksContainerRef.current, {
+              autoresize: true,
+              opacity: 0.5,
+              acceleration: 1.05,
+              friction: 0.97,
+              gravity: 1.5,
+              particles: 50,
+              traceLength: 3,
+              traceSpeed: 10,
+              explosion: 5,
+              intensity: 30,
+              flickering: 50,
+              lineStyle: 'round',
+              hue: { min: 0, max: 360 },
+              delay: { min: 30, max: 60 },
+              rocketsPoint: { min: 50, max: 50 },
+              lineWidth: { explosion: { min: 1, max: 3 }, trace: { min: 1, max: 2 } },
+              brightness: { min: 50, max: 80 },
+              decay: { min: 0.015, max: 0.03 },
+              mouse: { click: false, move: false, max: 1 }
+            });
+            fireworks.start();
+            fireworksInstanceRef.current = fireworks;
+            
+            if (fireworkAudioRef.current) {
+              fireworkAudioRef.current.volume = 1.0;
+              fireworkAudioRef.current.play().catch(console.error);
+            }
+
+            const timeout = setTimeout(() => {
+                fireworks.stop();
+                 if (fireworkAudioRef.current) {
+                    fireworkAudioRef.current.pause();
+                }
+            }, 15000);
+            
+             return () => {
+                clearTimeout(timeout);
+                fireworks.stop();
+            };
+        }
+      }
+    };
+
+    const timer = setInterval(checkTime, 1000);
+    checkTime(); // Initial check
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <PageTransition>
+      <div ref={fireworksContainerRef} className="fixed inset-0 z-50 pointer-events-none" />
+      <audio ref={fireworkAudioRef} src={FIREWORK_AUDIO_URL} preload="auto" playsInline />
       <EventMarquee />
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-20">
+        {/* ... existing video background ... */}
         <div className="absolute inset-0 z-0">
           <video
             autoPlay
@@ -51,11 +121,10 @@ const Index = () => {
           </video>
           <div className="absolute inset-0 bg-background/70" />
         </div>
-        { }
+        
         <div className="absolute inset-0 grid-bg opacity-20" />
-        { }
         <div className="absolute inset-0 scanlines pointer-events-none" />
-        { }
+        
         <div className="relative z-10 container mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -97,7 +166,9 @@ const Index = () => {
             <p className="text-sm text-muted-foreground uppercase tracking-wider mb-4">
               Next Event Starts In
             </p>
-            <CountdownTimer targetDate="2026-02-07T00:00:00" color="cyan" />
+            <a href="/countdown">
+              <CountdownTimer targetDate={TARGET_DATE} color="cyan" />
+            </a>
           </motion.div>
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center"
