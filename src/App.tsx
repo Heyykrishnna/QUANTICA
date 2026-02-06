@@ -65,11 +65,12 @@ const AnimatedRoutes = () => {
 
 const Layout = () => {
   const location = useLocation();
-  const showFooter = location.pathname !== '/registration-desk';
+  const showFooter = location.pathname !== '/registration-desk' && location.pathname !== '/countdown';
+  const showNavbar = location.pathname !== '/countdown';
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      {showNavbar && <Navbar />}
       <main>
         <AnimatedRoutes />
       </main>
@@ -129,17 +130,29 @@ const App = () => {
         <Sonner />
         {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
         <GlitchOverlay />
-        <AudioController />
         {!isMobile && <TargetCursor targetSelector="button, a.cyber-btn, a.cyber-btn-outline, .cursor-target" />}
         <BrowserRouter>
-          <SmoothScroll>
-            <Layout />
-            <ArtistRevealPopup />
-            <Analytics />
-          </SmoothScroll>
+          <AppContent />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
   );
 };
+
+const AppContent = () => {
+  const location = useLocation();
+  const showAudioController = location.pathname !== '/countdown';
+
+  return (
+    <>
+      {showAudioController && <AudioController />}
+      <SmoothScroll>
+        <Layout />
+        <ArtistRevealPopup />
+        <Analytics />
+      </SmoothScroll>
+    </>
+  );
+};
+
 export default App;
