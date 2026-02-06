@@ -163,6 +163,6 @@ export const events = [
 		color: "magenta" as const,
 		status: "Registration Open",
 		registrationUrl: "https://unstop.com/p/quantica-2026-ea-fc-26-solo-cup-quantica-2026-sage-rishihood-university-1621608",
-		gameLogo: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1768044591/ea-sports-fc-26-releases-on-september-26-cover68778afd733aa-removebg-preview_ayg4un.png",
+		gameLogo: "https://ik.imagekit.io/jbckhvkvo/ea-sports-fc-26-releases-on-september-26-cover68778afd733aa-removebg-preview_ayg4un.png?updatedAt=1770090636555",
 	},
 ];
