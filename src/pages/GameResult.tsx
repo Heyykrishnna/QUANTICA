@@ -9,14 +9,17 @@ import { Copy, Share2, Trophy, Users, AlertCircle, Clock, Target, Shield, ArrowL
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { events } from "@/data/events";
 
+import TournamentBracket from "@/components/TournamentBracket";
+
 const GameResult = () => {
     const { gameSlug } = useParams<{ gameSlug: string }>();
     const { teams, event, loading, error } = useLeaderboard(gameSlug || "");
 
     const gameInfo = events.find(e => e.slug === gameSlug);
-    // Use events.ts data to identify if BR or has multiple groups
-    const hasPredefinedGroups = gameInfo?.groups && gameInfo.groups.length > 0;
-    const isBattleRoyale = gameSlug?.includes("bgmi") || gameSlug?.includes("freefire");
+    // Use events.ts data to identify if BR or has multiple groups. Explicitly disable groups for Valorant.
+    const isValorant = gameSlug?.includes("valorant");
+    const hasPredefinedGroups = gameInfo?.groups && gameInfo.groups.length > 0 && !isValorant;
+    const isBattleRoyale = gameSlug?.includes("bgmi") || gameSlug?.includes("freefire") || gameSlug?.includes("pubg");
 
     // Default to first group for BR, otherwise overall
     const defaultTab = (isBattleRoyale && gameInfo?.groups?.length)
@@ -34,16 +37,16 @@ const GameResult = () => {
         };
 
         // Initialize from events.ts configuration
-        if (gameInfo?.groups) {
+        if (gameInfo?.groups && !isValorant) {
             gameInfo.groups.forEach(g => {
                 const shortCode = g.replace("Group ", "");
                 groups[shortCode] = [];
             });
         }
 
-        // Distribute teams
+        // Distribute teams (skip for Valorant to keep it Overall)
         teams?.forEach(team => {
-            if (team.group) {
+            if (team.group && !isValorant) {
                 // if it's "A", add to "A".
                 if (groups[team.group] === undefined) {
                     groups[team.group] = [];
@@ -54,7 +57,7 @@ const GameResult = () => {
 
         if (!groups.overall) groups.overall = [];
         return groups;
-    }, [teams, gameInfo]);
+    }, [teams, gameInfo, isValorant]);
 
     const currentTeams = groupedTeams[activeTab] || [];
 
@@ -278,13 +281,18 @@ const GameResult = () => {
                             </div>
                         </div>
                     ) : (
-                        // Placeholder for Bracket or Message for Knockout Games
-                        <div className="min-h-[300px] flex flex-col items-center justify-center text-center p-8 bg-card/20 backdrop-blur-sm rounded-xl border border-primary/10">
-                            <Lock className="w-16 h-16 text-primary/30 mb-4" />
-                            <h3 className="text-2xl font-bold mb-2">Bracket View</h3>
-                            <p className="text-muted-foreground max-w-md">
-                                The tournament bracket for {gameInfo?.game || 'this event'} will be displayed here soon.
-                            </p>
+                        // Bracket View
+                        <div className="min-h-[300px] w-full bg-card/20 backdrop-blur-sm rounded-xl border border-primary/10 overflow-hidden">
+                            <div className="p-4 border-b border-primary/10 bg-black/40 flex justify-between items-center">
+                                <h3 className="text-lg font-bold flex items-center gap-2">
+                                    <Trophy className="w-4 h-4 text-primary" />
+                                    Tournament Bracket
+                                </h3>
+                                <div className="text-xs text-muted-foreground">
+                                    Best of 1 / Single Elimination
+                                </div>
+                            </div>
+                            <TournamentBracket eventSlug={gameSlug || ""} />
                         </div>
                     )}
                 </div>
