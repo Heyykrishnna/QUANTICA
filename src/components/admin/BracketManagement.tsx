@@ -210,6 +210,8 @@ const BracketManagement = ({ preSelectedEventId }: BracketManagementProps = {}) 
             // Limit to 64 as per updated requirement
             if (bracketSize > 64) bracketSize = 64;
 
+            console.log("Generating Bracket:", { teamCount, bracketSize });
+
             // 4. Assign Byes
             // The top (bracketSize - teamCount) teams get "Byes" if we seed properly.
             // But usually Byes are "Empty Slots" in the opponents.
