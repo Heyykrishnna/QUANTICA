@@ -35,6 +35,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [pendingEventChange, setPendingEventChange] = useState<string | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<string>("all");
+  const [stage, setStage] = useState<'Group' | 'Finals'>('Group');
 
   // Helper to check if event is BGMI or Free Fire
   const isBattleRoyale = (eventId: string) => {
@@ -83,6 +84,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
       const { data } = await api.get<Team[]>(`/teams?eventId=${selectedEvent}`);
       setTeams(data);
       setSelectedGroup("all"); // Reset group filter on new teams fetch
+      setStage('Group'); // Reset stage to Group defaults
       const initialScores: Record<string, { placement: number; kills: number; points: number }> = {};
       data.forEach((team) => {
         initialScores[team.id] = { placement: 0, kills: 0, points: 0 };
@@ -117,6 +119,8 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
     setEditingMatch(matchId);
     const match = matches.find(m => m.id === matchId);
     if (!match) return;
+
+    setStage(match.stage || 'Group'); // Set stage from match or default to Group
 
     setMatchNumber(match.matchNumber);
 
@@ -208,6 +212,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
         const { data: newMatch } = await api.post('/matches', {
           eventId: selectedEvent,
           matchNumber: matchNumber,
+          stage: stage,
           status: 'completed',
           scheduledDate: new Date().toISOString(),
         });
@@ -358,8 +363,47 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
         </div>
       )}
 
-      {/* Group Selector - Only show if groups exist */}
-      {selectedEvent && teams.some(t => t.group) && (
+
+
+      {/* Stage Selector - Only for Battle Royale */}
+      {selectedEvent && isBattleRoyale(selectedEvent) && (
+        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-xl p-4">
+          <label className="block text-sm font-bold uppercase tracking-wider text-green-400 mb-2">
+            Select Stage
+          </label>
+          <div className="gap-2 bg-black/60 p-1 rounded-lg inline-flex">
+            <button
+              onClick={() => {
+                setStage('Group');
+                setSelectedGroup("all");
+              }}
+              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
+                stage === 'Group' 
+                  ? "bg-green-500 text-white shadow-lg" 
+                  : "text-gray-400 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              Group Stage
+            </button>
+            <button
+              onClick={() => {
+                setStage('Finals');
+                setSelectedGroup("all"); // Remove group filter for Finals
+              }}
+              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
+                stage === 'Finals' 
+                  ? "bg-yellow-500 text-white shadow-lg" 
+                  : "text-gray-400 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              Finals
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Group Selector - Only show if groups exist AND in Group Stage */}
+      {selectedEvent && teams.some(t => t.group) && stage === 'Group' && (
         <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-xl p-4">
           <label className="block text-sm font-bold uppercase tracking-wider text-purple-400 mb-2">
             Filter by Group
@@ -426,7 +470,54 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
               </thead>
               <tbody>
                 {teams
-                  .filter(team => selectedGroup === "all" || team.group === selectedGroup)
+                  .filter(team => {
+                    if (stage === 'Finals') {
+                        // Logic to filter ONLY qualified teams based on GROUP stage matches
+                        const bgmiLimit = 8; // Top 8 per group for BGMI? No, user request said "all group top 4 teams"
+                        const ffLimit = 4;
+                        const limit = selectedEvent.includes('bgmi') ? 4 : 4; // User said "top 4 teams which have green background"
+
+                        // We need to calculate ranks based on GROUP matches only to determine qualification
+                        // This is expensive to do in render, but for admin panel with < 100 teams it's fine.
+                        // Optimization: Memorize this or move logic up.
+                        // For now, let's filter based on their CURRENT total points in Group Stage
+                        
+                        // 1. Filter matches to only include Group stage matches
+                        const groupMatches = matches.filter(m => !m.stage || m.stage === 'Group');
+                        
+                        // 2. Calculate stats for all teams based on group matches
+                        const teamStats = new Map<string, number>();
+                        teams.forEach(t => teamStats.set(t.id, 0));
+                        
+                        groupMatches.forEach(match => {
+                             match.scores?.forEach(s => {
+                                 const current = teamStats.get(s.teamId) || 0;
+                                 teamStats.set(s.teamId, current + (s.points || 0));
+                             });
+                        });
+
+                        // 3. Group teams by their group
+                        const teamsByGroup: Record<string, typeof teams> = {};
+                        teams.forEach(t => {
+                            if (t.group) {
+                                if (!teamsByGroup[t.group]) teamsByGroup[t.group] = [];
+                                teamsByGroup[t.group].push(t);
+                            }
+                        });
+
+                        // 4. Sort each group and find qualified IDs
+                        const qualifiedTeamIds = new Set<string>();
+                        Object.values(teamsByGroup).forEach(groupTeams => {
+                             // Sort by calculated group points
+                             groupTeams.sort((a, b) => (teamStats.get(b.id) || 0) - (teamStats.get(a.id) || 0));
+                             // Take top N
+                             groupTeams.slice(0, limit).forEach(t => qualifiedTeamIds.add(t.id));
+                        });
+
+                        return qualifiedTeamIds.has(team.id);
+                    }
+                    return selectedGroup === "all" || team.group === selectedGroup;
+                  })
                   .map((team, index) => (
                   <tr 
                     key={team.id} 
@@ -549,6 +640,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                 
                 <div className="text-xs text-gray-500 uppercase tracking-wider">
                   Status: <span className="text-green-400 font-bold">{match.status}</span>
+                  <span className="ml-2 text-gray-500">|</span> <span className={`${match.stage === 'Finals' ? 'text-yellow-400' : 'text-blue-400'} font-bold`}>{match.stage || 'Group'}</span>
                 </div>
               </motion.div>
             ))}

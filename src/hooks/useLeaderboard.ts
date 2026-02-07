@@ -35,6 +35,7 @@ export interface Match {
   team2Score: string | null;
   status: 'scheduled' | 'live' | 'completed';
   scheduledDate: string;
+  stage?: 'Group' | 'Finals';
   scores: MatchScore[];
 }
 

@@ -21,10 +21,16 @@ const GameResult = () => {
     const hasPredefinedGroups = gameInfo?.groups && gameInfo.groups.length > 0 && !isValorant;
     const isBattleRoyale = gameSlug?.includes("bgmi") || gameSlug?.includes("freefire") || gameSlug?.includes("pubg");
 
-    // Default to first group for BR, otherwise overall
-    const defaultTab = (isBattleRoyale && gameInfo?.groups?.length)
-        ? gameInfo.groups[0].replace("Group ", "")
-        : "overall";
+    // Default to Finals if active, else first group for BR, otherwise overall
+    // Assuming if today is past target date, finals are active.
+    // User requested: "unlock finals section and lock group matches"
+    const isFinalsActive = true; // Force active based on request "now in free fire and bgmi..."
+    
+    const defaultTab = (isBattleRoyale && isFinalsActive) 
+        ? "Finals"
+        : (isBattleRoyale && gameInfo?.groups?.length)
+            ? gameInfo.groups[0].replace("Group ", "")
+            : "overall";
 
     const [activeTab, setActiveTab] = useState(defaultTab);
 
@@ -56,6 +62,31 @@ const GameResult = () => {
         });
 
         if (!groups.overall) groups.overall = [];
+        
+        // Populate Finals Group
+        // Logic: Get Top 4 from each group based on GROUP MATCHES
+        // Since we don't have separate match data here easily (useLeaderboard returns aggregated),
+        // we can try to infer or just use the Total Points if we assume they carry over.
+        // User said: "teams of all group top 4 teams which have green background should come in finals"
+        // This implies we take the current leaders of groups.
+        
+        // Note: Ideally backend does this or we fetch matches to separate.
+        // For now, let's filter the 'overall' list or process groups.
+        
+        // Let's iterate all groups and pick top 4 from each.
+        const finalsTeams = new Set<Team>();
+        if (gameInfo?.groups && !isValorant) {
+            gameInfo.groups.forEach(g => {
+                const groupName = g.replace("Group ", "");
+                const groupTeams = groups[groupName] || [];
+                // Sort by points
+                const sorted = [...groupTeams].sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0));
+                // Take top 4
+                sorted.slice(0, 4).forEach(t => finalsTeams.add(t));
+            });
+        }
+        groups['Finals'] = Array.from(finalsTeams).sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0));
+
         return groups;
     }, [teams, gameInfo, isValorant]);
 
@@ -158,22 +189,23 @@ const GameResult = () => {
                                             <TabsTrigger
                                                 key={code}
                                                 value={code}
-                                                className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors"
+                                                disabled={isFinalsActive}
+                                                className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                             >
                                                 Group {code}
+                                                {isFinalsActive && <Lock className="w-3 h-3" />}
                                             </TabsTrigger>
                                         );
                                     })}
 
-                                    {/* Finals Tab (Locked Logic) */}
+                                    {/* Finals Tab (Unlocked & Default) */}
                                     {isBattleRoyale && (
                                         <TabsTrigger
                                             value="Finals"
-                                            disabled={new Date() < new Date("2026-02-08T00:00:00")}
-                                            className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                            className="data-[state=active]:bg-transparent data-[state=active]:text-yellow-400 data-[state=active]:border-b-2 data-[state=active]:border-yellow-400 rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors flex items-center gap-2"
                                         >
+                                            <Trophy className="w-4 h-4 text-yellow-500" />
                                             Finals
-                                            {new Date() < new Date("2026-02-08T00:00:00") && <Lock className="w-3 h-3" />}
                                         </TabsTrigger>
                                     )}
 
@@ -185,9 +217,11 @@ const GameResult = () => {
                                             <TabsTrigger
                                                 key={group}
                                                 value={group}
-                                                className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors"
+                                                disabled={isFinalsActive}
+                                                className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                             >
                                                 Group {group}
+                                                {isFinalsActive && <Lock className="w-3 h-3" />}
                                             </TabsTrigger>
                                         ))}
                                 </TabsList>
