@@ -200,7 +200,8 @@ const GameResult = () => {
                         <div className="bg-card/30 border border-primary/20 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl min-h-[300px]">
                             <div className="grid grid-cols-12 gap-2 md:gap-4 p-5 bg-black/40 border-b border-primary/20 font-bold text-xs md:text-sm uppercase tracking-widest text-muted-foreground">
                                 <div className="col-span-1 text-center">Rank</div>
-                                <div className="col-span-5 md:col-span-4">Team Details</div>
+                                <div className="col-span-4 md:col-span-4">Team Details</div>
+                                <div className="col-span-1 text-center text-yellow-500">Wins</div>
                                 <div className="col-span-2 text-center text-white">Total Kills</div>
                                 <div className="col-span-2 text-center text-secondary">Pos Pts</div>
                                 <div className="col-span-2 text-center text-primary">Points</div>
@@ -213,6 +214,7 @@ const GameResult = () => {
                                         <div key={i} className="grid grid-cols-12 gap-4 p-4 animate-pulse">
                                             <div className="col-span-1 bg-white/5 h-6 rounded"></div>
                                             <div className="col-span-4 bg-white/5 h-6 rounded"></div>
+                                            <div className="col-span-1 bg-white/5 h-6 rounded"></div>
                                             <div className="col-span-2 bg-white/5 h-6 rounded"></div>
                                             <div className="col-span-2 bg-white/5 h-6 rounded"></div>
                                             <div className="col-span-2 bg-white/5 h-6 rounded"></div>
@@ -251,7 +253,7 @@ const GameResult = () => {
                                                     </span>
                                                 </div>
 
-                                                <div className="col-span-5 md:col-span-4">
+                                                <div className="col-span-4 md:col-span-4">
                                                     <div className="font-bold text-base md:text-lg text-white group-hover:text-primary transition-colors flex items-center gap-2">
                                                         {team.name}
                                                         {isTop3 && <Trophy className="w-3 h-3 text-yellow-500" />}
@@ -259,6 +261,10 @@ const GameResult = () => {
                                                     <div className="text-[10px] md:text-xs text-muted-foreground truncate max-w-[150px] md:max-w-none">
                                                         {team.participants?.map(p => p.name).join(", ")}
                                                     </div>
+                                                </div>
+
+                                                <div className="col-span-1 text-center font-mono text-base md:text-lg text-yellow-500 font-bold">
+                                                    {team.wins || 0}
                                                 </div>
 
                                                 <div className="col-span-2 text-center font-mono text-base md:text-lg text-gray-300">
