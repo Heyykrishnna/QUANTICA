@@ -34,6 +34,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
   const [matchToDelete, setMatchToDelete] = useState<string | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [pendingEventChange, setPendingEventChange] = useState<string | null>(null);
+  const [selectedGroup, setSelectedGroup] = useState<string>("all");
 
   // Helper to check if event is BGMI or Free Fire
   const isBattleRoyale = (eventId: string) => {
@@ -81,6 +82,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
     try {
       const { data } = await api.get<Team[]>(`/teams?eventId=${selectedEvent}`);
       setTeams(data);
+      setSelectedGroup("all"); // Reset group filter on new teams fetch
       const initialScores: Record<string, { placement: number; kills: number; points: number }> = {};
       data.forEach((team) => {
         initialScores[team.id] = { placement: 0, kills: 0, points: 0 };
@@ -356,6 +358,40 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
         </div>
       )}
 
+      {/* Group Selector - Only show if groups exist */}
+      {selectedEvent && teams.some(t => t.group) && (
+        <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-xl p-4">
+          <label className="block text-sm font-bold uppercase tracking-wider text-purple-400 mb-2">
+            Filter by Group
+          </label>
+          <div className="gap-2 bg-black/60 p-1 rounded-lg inline-flex">
+            <button
+              onClick={() => setSelectedGroup("all")}
+              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
+                selectedGroup === "all" 
+                  ? "bg-purple-500 text-white shadow-lg" 
+                  : "text-gray-400 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              All Teams
+            </button>
+            {Array.from(new Set(teams.map(t => t.group).filter(Boolean))).sort().map(group => (
+              <button
+                key={group}
+                onClick={() => setSelectedGroup(group!)}
+                className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
+                  selectedGroup === group 
+                    ? "bg-purple-500 text-white shadow-lg" 
+                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                Group {group}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Scoring Table */}
       {selectedEvent && teams.length > 0 ? (
         <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden">
@@ -363,6 +399,9 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
             <table className="w-full">
               <thead className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border-b border-white/10">
                 <tr>
+                  <th className="px-4 py-4 text-left text-gray-400 uppercase tracking-wider text-sm font-bold w-12">
+                    #
+                  </th>
                   <th className="px-4 py-4 text-left text-cyan-400 uppercase tracking-wider text-sm font-bold">
                     Team
                   </th>
@@ -386,7 +425,9 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                 </tr>
               </thead>
               <tbody>
-                {teams.map((team, index) => (
+                {teams
+                  .filter(team => selectedGroup === "all" || team.group === selectedGroup)
+                  .map((team, index) => (
                   <tr 
                     key={team.id} 
                     className={`
@@ -394,6 +435,9 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                       ${index % 2 === 0 ? 'bg-black/20' : 'bg-transparent'}
                     `}
                   >
+                    <td className="px-4 py-3 font-mono text-gray-500 font-bold">
+                      {index + 1}
+                    </td>
                     <td className="px-4 py-3 font-bold text-white flex items-center gap-2">
                       <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
                       {team.name}
