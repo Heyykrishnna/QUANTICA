@@ -207,8 +207,8 @@ const BracketManagement = ({ preSelectedEventId }: BracketManagementProps = {}) 
                 bracketSize *= 2;
             }
 
-            // Limit to 16 for now as per requirement
-            if (bracketSize > 16) bracketSize = 16;
+            // Limit to 64 as per updated requirement
+            if (bracketSize > 64) bracketSize = 64;
 
             // 4. Assign Byes
             // The top (bracketSize - teamCount) teams get "Byes" if we seed properly.
