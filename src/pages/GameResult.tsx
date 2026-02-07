@@ -22,8 +22,8 @@ const GameResult = () => {
     const isBattleRoyale = gameSlug?.includes("bgmi") || gameSlug?.includes("freefire") || gameSlug?.includes("pubg");
 
     // Default to Finals if active, else first group for BR, otherwise overall
-    // Target: 5:00 AM 8-Feb 2026 IST
-    const finalsStartTime = new Date("2026-02-08T05:00:00+05:30");
+    // Target: ENABLED NOW
+    const finalsStartTime = new Date("2026-02-07T05:00:00+05:30");
     const now = new Date();
     const isFinalsActive = now >= finalsStartTime;
     
@@ -64,29 +64,55 @@ const GameResult = () => {
 
         if (!groups.overall) groups.overall = [];
         
+        if (!groups.overall) groups.overall = [];
+        
         // Populate Finals Group
-        // Logic: Get Top 4 from each group based on GROUP MATCHES
-        // Since we don't have separate match data here easily (useLeaderboard returns aggregated),
-        // we can try to infer or just use the Total Points if we assume they carry over.
-        // User said: "teams of all group top 4 teams which have green background should come in finals"
-        // This implies we take the current leaders of groups.
+        // Logic: 
+        // 1. If manual list exists (e.g. Free Fire), use that.
+        // 2. Else get Top 4 from each group based on GROUP MATCHES
         
-        // Note: Ideally backend does this or we fetch matches to separate.
-        // For now, let's filter the 'overall' list or process groups.
-        
-        // Let's iterate all groups and pick top 4 from each.
-        const finalsTeams = new Set<Team>();
-        if (gameInfo?.groups && !isValorant) {
-            gameInfo.groups.forEach(g => {
-                const groupName = g.replace("Group ", "");
-                const groupTeams = groups[groupName] || [];
-                // Sort by points
-                const sorted = [...groupTeams].sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0));
-                // Take top 4
-                sorted.slice(0, 4).forEach(t => finalsTeams.add(t));
-            });
+        // Helper for Tie-Breaker Logic
+        // 1. Total Points
+        // 2. Wins
+        // 3. Position Points
+        // 4. Kills
+        const sortTeams = (a: Team, b: Team) => {
+            if ((b.totalPoints || 0) !== (a.totalPoints || 0)) {
+                return (b.totalPoints || 0) - (a.totalPoints || 0);
+            }
+            if ((b.wins || 0) !== (a.wins || 0)) {
+                return (b.wins || 0) - (a.wins || 0);
+            }
+            if ((b.positionPoints || 0) !== (a.positionPoints || 0)) {
+                return (b.positionPoints || 0) - (a.positionPoints || 0);
+            }
+            return (b.totalKills || 0) - (a.totalKills || 0);
+        };
+
+        const manualFinalsTeams = gameInfo?.finalsTeams;
+
+        if (manualFinalsTeams && manualFinalsTeams.length > 0) {
+             // Filter teams based on the manual names list
+             const filtered = (teams || []).filter(t => 
+                 manualFinalsTeams.some(manualName => manualName.toLowerCase() === t.name.toLowerCase())
+             );
+             
+             groups['Finals'] = filtered.sort(sortTeams);
+        } else {
+            // Auto-qualification Logic
+            const finalsTeams = new Set<Team>();
+            if (gameInfo?.groups && !isValorant) {
+                gameInfo.groups.forEach(g => {
+                    const groupName = g.replace("Group ", "");
+                    const groupTeams = groups[groupName] || [];
+                    // Sort by points
+                    const sorted = [...groupTeams].sort(sortTeams);
+                    // Take top 4
+                    sorted.slice(0, 4).forEach(t => finalsTeams.add(t));
+                });
+            }
+            groups['Finals'] = Array.from(finalsTeams).sort(sortTeams);
         }
-        groups['Finals'] = Array.from(finalsTeams).sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0));
 
         return groups;
     }, [teams, gameInfo, isValorant]);
@@ -158,12 +184,6 @@ const GameResult = () => {
                                         <Shield className="w-5 h-5 text-primary" /> {teams?.length || 0}
                                     </p>
                                 </div>
-                                <div className="bg-card/50 backdrop-blur-md border border-primary/20 p-4 rounded-lg min-w-[140px]">
-                                    <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Top Score</p>
-                                    <p className="text-2xl font-bold text-white flex items-center gap-2">
-                                        <Target className="w-5 h-5 text-secondary" /> {teams?.[0]?.totalPoints || 0}
-                                    </p>
-                                </div>
                             </motion.div>
                         )}
                     </div>
@@ -190,13 +210,11 @@ const GameResult = () => {
                                             <TabsTrigger
                                                 key={code}
                                                 value={code}
-                                                disabled={isFinalsActive} 
-                                                onClick={(e) => {
-                                                }}
+                                                disabled={isFinalsActive}
                                                 className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                             >
                                                 Group {code}
-                                                <Lock className="w-3 h-3" />
+                                                {isFinalsActive && <Lock className="w-3 h-3" />}
                                             </TabsTrigger>
                                         );
                                     })}
@@ -223,23 +241,10 @@ const GameResult = () => {
                                                 key={group}
                                                 value={group}
                                                 disabled={isFinalsActive}
-                                                onClick={(e) => {
-                                                    if (!isFinalsActive) {
-                                                        e.preventDefault();
-                                                        toast.error("Group Leaderboard will be live by 5:00 AM 8-Feb", {
-                                                            style: {
-                                                                background: "#333",
-                                                                color: "#fff",
-                                                                border: "1px solid #777"
-                                                            },
-                                                            icon: "🔒"
-                                                        });
-                                                    }
-                                                }}
                                                 className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                             >
                                                 Group {group}
-                                                <Lock className="w-3 h-3" />
+                                                {isFinalsActive && <Lock className="w-3 h-3" />}
                                             </TabsTrigger>
                                         ))}
                                 </TabsList>
@@ -288,7 +293,13 @@ const GameResult = () => {
                                 ) : (
                                     currentTeams.map((team, index) => {
                                         const rank = index + 1;
-                                        const isQualified = activeTab !== 'overall' && isBattleRoyale && rank <= QUALIFY_LIMIT;
+                                        // Qualification / Highlight Logic
+                                        // If Finals: Only Top 3 get green background
+                                        // If Groups: Top N (QUALIFY_LIMIT) get green background
+                                        const isQualified = activeTab === 'Finals' 
+                                            ? rank <= 3 
+                                            : (activeTab !== 'overall' && isBattleRoyale && rank <= QUALIFY_LIMIT);
+                                            
                                         const isTop3 = rank <= 3;
 
                                         return (
