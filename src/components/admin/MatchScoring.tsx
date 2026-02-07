@@ -16,6 +16,7 @@ import {
 import api from "../../lib/api";
 import { Event, Team, Match } from "../../hooks/useLeaderboard"; // Reuse types
 import { identifyGameType, calculatePoints, GameType } from "../../lib/scoringSchemes";
+import { events as staticEvents } from "../../data/events";
 import { GiTireIronCross } from "react-icons/gi";
 
 interface MatchScoringProps {
@@ -472,6 +473,18 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                 {teams
                   .filter(team => {
                     if (stage === 'Finals') {
+                        // Find the static event config to check for manual finals list
+                        const currentApiEvent = events.find(e => e.id === selectedEvent);
+                        const staticConfig = staticEvents.find(e => e.slug === currentApiEvent?.slug);
+                        
+                        // 1. Manual List Check (e.g. Free Fire)
+                        if (staticConfig?.finalsTeams && staticConfig.finalsTeams.length > 0) {
+                            return staticConfig.finalsTeams.some(manualName => 
+                                manualName.toLowerCase() === team.name.toLowerCase()
+                            );
+                        }
+
+                        // 2. Auto-qualification Logic (Fallback)
                         // Logic to filter ONLY qualified teams based on GROUP stage matches
                         const bgmiLimit = 8; // Top 8 per group for BGMI? No, user request said "all group top 4 teams"
                         const ffLimit = 4;

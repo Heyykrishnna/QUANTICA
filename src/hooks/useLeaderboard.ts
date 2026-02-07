@@ -129,8 +129,18 @@ export function useLeaderboard(eventSlug: string) {
           };
         });
 
-        // 6. Sort by totalPoints descending and assign ranks
-        const sortedTeams = enrichedTeams.sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0));
+        const sortedTeams = enrichedTeams.sort((a, b) => {
+            if ((b.totalPoints || 0) !== (a.totalPoints || 0)) {
+                return (b.totalPoints || 0) - (a.totalPoints || 0);
+            }
+            if ((b.wins || 0) !== (a.wins || 0)) {
+                return (b.wins || 0) - (a.wins || 0);
+            }
+            if ((b.positionPoints || 0) !== (a.positionPoints || 0)) {
+                return (b.positionPoints || 0) - (a.positionPoints || 0);
+            }
+            return (b.totalKills || 0) - (a.totalKills || 0);
+        });
         const rankedTeams = sortedTeams.map((team, index) => ({
           ...team,
           rank: index + 1,
