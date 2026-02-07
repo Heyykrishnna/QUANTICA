@@ -43,23 +43,36 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user) {
       fetchDashboardData();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch events
       const { data: events } = await api.get<Event[]>('/events');
-      
+
+      // Check for restricted access (Game Admin)
+      if (user?.email) {
+        const matchedEvent = events.find((e: any) =>
+          user.email.toLowerCase().includes(e.slug.toLowerCase())
+        );
+
+        if (matchedEvent) {
+          // Redirect Game Admin to their specific page
+          navigate(`/admin?event=${matchedEvent.id}`);
+          return;
+        }
+      }
+
       // Fetch all teams and matches for statistics
-      const teamRequests = events.map(event => 
+      const teamRequests = events.map(event =>
         api.get(`/teams?eventId=${event.id}`).catch(() => ({ data: [] }))
       );
-      const matchRequests = events.map(event => 
+      const matchRequests = events.map(event =>
         api.get(`/matches?eventId=${event.id}`).catch(() => ({ data: [] }))
       );
 
@@ -69,7 +82,7 @@ const AdminDashboard = () => {
       // Calculate stats
       const totalTeams = teamsData.reduce((sum, res) => sum + (res.data?.length || 0), 0);
       const totalMatches = matchesData.reduce((sum, res) => sum + (res.data?.length || 0), 0);
-      
+
       setStats({
         totalTeams,
         totalMatches,
@@ -109,10 +122,10 @@ const AdminDashboard = () => {
 
   const handleGameClick = (eventId: string, slug: string) => {
     // Battle royale games go to scoring, others go to brackets
-    const isBattleRoyale = slug.toLowerCase().includes('bgmi') || 
-                          slug.toLowerCase().includes('freefire') || 
-                          slug.toLowerCase().includes('pubg');
-    
+    const isBattleRoyale = slug.toLowerCase().includes('bgmi') ||
+      slug.toLowerCase().includes('freefire') ||
+      slug.toLowerCase().includes('pubg');
+
     const tab = isBattleRoyale ? 'scoring' : 'brackets';
     navigate(`/admin?event=${eventId}&tab=${tab}`);
   };
@@ -229,7 +242,7 @@ const AdminDashboard = () => {
                       />
                       {/* Gradient Overlay */}
                       <div className={`absolute inset-0 bg-gradient-to-t ${game.color}`} />
-                      
+
                       {/* Game Name Overlay */}
                       <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
                         <h3 className="text-2xl font-bold text-white mb-1">

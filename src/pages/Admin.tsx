@@ -1,4 +1,4 @@
-import {useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import api from "../lib/api";
 import { useAdminAuth } from "../hooks/useAdminAuth";
@@ -19,12 +19,13 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState("teams");
   const [managedGameName, setManagedGameName] = useState<string | null>(null);
   const [effectiveManagedEventId, setEffectiveManagedEventId] = useState<string | undefined>(undefined);
+  const [isRestricted, setIsRestricted] = useState(false);
 
   useEffect(() => {
     const determineUserScope = async () => {
       try {
         const { data } = await api.get('/events');
-        
+
         // First check if there's an event ID from URL query params
         const eventIdFromUrl = searchParams.get('event');
         if (eventIdFromUrl) {
@@ -45,6 +46,7 @@ const Admin = () => {
           if (matchedEvent) {
             setEffectiveManagedEventId(matchedEvent.id);
             setManagedGameName(matchedEvent.name);
+            setIsRestricted(true);
           } else {
             // Super Admin - redirect to dashboard
             navigate('/admin/dashboard');
@@ -92,13 +94,23 @@ const Admin = () => {
           {/* Breadcrumb Navigation */}
           <div className="mb-6">
             <div className="flex items-center gap-2 text-sm">
-              <button
-                onClick={() => navigate('/admin/dashboard')}
-                className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 transition-colors"
-              >
-                <Home size={16} />
-                <span>Dashboard</span>
-              </button>
+              {/* Only show Dashboard link if NOT restricted to a specific event (Super Admin) */}
+              {!isRestricted && (
+                <button
+                  onClick={() => navigate('/admin/dashboard')}
+                  className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
+                  <Home size={16} />
+                  <span>Dashboard</span>
+                </button>
+              )}
+              {/* If restricted, just show a static Home icon or nothing to avoid confusion */}
+              {isRestricted && (
+                <div className="flex items-center gap-1 text-gray-500 cursor-not-allowed">
+                  <Home size={16} />
+                  <span>Home</span>
+                </div>
+              )}
               <ChevronRight size={16} className="text-gray-600" />
               <span className="text-gray-400">{managedGameName || 'Game Management'}</span>
             </div>
