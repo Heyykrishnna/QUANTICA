@@ -1,7 +1,7 @@
 export const events = [
 	{
 		title: "BGMI",
-		game: "BGMI",
+		game: "BGMI - Finals",
 		date: "7 Feb 2026",
 		targetDate: "2026-02-07T10:00:00",
 		startTime: "10:00 AM",
@@ -28,7 +28,7 @@ export const events = [
 	},
 	{
 		title: "Free Fire MAX",
-		game: "Free Fire",
+		game: "Free Fire - Finals",
 		date: "7-8 Feb 2026",
 		targetDate: "2026-02-07T10:00:00",
 		startTime: "10:00 AM",
@@ -57,7 +57,7 @@ export const events = [
 	},
 	{
 		title: "Valorant",
-		game: "Valorant",
+		game: "Valorant - Finals",
 		date: "7-8 Feb 2026",
 		targetDate: "2026-02-07T11:00:00",
 		startTime: "10:30 AM",
@@ -93,8 +93,7 @@ export const events = [
 		image: "https://ik.imagekit.io/vdigjljlu/efootball.jpeg?updatedAt=1769276556777",
 		slug: "efootball",
 		color: "cyan" as const,
-		status: "Registration Open",
-		registrationUrl: "https://unstop.com/o/2Y96fSD?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events",
+		status: "Registration Closed",
 		gameLogo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/EFootball_2022_logo_colored.svg/2048px-EFootball_2022_logo_colored.svg.png",
 	},
 	{
@@ -110,8 +109,7 @@ export const events = [
 		image: "https://ik.imagekit.io/vdigjljlu/tekken.jpeg?updatedAt=1769276558353",
 		slug: "tekken8",
 		color: "theme-red" as const,
-		status: "Registration Open",
-		registrationUrl: "https://unstop.com/o/TqSZWtY?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events",
+		status: "Registration Closed",
 		gameLogo: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f05a9b5b-ead5-460e-8573-73ba2fff9cde/dgs72ru-529a5528-da92-4eb3-a5b8-0f606390feeb.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9mMDVhOWI1Yi1lYWQ1LTQ2MGUtODU3My03M2JhMmZmZjljZGUvZGdzNzJydS01MjlhNTUyOC1kYTkyLTRlYjMtYTViOC0wZjYwNjM5MGZlZWIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.pk0wzVW-daWlpUgAbtp4co6Z8dR7c5hhfuJAdB20x_A",
 	},
 	{
@@ -127,8 +125,7 @@ export const events = [
 		image: "https://ik.imagekit.io/vdigjljlu/f1.jpeg?updatedAt=1769276557113",
 		slug: "f125",
 		color: "theme-red" as const,
-		status: "Registration Open",
-		registrationUrl: "https://unstop.com/o/rt2R94J?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events",
+		status: "Registration Closed",
 		gameLogo: "https://res.cloudinary.com/dqh5g2nmn/image/upload/v1768044450/F1_25_logo_e5d3qt.png",
 	},
 	{
@@ -144,8 +141,7 @@ export const events = [
 		image: "https://ik.imagekit.io/vdigjljlu/clashroyale.jpeg?updatedAt=1769276559781",
 		slug: "clashroyale",
 		color: "electric-blue" as const,
-		status: "Registration Open",
-		registrationUrl: "https://unstop.com/o/gra7Eck?lb=6YYCRAfR&utm_medium=Share&utm_source=sahabsin46468&utm_campaign=Events",
+		status: "Registration Closed",
 		gameLogo: "https://1000logos.net/wp-content/uploads/2021/02/Clash-Royale-emblem.png",
 	},
 	{
@@ -161,8 +157,7 @@ export const events = [
 		image: "https://ik.imagekit.io/vdigjljlu/fifa.jpeg?updatedAt=1769276559752",
 		slug: "eafootball26",
 		color: "magenta" as const,
-		status: "Registration Open",
-		registrationUrl: "https://unstop.com/p/quantica-2026-ea-fc-26-solo-cup-quantica-2026-sage-rishihood-university-1621608",
+		status: "Registration Closed",
 		gameLogo: "https://ik.imagekit.io/jbckhvkvo/ea-sports-fc-26-releases-on-september-26-cover68778afd733aa-removebg-preview_ayg4un.png?updatedAt=1770090636555",
 	},
 ];

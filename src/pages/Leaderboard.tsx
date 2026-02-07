@@ -1,11 +1,12 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, Users, Activity, PlayCircle, Clock, ChevronRight, MapPin, ChevronLeft } from "lucide-react";
+import { Trophy, Users, Activity, PlayCircle, Clock, ChevronRight, MapPin, ChevronLeft, Medal } from "lucide-react";
 import PageTransition from "../components/PageTransition";
 import GlitchText from "../components/GlitchText";
 import LiveTicker from "../components/LiveTicker";
 import { events } from "../data/events";
 import { scheduleEvents } from "../data/schedule";
 import { useState, useEffect } from "react";
+import { useLeaderboard, Team } from "../hooks/useLeaderboard";
 
 // Helper to determine status based on schedule
 type Event = typeof events[0];
@@ -39,6 +40,75 @@ const getEventStatus = (scheduleEvent: ScheduleEvent | undefined) => {
   } else {
     return { status: 'ended', label: 'Ended', color: 'text-gray-400', bgColor: 'bg-gray-500/20', borderColor: 'border-gray-500/30' };
   }
+};
+
+// Hardcoded top 3 data for specific ended events
+const hardcodedTop3: Record<string, string[]> = {
+  'tekken8': ['Kushagra Maheshwari', 'Shubhro', 'Yuvansh Juneja'],
+  'eafootball26': ['Mohak', 'Preetish', 'Gaunath'],
+};
+
+// Events to skip (don't show top 3)
+const skipTop3Events = ['efootball', 'f125', 'clashroyale'];
+
+// Component to display top 3 teams for ended events
+const Top3Teams = ({ eventSlug }: { eventSlug: string }) => {
+  // Check if this event should be skipped
+  if (skipTop3Events.includes(eventSlug)) {
+    return null;
+  }
+
+  // Check for hardcoded data first
+  const hardcodedNames = hardcodedTop3[eventSlug];
+
+  const medals = ['🥇', '🥈', '🥉'];
+
+  if (hardcodedNames) {
+    return (
+      <div className="space-y-2">
+        {hardcodedNames.map((name, idx) => (
+          <div key={idx} className="flex items-center gap-2 text-sm">
+            <span className="text-base">{medals[idx]}</span>
+            <span className={`font-semibold truncate flex-1 ${idx === 0 ? 'text-white' : 'text-gray-300'}`}>
+              {name}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // For other events, fetch from API
+  const { teams, loading } = useLeaderboard(eventSlug);
+
+  if (loading) {
+    return (
+      <div className="space-y-2 animate-pulse">
+        {[1, 2, 3].map(i => (
+          <div key={i} className="h-6 bg-white/5 rounded" />
+        ))}
+      </div>
+    );
+  }
+
+  const top3 = teams.slice(0, 3);
+
+  if (top3.length === 0) {
+    return <p className="text-xs text-muted-foreground">No results yet</p>;
+  }
+
+  return (
+    <div className="space-y-2">
+      {top3.map((team, idx) => (
+        <div key={team.id} className="flex items-center gap-2 text-sm">
+          <span className="text-base">{medals[idx]}</span>
+          <span className={`font-semibold truncate flex-1 ${idx === 0 ? 'text-white' : 'text-gray-300'}`}>
+            {team.name}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
 };
 
 const Leaderboard = () => {
@@ -124,8 +194,8 @@ const Leaderboard = () => {
                       key={idx}
                       onClick={() => goToSlide(idx)}
                       className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === currentIndex
-                          ? 'bg-primary w-8'
-                          : 'bg-white/30 hover:bg-white/50'
+                        ? 'bg-primary w-8'
+                        : 'bg-white/30 hover:bg-white/50'
                         }`}
                     />
                   ))}
@@ -168,8 +238,16 @@ const Leaderboard = () => {
           {/* Game Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event, index) => {
-              // Find matching schedule event to get timing
-              const scheduleEvent = scheduleEvents.find(s => s.slug === event.slug || s.slug.startsWith(event.slug));
+              // Find the latest matching schedule event (by date) to get accurate timing for multi-day events
+              const matchingScheduleEvents = scheduleEvents.filter(s => s.slug === event.slug || s.slug.startsWith(event.slug));
+              // Sort by date descending and pick the latest one
+              const scheduleEvent = matchingScheduleEvents.sort((a, b) => {
+                const [dayA, monthA, yearA] = a.day.split('/').map(Number);
+                const [dayB, monthB, yearB] = b.day.split('/').map(Number);
+                const dateA = new Date(2000 + yearA, monthA - 1, dayA);
+                const dateB = new Date(2000 + yearB, monthB - 1, dayB);
+                return dateB.getTime() - dateA.getTime(); // Latest first
+              })[0];
               const eventTime = scheduleEvent ? `${scheduleEvent.startTime} - ${scheduleEvent.endTime}` : event.date;
               const statusInfo = getEventStatus(scheduleEvent);
               return (
@@ -212,27 +290,38 @@ const Leaderboard = () => {
 
                       {/* Content Area */}
                       <div className="p-6 flex-1 flex flex-col">
-                        <div className="grid grid-cols-3 gap-3 mb-6">
-                          <div className="bg-primary/5 rounded p-3 border border-primary/10">
-                            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Time</div>
-                            <div className="text-sm font-mono font-bold text-primary flex items-center gap-1">
-                              <Clock className="w-3 h-3 opacity-50" />
-                              {eventTime}
+                        {/* Show Top 3 for ended events (except skipped ones), stats grid for others */}
+                        {statusInfo.status === 'ended' && !skipTop3Events.includes(event.slug) ? (
+                          <div className="mb-4">
+                            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+                              <Trophy className="w-3 h-3 text-yellow-500" />
+                              Top Performers
+                            </div>
+                            <Top3Teams eventSlug={event.slug} />
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-3 gap-3 mb-6">
+                            <div className="bg-primary/5 rounded p-3 border border-primary/10">
+                              <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Time</div>
+                              <div className="text-sm font-mono font-bold text-primary flex items-center gap-1">
+                                <Clock className="w-3 h-3 opacity-50" />
+                                {eventTime}
+                              </div>
+                            </div>
+                            <div className="bg-primary/5 rounded p-3 border border-primary/10">
+                              <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Prize Pool</div>
+                              <div className="text-sm font-mono font-bold text-green-400 flex items-center gap-1">
+                                {event.prizePool || 'TBA'}
+                              </div>
+                            </div>
+                            <div className="bg-primary/5 rounded p-3 border border-primary/10">
+                              <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Groups</div>
+                              <div className="text-lg font-mono font-bold text-foreground flex items-center gap-1">
+                                <Trophy className="w-3 h-3 opacity-50" /> {event.groups?.length || 1}
+                              </div>
                             </div>
                           </div>
-                          <div className="bg-primary/5 rounded p-3 border border-primary/10">
-                            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Prize Pool</div>
-                            <div className="text-sm font-mono font-bold text-green-400 flex items-center gap-1">
-                              {event.prizePool || 'TBA'}
-                            </div>
-                          </div>
-                          <div className="bg-primary/5 rounded p-3 border border-primary/10">
-                            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Groups</div>
-                            <div className="text-lg font-mono font-bold text-foreground flex items-center gap-1">
-                              <Trophy className="w-3 h-3 opacity-50" /> {event.groups?.length || 1}
-                            </div>
-                          </div>
-                        </div>
+                        )}
 
                         <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between text-xs text-muted-foreground group-hover:text-white transition-colors">
                           <span className={`flex items-center gap-2 font-semibold ${statusInfo.color}`}>
