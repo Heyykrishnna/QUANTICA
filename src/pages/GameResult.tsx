@@ -1,4 +1,4 @@
-
+import toast from "react-hot-toast";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useMemo } from "react";
@@ -22,9 +22,10 @@ const GameResult = () => {
     const isBattleRoyale = gameSlug?.includes("bgmi") || gameSlug?.includes("freefire") || gameSlug?.includes("pubg");
 
     // Default to Finals if active, else first group for BR, otherwise overall
-    // Assuming if today is past target date, finals are active.
-    // User requested: "unlock finals section and lock group matches"
-    const isFinalsActive = true; // Force active based on request "now in free fire and bgmi..."
+    // Target: 5:00 AM 8-Feb 2026 IST
+    const finalsStartTime = new Date("2026-02-08T05:00:00+05:30");
+    const now = new Date();
+    const isFinalsActive = now >= finalsStartTime;
     
     const defaultTab = (isBattleRoyale && isFinalsActive) 
         ? "Finals"
@@ -189,23 +190,27 @@ const GameResult = () => {
                                             <TabsTrigger
                                                 key={code}
                                                 value={code}
-                                                disabled={isFinalsActive}
+                                                disabled={isFinalsActive} 
+                                                onClick={(e) => {
+                                                }}
                                                 className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                             >
                                                 Group {code}
-                                                {isFinalsActive && <Lock className="w-3 h-3" />}
+                                                <Lock className="w-3 h-3" />
                                             </TabsTrigger>
                                         );
                                     })}
 
                                     {/* Finals Tab (Unlocked & Default) */}
+                                    {/* Finals Tab (Locked Logic with Warning) */}
                                     {isBattleRoyale && (
                                         <TabsTrigger
                                             value="Finals"
-                                            className="data-[state=active]:bg-transparent data-[state=active]:text-yellow-400 data-[state=active]:border-b-2 data-[state=active]:border-yellow-400 rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors flex items-center gap-2"
+                                            className={`data-[state=active]:bg-transparent data-[state=active]:text-yellow-400 data-[state=active]:border-b-2 data-[state=active]:border-yellow-400 rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors flex items-center gap-2`}
                                         >
-                                            <Trophy className="w-4 h-4 text-yellow-500" />
+                                            <Trophy className={`w-4 h-4 ${isFinalsActive ? "text-yellow-500" : "text-muted-foreground"}`} />
                                             Finals
+                                            {!isFinalsActive && <Lock className="w-3 h-3" />}
                                         </TabsTrigger>
                                     )}
 
@@ -218,10 +223,23 @@ const GameResult = () => {
                                                 key={group}
                                                 value={group}
                                                 disabled={isFinalsActive}
+                                                onClick={(e) => {
+                                                    if (!isFinalsActive) {
+                                                        e.preventDefault();
+                                                        toast.error("Group Leaderboard will be live by 5:00 AM 8-Feb", {
+                                                            style: {
+                                                                background: "#333",
+                                                                color: "#fff",
+                                                                border: "1px solid #777"
+                                                            },
+                                                            icon: "🔒"
+                                                        });
+                                                    }
+                                                }}
                                                 className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none border-b-2 border-transparent px-6 py-3 uppercase tracking-wider font-bold text-muted-foreground hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                             >
                                                 Group {group}
-                                                {isFinalsActive && <Lock className="w-3 h-3" />}
+                                                <Lock className="w-3 h-3" />
                                             </TabsTrigger>
                                         ))}
                                 </TabsList>
@@ -242,7 +260,15 @@ const GameResult = () => {
                             </div>
 
                             <div className="divide-y divide-white/5">
-                                {loading && teams.length === 0 ? (
+                                {!isFinalsActive ? (
+                                    <div className="flex flex-col items-center justify-center p-16 text-center">
+                                        <Lock className="w-16 h-16 text-yellow-500/50 mb-4" />
+                                        <h3 className="text-2xl font-bold text-white mb-2 uppercase tracking-wide">Leaderboard Locked</h3>
+                                        <p className="text-muted-foreground max-w-md text-lg">
+                                            Leaderboard will be live by <span className="text-yellow-400 font-bold">5:00 AM 8-Feb</span>.
+                                        </p>
+                                    </div>
+                                ) : loading && teams.length === 0 ? (
                                     // Skeleton Loader Rows
                                     Array.from({ length: 5 }).map((_, i) => (
                                         <div key={i} className="grid grid-cols-12 gap-4 p-4 animate-pulse">
