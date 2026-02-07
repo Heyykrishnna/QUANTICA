@@ -89,7 +89,7 @@ const EventLeaderboard = ({ eventSlug, eventName }: EventLeaderboardProps) => {
             </th>
           </tr>
         </thead>
-        
+
         <tbody>
           {teams.map((team, index) => {
             const currentRank = team.rank || index + 1;
@@ -99,11 +99,11 @@ const EventLeaderboard = ({ eventSlug, eventName }: EventLeaderboardProps) => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className={`border-b border-border/50 hover:bg-card/50 transition-colors ${
-                  (eventName.toLowerCase().includes('bgmi') || eventName.toLowerCase().includes('free fire')) && currentRank <= 4
-                    ? "bg-green-500/10 border-l-4 border-l-green-500" 
-                    : currentRank <= 3 
-                      ? "bg-card/30" 
+                className={`border-b border-border/50 hover:bg-card/50 transition-colors ${((eventName.toLowerCase().includes('bgmi') && currentRank <= 8) ||
+                    (eventName.toLowerCase().includes('free fire') && currentRank <= 4))
+                    ? "bg-green-500/10 border-l-4 border-l-green-500"
+                    : currentRank <= 3
+                      ? "bg-card/30"
                       : ""
                   }`}
               >

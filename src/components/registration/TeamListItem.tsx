@@ -35,8 +35,8 @@ const TeamListItem = ({ team, isSelected, onClick }: TeamListItemProps) => {
     }
   };
 
-  const bgClass = team.checkInStatus === CheckInStatus.CheckedIn 
-    ? 'bg-green-500/10 border-green-500' 
+  const bgClass = team.checkInStatus === CheckInStatus.CheckedIn
+    ? 'bg-green-500/10 border-green-500'
     : 'bg-card border-border';
 
   return (
@@ -57,23 +57,25 @@ const TeamListItem = ({ team, isSelected, onClick }: TeamListItemProps) => {
             {team.teamName}
           </h3>
           <p className="text-xs text-muted-foreground truncate">
-            Lead: {team.teamLeadName}
+            {team.eventName}
           </p>
         </div>
         <div className="flex-shrink-0">
           {getStatusBadge()}
         </div>
       </div>
-      
-      {team.checkInStatus === CheckInStatus.CheckedIn && (
-        <div className="mt-2 pt-2 border-t border-border text-xs text-muted-foreground">
-          {team.checkInTime && new Date(team.checkInTime).toLocaleTimeString('en-IN', {
-            hour: '2-digit',
-            minute: '2-digit'
-          })}
-        </div>
-      )}
-    </motion.div>
+
+      {
+        team.checkInStatus === CheckInStatus.CheckedIn && (
+          <div className="mt-2 pt-2 border-t border-border text-xs text-muted-foreground">
+            {team.checkInTime && new Date(team.checkInTime).toLocaleTimeString('en-IN', {
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </div>
+        )
+      }
+    </motion.div >
   );
 };
 

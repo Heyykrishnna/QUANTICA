@@ -5,17 +5,15 @@ import { useAdminAuth } from '../hooks/useAdminAuth';
 import PageTransition from '../components/PageTransition';
 import GlitchText from '../components/GlitchText';
 import AdminLogin from '../components/admin/AdminLogin';
-import TeamMembersModal from '../components/registration/TeamMembersModal';
 import AddTeamModal from '../components/registration/AddTeamModal';
 import { RegistrationTeam, CheckInStatus, VerificationStatus } from '../types/registration';
 import { registrationService } from '../services/registrationService';
-import { CheckCircle, Clock, LogOut, Shield, Phone, Users, Filter, Sparkles, TrendingUp, Search, X, Trash2, AlertTriangle } from 'lucide-react';
+import { CheckCircle, Clock, LogOut, Shield, Filter, TrendingUp, Search, X, Trash2, AlertTriangle } from 'lucide-react';
 
 const AdminRegistration = () => {
   const { isAuthenticated, isLoading, login, logout } = useAdminAuth();
   const [filter, setFilter] = useState<'all' | 'checked_in' | 'pending' | 'checked_out'>('all');
   const [selectedTeam, setSelectedTeam] = useState<RegistrationTeam | null>(null);
-  const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
   const [isAddTeamModalOpen, setIsAddTeamModalOpen] = useState(false);
   const [teamToDelete, setTeamToDelete] = useState<RegistrationTeam | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,10 +54,7 @@ const AdminRegistration = () => {
 
   const filteredTeams = teams;
 
-  const handleViewMembers = (team: RegistrationTeam) => {
-    setSelectedTeam(team);
-    setIsMembersModalOpen(true);
-  };
+
 
   const updateTeamMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<RegistrationTeam> }) =>
@@ -115,19 +110,7 @@ const AdminRegistration = () => {
     }
   };
 
-  const handleMemberToggle = (memberIndex: number) => {
-    if (selectedTeam) {
-      const updatedMembers = [...selectedTeam.members];
-      updatedMembers[memberIndex] = {
-        ...updatedMembers[memberIndex],
-        isChecked: !updatedMembers[memberIndex].isChecked
-      };
-      updateTeamMutation.mutate({ 
-        id: selectedTeam.id, 
-        data: { members: updatedMembers } 
-      });
-    }
-  };
+
 
   const getStatusBadge = (status: CheckInStatus) => {
     switch (status) {
@@ -296,8 +279,8 @@ const AdminRegistration = () => {
               <button
                 onClick={() => setFilter('all')}
                 className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${filter === 'all'
-                    ? 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/50'
-                    : 'bg-background text-foreground border-border hover:border-primary'
+                  ? 'bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/50'
+                  : 'bg-background text-foreground border-border hover:border-primary'
                   }`}
               >
                 All ({stats.total})
@@ -305,8 +288,8 @@ const AdminRegistration = () => {
               <button
                 onClick={() => setFilter('checked_in')}
                 className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${filter === 'checked_in'
-                    ? 'bg-green-500 text-white border-green-500 shadow-lg shadow-green-500/50'
-                    : 'bg-background text-foreground border-border hover:border-green-500'
+                  ? 'bg-green-500 text-white border-green-500 shadow-lg shadow-green-500/50'
+                  : 'bg-background text-foreground border-border hover:border-green-500'
                   }`}
               >
                 Checked In ({stats.checkedIn})
@@ -314,8 +297,8 @@ const AdminRegistration = () => {
               <button
                 onClick={() => setFilter('pending')}
                 className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${filter === 'pending'
-                    ? 'bg-yellow-500 text-black border-yellow-500 shadow-lg shadow-yellow-500/50'
-                    : 'bg-background text-foreground border-border hover:border-yellow-500'
+                  ? 'bg-yellow-500 text-black border-yellow-500 shadow-lg shadow-yellow-500/50'
+                  : 'bg-background text-foreground border-border hover:border-yellow-500'
                   }`}
               >
                 Pending ({stats.pending})
@@ -323,8 +306,8 @@ const AdminRegistration = () => {
               <button
                 onClick={() => setFilter('checked_out')}
                 className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all hover:scale-105 ${filter === 'checked_out'
-                    ? 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/50'
-                    : 'bg-background text-foreground border-border hover:border-blue-500'
+                  ? 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/50'
+                  : 'bg-background text-foreground border-border hover:border-blue-500'
                   }`}
               >
                 Checked Out ({stats.checkedOut})
@@ -361,8 +344,8 @@ const AdminRegistration = () => {
                   <button
                     onClick={() => setSelectedEventFilter('all')}
                     className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all ${selectedEventFilter === 'all'
-                        ? 'bg-purple-500 text-white border-purple-500'
-                        : 'bg-background text-foreground border-border hover:border-purple-500'
+                      ? 'bg-purple-500 text-white border-purple-500'
+                      : 'bg-background text-foreground border-border hover:border-purple-500'
                       }`}
                   >
                     All Events ({teams.length})
@@ -374,8 +357,8 @@ const AdminRegistration = () => {
                         key={event.id}
                         onClick={() => setSelectedEventFilter(event.id)}
                         className={`px-4 py-2 text-sm font-bold uppercase border-2 transition-all ${selectedEventFilter === event.id
-                            ? 'bg-purple-500 text-white border-purple-500'
-                            : 'bg-background text-foreground border-border hover:border-purple-500'
+                          ? 'bg-purple-500 text-white border-purple-500'
+                          : 'bg-background text-foreground border-border hover:border-purple-500'
                           }`}
                       >
                         {event.name} ({count})
@@ -412,19 +395,7 @@ const AdminRegistration = () => {
                       Event
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-primary">
-                      Team Lead
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-primary">
-                      Phone
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-primary">
                       Status
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-primary">
-                      Verification
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-primary">
-                      Members
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-primary">
                       Check-In Time
@@ -448,9 +419,6 @@ const AdminRegistration = () => {
                     </tr>
                   ) : (
                     filteredTeams.map((team, index) => {
-                      const checkedMembers = team.members.filter(m => m.isChecked).length;
-                      const totalMembers = team.members.length;
-
                       return (
                         <motion.tr
                           key={team.id}
@@ -458,7 +426,6 @@ const AdminRegistration = () => {
                           animate={{ x: 0, opacity: 1 }}
                           transition={{ delay: 0.05 * index }}
                           className="border-b border-border hover:bg-primary/5 transition-all cursor-pointer group"
-                          onClick={() => handleViewMembers(team)}
                         >
                           <td className="px-6 py-4 font-bold text-foreground text-lg group-hover:text-primary transition-colors">
                             {team.teamName}
@@ -468,38 +435,8 @@ const AdminRegistration = () => {
                               {team.eventName}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-foreground">
-                            {team.teamLeadName}
-                          </td>
-                          <td className="px-6 py-4 text-foreground font-mono text-sm">
-                            <div className="flex items-center gap-2">
-                              <Phone className="w-4 h-4 text-primary" />
-                              {team.teamLeadPhone}
-                            </div>
-                          </td>
                           <td className="px-6 py-4">
                             {getStatusBadge(team.checkInStatus)}
-                          </td>
-                          <td className="px-6 py-4">
-                            {team.verificationStatus === VerificationStatus.Verified ? (
-                              <span className="inline-flex items-center gap-1 text-green-500 text-sm font-bold">
-                                <Shield className="w-5 h-5" />
-                                Verified
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1 text-yellow-500 text-sm font-bold">
-                                <Clock className="w-5 h-5" />
-                                Pending
-                              </span>
-                            )}
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-2">
-                              <Users className="w-5 h-5 text-primary" />
-                              <span className={`font-mono font-bold text-lg ${checkedMembers === totalMembers ? 'text-green-500' : 'text-yellow-500'}`}>
-                                {checkedMembers}/{totalMembers}
-                              </span>
-                            </div>
                           </td>
                           <td className="px-6 py-4 text-center">
                             <div className="flex gap-2 justify-center">
@@ -535,27 +472,14 @@ const AdminRegistration = () => {
           </motion.div>
         </div>
 
-            <AddTeamModal
-              isOpen={isAddTeamModalOpen}
-              onClose={() => setIsAddTeamModalOpen(false)}
-              onSubmit={(data) => createTeamMutation.mutate(data)}
-              isSubmitting={createTeamMutation.isPending}
-            />
+        <AddTeamModal
+          isOpen={isAddTeamModalOpen}
+          onClose={() => setIsAddTeamModalOpen(false)}
+          onSubmit={(data) => createTeamMutation.mutate(data)}
+          isSubmitting={createTeamMutation.isPending}
+        />
 
-        {/* Team Members Modal */}
-        {selectedTeam && (
-          <TeamMembersModal
-            team={selectedTeam}
-            isOpen={isMembersModalOpen}
-            onClose={() => {
-              setIsMembersModalOpen(false);
-              setSelectedTeam(null);
-            }}
-            readOnly={false}
-            onStatusUpdate={handleStatusUpdate}
-            onToggleMember={handleMemberToggle}
-          />
-        )}
+
 
         {/* Delete Confirmation Dialog */}
         {teamToDelete && (

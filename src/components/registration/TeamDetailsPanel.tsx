@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { RegistrationTeam, VerificationStatus, CheckInStatus } from '../../types/registration';
-import { Phone, User, Users, CheckCircle, Shield, LogOut, LogIn } from 'lucide-react';
+import { Phone, Users, CheckCircle, Shield, LogOut, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface TeamDetailsPanelProps {
@@ -23,16 +23,7 @@ const TeamDetailsPanel = ({ team, onUpdateTeam, onOpenOTPModal, onOpenMembersMod
   }
 
   const handleCheckIn = () => {
-    if (team.verificationStatus !== VerificationStatus.Verified) {
-      toast.error('Please verify team lead phone number first');
-      return;
-    }
 
-    const allMembersChecked = team.members.every(m => m.isChecked);
-    if (!allMembersChecked) {
-      toast.error('Please check all team members before check-in');
-      return;
-    }
 
     onUpdateTeam({
       ...team,
@@ -55,8 +46,7 @@ const TeamDetailsPanel = ({ team, onUpdateTeam, onOpenOTPModal, onOpenMembersMod
     toast.success(`Team "${team.teamName}" checked out successfully!`);
   };
 
-  const checkedMembersCount = team.members.filter(m => m.isChecked).length;
-  const totalMembersCount = team.members.length;
+
 
   return (
     <motion.div
@@ -98,88 +88,7 @@ const TeamDetailsPanel = ({ team, onUpdateTeam, onOpenOTPModal, onOpenMembersMod
         </div>
       </div>
 
-      {/* Team Lead Info */}
-      <div className="space-y-4 mb-6">
-        <div className="bg-gradient-to-r from-background via-card to-background border-2 border-border p-4 hover:border-primary transition-colors">
-          <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-2">
-            Team Lead Name
-          </label>
-          <div className="flex items-center gap-2 text-foreground text-lg">
-            <User className="w-5 h-5 text-primary" />
-            <span className="font-semibold">{team.teamLeadName}</span>
-          </div>
-        </div>
 
-        <div className="bg-gradient-to-r from-background via-card to-background border-2 border-border p-4 hover:border-primary transition-colors">
-          <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-2">
-            Team Lead Phone Number
-          </label>
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <div className="flex items-center gap-2 text-foreground font-mono text-lg">
-              <Phone className="w-5 h-5 text-primary" />
-              <span>{team.teamLeadPhone}</span>
-            </div>
-            {team.verificationStatus === VerificationStatus.Verified ? (
-              <span className="flex items-center gap-1 text-green-500 text-sm font-bold">
-                <CheckCircle className="w-5 h-5" />
-                Verified
-              </span>
-            ) : (
-              <button
-                onClick={onOpenOTPModal}
-                className="glitch-btn bg-primary text-primary-foreground px-6 py-3 text-sm font-bold uppercase tracking-wider hover:bg-primary/90 transition-all hover:scale-105"
-              >
-                Verify Phone
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Team Members Section with Button */}
-      <div className="flex-1 mb-6">
-        <div className="bg-gradient-to-br from-card via-background to-card border-2 border-border p-6 hover:border-primary transition-all h-full flex flex-col">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-1">
-                Team Members
-              </label>
-              <p className="text-muted-foreground text-sm">
-                {checkedMembersCount}/{totalMembersCount} Present
-              </p>
-            </div>
-            {checkedMembersCount === totalMembersCount && totalMembersCount > 0 && (
-              <span className="flex items-center gap-1 text-green-500 text-sm font-bold animate-pulse">
-                <CheckCircle className="w-5 h-5" /> All Present
-              </span>
-            )}
-          </div>
-
-          <div className="flex-1 flex items-center justify-center">
-            <button
-              onClick={onOpenMembersModal}
-              className="glitch-btn bg-gradient-to-r from-primary to-purple-600 text-primary-foreground py-2 px-8 font-bold uppercase tracking-wider hover:scale-105 transition-all shadow-lg shadow-primary/50 flex items-center gap-3"
-            >
-              <Users className="w-6 h-6" />
-              <span className="text-sm">View & Manage Members</span>
-            </button>
-          </div>
-
-          {/* Member Progress Indicator */}
-          <div className="mt-4">
-            <div className="bg-background border border-border h-3 relative overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${(checkedMembersCount / totalMembersCount) * 100}%` }}
-                className="h-full bg-primary"
-              />
-            </div>
-            <p className="text-xs text-muted-foreground mt-1 text-center font-mono">
-              {Math.round((checkedMembersCount / totalMembersCount) * 100)}% Complete
-            </p>
-          </div>
-        </div>
-      </div>
 
       {/* Check In/Out Time Display */}
       {team.checkInTime && (

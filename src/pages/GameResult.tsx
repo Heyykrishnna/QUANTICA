@@ -26,7 +26,7 @@ const GameResult = () => {
     const [activeTab, setActiveTab] = useState(defaultTab);
 
     // Qualification Rules
-    const QUALIFY_LIMIT = gameSlug?.includes("bgmi") ? 5 : gameSlug?.includes("freefire") ? 3 : 0;
+    const QUALIFY_LIMIT = gameSlug?.includes("bgmi") ? 8 : gameSlug?.includes("freefire") ? 4 : 0;
 
     const groupedTeams = useMemo(() => {
         const groups: Record<string, Team[]> = {

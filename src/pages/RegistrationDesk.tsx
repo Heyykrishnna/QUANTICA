@@ -5,10 +5,7 @@ import PageTransition from '../components/PageTransition';
 import GlitchText from '../components/GlitchText';
 import TeamListItem from '../components/registration/TeamListItem';
 import TeamDetailsPanel from '../components/registration/TeamDetailsPanel';
-import OTPVerificationModal from '../components/registration/OTPVerificationModal';
-import TeamMembersModal from '../components/registration/TeamMembersModal';
-import { RegistrationTeam, VerificationStatus } from '../types/registration';
-import { generateSimulatedOTP, verifyOTP } from '../data/registrationData';
+import { RegistrationTeam } from '../types/registration';
 import { registrationService } from '../services/registrationService';
 import { ClipboardList, Sparkles, Search, Filter, X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -16,9 +13,6 @@ import toast from 'react-hot-toast';
 const RegistrationDesk = () => {
   const queryClient = useQueryClient();
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
-  const [isOTPModalOpen, setIsOTPModalOpen] = useState(false);
-  const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
-  const [generatedOTP, setGeneratedOTP] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEventFilter, setSelectedEventFilter] = useState<string>('all');
   const [showEventFilter, setShowEventFilter] = useState(false);
@@ -86,61 +80,9 @@ const RegistrationDesk = () => {
       id: updatedTeam.id,
       updates: {
         checkInStatus: updatedTeam.checkInStatus,
-        verificationStatus: updatedTeam.verificationStatus,
-        members: updatedTeam.members
+        verificationStatus: updatedTeam.verificationStatus
       }
     });
-  };
-
-  const handleToggleMember = (memberIndex: number) => {
-    if (!selectedTeam) return;
-
-    const updatedMembers = [...selectedTeam.members];
-    updatedMembers[memberIndex] = {
-      ...updatedMembers[memberIndex],
-      isChecked: !updatedMembers[memberIndex].isChecked
-    };
-
-    handleUpdateTeam({
-      ...selectedTeam,
-      members: updatedMembers
-    });
-  };
-
-  const handleOpenOTPModal = () => {
-    if (selectedTeam) {
-      // For now still using simulated OTP generation on frontend
-      // In future move to backend
-      const otp = generateSimulatedOTP(selectedTeam.teamLeadPhone);
-      setGeneratedOTP(otp);
-      setIsOTPModalOpen(true);
-      toast.success('OTP sent! Check console for demo OTP');
-    }
-  };
-
-  const verifyOTPMutation = useMutation({
-    mutationFn: (data: { id: string; status: VerificationStatus }) =>
-      registrationService.verifyTeam(data.id, data.status),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['registration-teams'] });
-      toast.success('Phone number verified successfully!');
-    }
-  });
-
-  const handleVerifyOTP = async (enteredOTP: string): Promise<boolean> => {
-    if (!selectedTeam) return false;
-
-    const isValid = verifyOTP(selectedTeam.teamLeadPhone, enteredOTP, generatedOTP);
-
-    if (isValid) {
-      verifyOTPMutation.mutate({
-        id: selectedTeam.id,
-        status: VerificationStatus.Verified
-      });
-      return true;
-    }
-
-    return false;
   };
 
   const checkedInCount = teams.filter(t => t.isCheckedIn).length; // This might be inaccurate if paginated/filtered. 
@@ -258,8 +200,8 @@ const RegistrationDesk = () => {
                 <button
                   onClick={() => setSelectedEventFilter('all')}
                   className={`px-3 py-1.5 text-xs font-bold uppercase border-2 transition-all ${selectedEventFilter === 'all'
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'bg-background text-foreground border-border hover:border-primary'
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-background text-foreground border-border hover:border-primary'
                     }`}
                 >
                   All Events ({teams.length})
@@ -271,8 +213,8 @@ const RegistrationDesk = () => {
                       key={event.id}
                       onClick={() => setSelectedEventFilter(event.id)}
                       className={`px-3 py-1.5 text-xs font-bold uppercase border-2 transition-all ${selectedEventFilter === event.id
-                          ? 'bg-primary text-primary-foreground border-primary'
-                          : 'bg-background text-foreground border-border hover:border-primary'
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-background text-foreground border-border hover:border-primary'
                         }`}
                     >
                       {event.name} ({count})
@@ -349,32 +291,15 @@ const RegistrationDesk = () => {
                 <TeamDetailsPanel
                   team={selectedTeam}
                   onUpdateTeam={handleUpdateTeam}
-                  onOpenOTPModal={handleOpenOTPModal}
-                  onOpenMembersModal={() => setIsMembersModalOpen(true)}
+                  onOpenOTPModal={() => { }}
+                  onOpenMembersModal={() => { }}
                 />
               </div>
             </motion.div>
           </div>
         </div>
 
-        {/* OTP Verification Modal */}
-        <OTPVerificationModal
-          phone={selectedTeam?.teamLeadPhone || ''}
-          isOpen={isOTPModalOpen}
-          onClose={() => setIsOTPModalOpen(false)}
-          onVerify={handleVerifyOTP}
-        />
 
-        {/* Team Members Modal */}
-        {selectedTeam && (
-          <TeamMembersModal
-            team={selectedTeam}
-            isOpen={isMembersModalOpen}
-            onClose={() => setIsMembersModalOpen(false)}
-            onToggleMember={handleToggleMember}
-            readOnly={selectedTeam.checkInStatus !== 'not_checked_in'}
-          />
-        )}
       </section>
     </PageTransition>
   );
