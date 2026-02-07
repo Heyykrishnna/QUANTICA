@@ -55,8 +55,6 @@ const AnimatedRoutes = () => {
         <Route path="/artist-reveal" element={<ArtistReveal />} />
         <Route path="/map" element={<MapPage />} />
         <Route path="/countdown" element={<Countdown />} />
-
-
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
