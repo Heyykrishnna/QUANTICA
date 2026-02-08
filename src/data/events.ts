@@ -38,7 +38,8 @@ export const events = [
 			"Mortal Wolves",
 			"Gamers guild eSports",
 			"Last Hope",
-			"Jaat Official"
+			"Jaat Official",
+			"Team Warden"
 		],
 		prizePool: "₹50,000",
 		image: "https://ik.imagekit.io/vdigjljlu/bgmi.jpeg?updatedAt=1769276558264",
