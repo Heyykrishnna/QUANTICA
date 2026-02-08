@@ -15,11 +15,22 @@ const GameResult = () => {
     const { gameSlug } = useParams<{ gameSlug: string }>();
     const { teams, event, loading, error } = useLeaderboard(gameSlug || "");
 
+    // Helper function to format lap time from milliseconds
+    const formatLapTime = (ms: number | null | undefined): string => {
+        if (ms === null || ms === undefined || ms === 0) return '--:--:---';
+        const totalSeconds = ms / 1000;
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = Math.floor(totalSeconds % 60);
+        const milliseconds = Math.floor((totalSeconds % 1) * 1000);
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+    };
+
     const gameInfo = events.find(e => e.slug === gameSlug);
     // Use events.ts data to identify if BR or has multiple groups. Explicitly disable groups for Valorant.
     const isValorant = gameSlug?.includes("valorant");
     const hasPredefinedGroups = gameInfo?.groups && gameInfo.groups.length > 0 && !isValorant;
     const isBattleRoyale = gameSlug?.includes("bgmi") || gameSlug?.includes("freefire") || gameSlug?.includes("pubg");
+    const isF1 = gameSlug?.includes("f125");
 
     // Default to Finals if active, else first group for BR, otherwise overall
     // Target: ENABLED NOW
@@ -252,17 +263,28 @@ const GameResult = () => {
                         </div>
                     )}
 
-                    {/* Leaderboard Table / Skeleton - Only for Battle Royale */}
-                    {isBattleRoyale ? (
+                    {/* Leaderboard Table / Skeleton - For Battle Royale and F1-25 */}
+                    {(isBattleRoyale || isF1) ? (
                         <div className="bg-card/30 border border-primary/20 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl min-h-[300px]">
-                            <div className="grid grid-cols-12 gap-2 md:gap-4 p-5 bg-black/40 border-b border-primary/20 font-bold text-xs md:text-sm uppercase tracking-widest text-muted-foreground">
-                                <div className="col-span-1 text-center">Rank</div>
-                                <div className="col-span-4 md:col-span-4">Team Details</div>
-                                <div className="col-span-1 text-center text-yellow-500">Wins</div>
-                                <div className="col-span-2 text-center text-white">Total Kills</div>
-                                <div className="col-span-2 text-center text-secondary">Pos Pts</div>
-                                <div className="col-span-2 text-center text-primary">Points</div>
-                            </div>
+                            {isF1 ? (
+                                // F1-25 Table Headers
+                                <div className="grid grid-cols-12 gap-2 md:gap-4 p-5 bg-black/40 border-b border-primary/20 font-bold text-xs md:text-sm uppercase tracking-widest text-muted-foreground">
+                                    <div className="col-span-1 text-center">Rank</div>
+                                    <div className="col-span-6 md:col-span-7">Driver/Team</div>
+                                    <div className="col-span-3 md:col-span-2 text-center text-primary">Best Lap Time</div>
+                                    <div className="col-span-2 md:col-span-2 text-center text-secondary">Races</div>
+                                </div>
+                            ) : (
+                                // Battle Royale Table Headers
+                                <div className="grid grid-cols-12 gap-2 md:gap-4 p-5 bg-black/40 border-b border-primary/20 font-bold text-xs md:text-sm uppercase tracking-widest text-muted-foreground">
+                                    <div className="col-span-1 text-center">Rank</div>
+                                    <div className="col-span-4 md:col-span-4">Team Details</div>
+                                    <div className="col-span-1 text-center text-yellow-500">Wins</div>
+                                    <div className="col-span-2 text-center text-white">Total Kills</div>
+                                    <div className="col-span-2 text-center text-secondary">Pos Pts</div>
+                                    <div className="col-span-2 text-center text-primary">Points</div>
+                                </div>
+                            )}
 
                             <div className="divide-y divide-white/5">
                                 {!isFinalsActive ? (
@@ -324,33 +346,59 @@ const GameResult = () => {
                                                     </span>
                                                 </div>
 
-                                                <div className="col-span-4 md:col-span-4">
-                                                    <div className="font-bold text-base md:text-lg text-white group-hover:text-primary transition-colors flex items-center gap-2">
-                                                        {team.name}
-                                                        {isTop3 && <Trophy className="w-3 h-3 text-yellow-500" />}
-                                                    </div>
-                                                    <div className="text-[10px] md:text-xs text-muted-foreground truncate max-w-[150px] md:max-w-none">
-                                                        {team.participants?.map(p => p.name).join(", ")}
-                                                    </div>
-                                                </div>
+                                                {isF1 ? (
+                                                    // F1-25 Display
+                                                    <>
+                                                        <div className="col-span-6 md:col-span-7">
+                                                            <div className="font-bold text-base md:text-lg text-white group-hover:text-primary transition-colors flex items-center gap-2">
+                                                                {team.name}
+                                                                {isTop3 && <Trophy className="w-3 h-3 text-yellow-500" />}
+                                                            </div>
+                                                            <div className="text-[10px] md:text-xs text-muted-foreground truncate max-w-[200px] md:max-w-none">
+                                                                {team.participants?.map(p => p.name).join(", ")}
+                                                            </div>
+                                                        </div>
 
-                                                <div className="col-span-1 text-center font-mono text-base md:text-lg text-yellow-500 font-bold">
-                                                    {team.wins || 0}
-                                                </div>
+                                                        <div className="col-span-3 md:col-span-2 text-center font-mono text-base md:text-xl text-primary font-bold">
+                                                            {formatLapTime(team.bestLapTime)}
+                                                        </div>
 
-                                                <div className="col-span-2 text-center font-mono text-base md:text-lg text-gray-300">
-                                                    {team.totalKills || 0}
-                                                </div>
+                                                        <div className="col-span-2 md:col-span-2 text-center font-mono text-base md:text-lg text-secondary">
+                                                            {team.totalRaces || 0}
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    // Battle Royale Display
+                                                    <>
+                                                        <div className="col-span-4 md:col-span-4">
+                                                            <div className="font-bold text-base md:text-lg text-white group-hover:text-primary transition-colors flex items-center gap-2">
+                                                                {team.name}
+                                                                {isTop3 && <Trophy className="w-3 h-3 text-yellow-500" />}
+                                                            </div>
+                                                            <div className="text-[10px] md:text-xs text-muted-foreground truncate max-w-[150px] md:max-w-none">
+                                                                {team.participants?.map(p => p.name).join(", ")}
+                                                            </div>
+                                                        </div>
 
-                                                <div className="col-span-2 text-center font-mono text-base md:text-lg text-secondary">
-                                                    {team.positionPoints || 0}
-                                                </div>
+                                                        <div className="col-span-1 text-center font-mono text-base md:text-lg text-yellow-500 font-bold">
+                                                            {team.wins || 0}
+                                                        </div>
 
-                                                <div className="col-span-2 text-center">
-                                                    <span className="font-mono text-lg md:text-2xl font-bold text-primary">
-                                                        {team.totalPoints || 0}
-                                                    </span>
-                                                </div>
+                                                        <div className="col-span-2 text-center font-mono text-base md:text-lg text-gray-300">
+                                                            {team.totalKills || 0}
+                                                        </div>
+
+                                                        <div className="col-span-2 text-center font-mono text-base md:text-lg text-secondary">
+                                                            {team.positionPoints || 0}
+                                                        </div>
+
+                                                        <div className="col-span-2 text-center">
+                                                            <span className="font-mono text-lg md:text-2xl font-bold text-primary">
+                                                                {team.totalPoints || 0}
+                                                            </span>
+                                                        </div>
+                                                    </>
+                                                )}
                                             </motion.div>
                                         );
                                     })

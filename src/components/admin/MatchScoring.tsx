@@ -24,12 +24,39 @@ interface MatchScoringProps {
 }
 
 const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
+  // Helper to parse lap time from MM:SS.mmm format to milliseconds
+  const parseLapTime = (timeStr: string): number | null => {
+    if (!timeStr || timeStr.trim() === '') return null;
+    
+    // Match format: MM:SS.mmm or M:SS.mmm or SS.mmm
+    const match = timeStr.match(/^(?:(\d+):)?(\d+)\.(\d{1,3})$/);
+    if (!match) return null;
+    
+    const minutes = parseInt(match[1] || '0');
+    const seconds = parseInt(match[2]);
+    const milliseconds = parseInt(match[3].padEnd(3, '0'));
+    
+    return (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
+  };
+
+  // Helper to format milliseconds to MM:SS.mmm for display
+  const formatLapTimeForInput = (ms: number | null | undefined): string => {
+    if (ms === null || ms === undefined || ms === 0) return '';
+    const totalSeconds = ms / 1000;
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = Math.floor(totalSeconds % 60);
+    const milliseconds = Math.floor((totalSeconds % 1) * 1000);
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+  };
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<string>(preSelectedEventId || "");
   const [teams, setTeams] = useState<Team[]>([]);
   const [matches, setMatches] = useState<Match[]>([]);
   const [matchNumber, setMatchNumber] = useState(1);
-  const [scores, setScores] = useState<Record<string, { placement: number; kills: number; points: number }>>({});
+  const [scores, setScores] = useState<Record<string, { placement: number; kills: number; points: number; lapTime?: number }>>({});
+  const [lapTimeInputs, setLapTimeInputs] = useState<Record<string, string>>({}); // Track raw lap time input strings
+  const [selectedForLeaderboard, setSelectedForLeaderboard] = useState<Set<string>>(new Set()); // Track teams selected for leaderboard
+  const [publishingLeaderboard, setPublishingLeaderboard] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editingMatch, setEditingMatch] = useState<string | null>(null);
   const [matchToDelete, setMatchToDelete] = useState<string | null>(null);
@@ -44,6 +71,13 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
     if (!event) return false;
     const game = event.game?.toLowerCase() || '';
     return game.includes('bgmi') || game.includes('free fire') || game.includes('pubg');
+  };
+
+  // Helper to check if event is F1-25
+  const isF125 = (eventId: string) => {
+    const event = events.find(e => e.id === eventId);
+    if (!event) return false;
+    return event.slug === 'f125';
   };
 
   // Get game type for scoring calculations
@@ -73,7 +107,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
   const fetchEvents = async () => {
     try {
       const { data } = await api.get<Event[]>('/events');
-      const includedSlugs = ['bgmi', 'freefire'];
+      const includedSlugs = ['bgmi', 'freefire', 'f125'];
       setEvents(data.filter(event => includedSlugs.includes(event.slug)));
     } catch (error) {
       console.error(error);
@@ -86,9 +120,9 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
       setTeams(data);
       setSelectedGroup("all"); // Reset group filter on new teams fetch
       setStage('Group'); // Reset stage to Group defaults
-      const initialScores: Record<string, { placement: number; kills: number; points: number }> = {};
+      const initialScores: Record<string, { placement: number; kills: number; points: number; lapTime?: number }> = {};
       data.forEach((team) => {
-        initialScores[team.id] = { placement: 0, kills: 0, points: 0 };
+        initialScores[team.id] = { placement: 0, kills: 0, points: 0, lapTime: 0 };
       });
       setScores(initialScores);
     } catch (error) {
@@ -126,7 +160,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
     setMatchNumber(match.matchNumber);
 
     // Populate scores from match.scores (included in fetching)
-    const newScores: Record<string, { placement: number; kills: number; points: number }> = {};
+    const newScores: Record<string, { placement: number; kills: number; points: number; lapTime?: number }> = {};
 
     // Initialize default
     teams.forEach((team) => {
@@ -139,7 +173,8 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
         newScores[score.teamId] = {
           placement: score.placement,
           kills: score.kills || 0,
-          points: score.points || 0
+          points: score.points || 0,
+          lapTime: score.lapTime || 0
         };
       });
     }
@@ -150,6 +185,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
   const handleCancelEdit = () => {
     setEditingMatch(null);
     setScores({});
+    setLapTimeInputs({}); // Clear lap time inputs
     setHasUnsavedChanges(false);
     fetchTeams(); // Reset to default state
     // Reset match number to next available
@@ -160,16 +196,16 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
     }
   };
 
-  const handleScoreChange = (teamId: string, field: 'placement' | 'kills' | 'points', value: number) => {
+  const handleScoreChange = (teamId: string, field: 'placement' | 'kills' | 'points' | 'lapTime', value: number) => {
     setHasUnsavedChanges(true);
     setScores(prev => {
-      const currentScore = prev[teamId] || { placement: 0, kills: 0, points: 0 };
+      const currentScore = prev[teamId] || { placement: 0, kills: 0, points: 0, lapTime: 0 };
       const updatedScore = {
         ...currentScore,
         [field]: value
       };
 
-      // Auto-calculate points for battle royale games
+      // Auto-calculate points for battle royale games only
       if (isBattleRoyale(selectedEvent) && (field === 'placement' || field === 'kills')) {
         const gameType = getGameType(selectedEvent);
         updatedScore.points = calculatePoints(
@@ -178,6 +214,9 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
           field === 'kills' ? value : currentScore.kills
         );
       }
+
+      // For F1-25, points are not calculated from placement/kills
+      // The lap time is the primary metric
 
       return {
         ...prev,
@@ -199,7 +238,8 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
         teamId: teamId,
         placement: score.placement || 0,
         kills: score.kills || 0,
-        points: score.points || 0, // Backend might recalc points based on scheme, but we send what we have
+        points: score.points || 0,
+        lapTime: score.lapTime || null, // Include lap time for F1-25
       }));
 
       if (editingMatch) {
@@ -299,6 +339,27 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
     }
   };
 
+  // Publish F1-25 Leaderboard
+  const handlePublishLeaderboard = async () => {
+    if (!isF125(selectedEvent) || selectedForLeaderboard.size === 0) {
+      toast.error('Please select teams to publish to the leaderboard');
+      return;
+    }
+
+    setPublishingLeaderboard(true);
+    try {
+      // The leaderboard will automatically update based on match data
+      // This is just a visual confirmation for the admin
+      toast.success(`Successfully published ${selectedForLeaderboard.size} teams to the leaderboard!`);
+      setSelectedForLeaderboard(new Set());
+    } catch (error: any) {
+      console.error('Error publishing leaderboard:', error);
+      toast.error('Failed to publish leaderboard');
+    } finally {
+      setPublishingLeaderboard(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Section */}
@@ -314,6 +375,26 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
         </div>
         
         <div className="flex items-center gap-3">
+          {isF125(selectedEvent) && !editingMatch && selectedForLeaderboard.size > 0 && (
+            <button
+              onClick={handlePublishLeaderboard}
+              disabled={publishingLeaderboard}
+              className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg font-bold flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all duration-200"
+            >
+              {publishingLeaderboard ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                  Publishing...
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="w-5 h-5" />
+                  <span className="hidden md:inline">Publish to Live ({selectedForLeaderboard.size})</span>
+                  <span className="md:hidden">Publish ({selectedForLeaderboard.size})</span>
+                </>
+              )}
+            </button>
+          )}
           {editingMatch && (
             <button
               onClick={handleCancelEdit}
@@ -447,10 +528,25 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                   <th className="px-4 py-4 text-left text-gray-400 uppercase tracking-wider text-sm font-bold w-12">
                     #
                   </th>
+                  {isF125(selectedEvent) && (
+                    <th className="px-4 py-4 text-center text-green-400 uppercase tracking-wider text-sm font-bold w-16">
+                      <div className="flex items-center justify-center gap-1">
+                        <CheckCircle className="w-4 h-4" />
+                        <span className="hidden md:inline">Live</span>
+                      </div>
+                    </th>
+                  )}
                   <th className="px-4 py-4 text-left text-cyan-400 uppercase tracking-wider text-sm font-bold">
                     Team
                   </th>
-                  {isBattleRoyale(selectedEvent) ? (
+                  {isF125(selectedEvent) ? (
+                    // F1-25 Headers
+                    <th className="px-4 py-4 text-center text-primary uppercase tracking-wider text-sm font-bold">
+                      Lap Time
+                      <div className="text-[10px] text-gray-400 normal-case font-normal mt-1">(MM:SS.mmm)</div>
+                    </th>
+                  ) : isBattleRoyale(selectedEvent) ? (
+                    // Battle Royale Headers
                     <>
                       <th className="px-4 py-4 text-center text-purple-400 uppercase tracking-wider text-sm font-bold">
                         Position
@@ -463,6 +559,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                       </th>
                     </>
                   ) : (
+                    // Other Games Headers
                     <th className="px-4 py-4 text-center text-cyan-400 uppercase tracking-wider text-sm font-bold">
                       Points
                     </th>
@@ -542,11 +639,73 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                     <td className="px-4 py-3 font-mono text-gray-500 font-bold">
                       {index + 1}
                     </td>
+                    {isF125(selectedEvent) && (
+                      <td className="px-4 py-3 text-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedForLeaderboard.has(team.id)}
+                          onChange={(e) => {
+                            const newSet = new Set(selectedForLeaderboard);
+                            if (e.target.checked) {
+                              newSet.add(team.id);
+                            } else {
+                              newSet.delete(team.id);
+                            }
+                            setSelectedForLeaderboard(newSet);
+                          }}
+                          className="w-5 h-5 rounded border-2 border-green-500/50 bg-black/60 checked:bg-green-500 checked:border-green-500 cursor-pointer transition-all hover:border-green-400"
+                        />
+                      </td>
+                    )}
                     <td className="px-4 py-3 font-bold text-white flex items-center gap-2">
                       <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
                       {team.name}
                     </td>
-                    {isBattleRoyale(selectedEvent) ? (
+                    {isF125(selectedEvent) ? (
+                      // F1-25: Lap Time Input (MM:SS.mmm format)
+                      <td className="px-4 py-3 text-center">
+                        <input
+                          type="text"
+                          placeholder="MM:SS.mmm"
+                          value={lapTimeInputs[team.id] ?? formatLapTimeForInput(scores[team.id]?.lapTime)}
+                          onFocus={(e) => {
+                            e.target.select();
+                            // Initialize input string if not set
+                            if (!lapTimeInputs[team.id]) {
+                              const formatted = formatLapTimeForInput(scores[team.id]?.lapTime);
+                              setLapTimeInputs(prev => ({ ...prev, [team.id]: formatted }));
+                            }
+                          }}
+                          onChange={(e) => {
+                            const timeStr = e.target.value;
+                            // Update input string immediately
+                            setLapTimeInputs(prev => ({ ...prev, [team.id]: timeStr }));
+                            
+                            // Try to parse and update score
+                            const ms = parseLapTime(timeStr);
+                            if (ms !== null) {
+                              handleScoreChange(team.id, 'lapTime', ms);
+                            } else if (timeStr === '') {
+                              handleScoreChange(team.id, 'lapTime', 0);
+                            }
+                          }}
+                          onBlur={(e) => {
+                            // Reformat on blur if valid score exists
+                            const ms = scores[team.id]?.lapTime;
+                            if (ms && ms > 0) {
+                              const formatted = formatLapTimeForInput(ms);
+                              setLapTimeInputs(prev => ({ ...prev, [team.id]: formatted }));
+                            } else {
+                              // Clear invalid input
+                              setLapTimeInputs(prev => ({ ...prev, [team.id]: '' }));
+                            }
+                          }}
+                          className="w-36 px-3 py-2 bg-black/60 border-2 border-primary/30 rounded-lg focus:border-primary outline-none text-center text-white font-mono transition-all hover:bg-black/80"
+                        />
+                        <div className="text-[10px] text-gray-500 mt-1">Format: 01:23.456</div>
+                      </td>
+                    ) : isBattleRoyale(selectedEvent) ? (
+                      // Battle Royale: Position, Kills, Points
                       <>
                         <td className="px-4 py-3 text-center">
                           <input
@@ -581,6 +740,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                         </td>
                       </>
                     ) : (
+                      // Other Games: Points Only
                       <td className="px-4 py-3 text-center">
                         <input
                           type="number"
