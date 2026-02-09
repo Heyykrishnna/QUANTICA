@@ -144,27 +144,29 @@ export function useLeaderboard(eventSlug: string) {
         // 6. Sort teams based on game type
         // For F1-25: sort by best lap time (ascending - fastest first)
         // For others: sort by totalPoints with tie-breakers
-        const isF1 = foundEvent.slug === 'f125';
-        
+        // For F1-25: sort by best lap time (ascending - fastest first)
+        // For others: sort by totalPoints with tie-breakers
+        const isF1 = foundEvent.slug.toLowerCase().includes('f1');
+
         const sortedTeams = enrichedTeams.sort((a, b) => {
-            if (isF1) {
-                // F1-25: Sort by best lap time (ascending)
-                const aTime = a.bestLapTime || Number.MAX_SAFE_INTEGER;
-                const bTime = b.bestLapTime || Number.MAX_SAFE_INTEGER;
-                return aTime - bTime;
-            } else {
-                // Other games: Sort by points with tie-breakers
-                if ((b.totalPoints || 0) !== (a.totalPoints || 0)) {
-                    return (b.totalPoints || 0) - (a.totalPoints || 0);
-                }
-                if ((b.wins || 0) !== (a.wins || 0)) {
-                    return (b.wins || 0) - (a.wins || 0);
-                }
-                if ((b.positionPoints || 0) !== (a.positionPoints || 0)) {
-                    return (b.positionPoints || 0) - (a.positionPoints || 0);
-                }
-                return (b.totalKills || 0) - (a.totalKills || 0);
+          if (isF1) {
+            // F1-25: Sort by best lap time (ascending)
+            const aTime = a.bestLapTime || Number.MAX_SAFE_INTEGER;
+            const bTime = b.bestLapTime || Number.MAX_SAFE_INTEGER;
+            return aTime - bTime;
+          } else {
+            // Other games: Sort by points with tie-breakers
+            if ((b.totalPoints || 0) !== (a.totalPoints || 0)) {
+              return (b.totalPoints || 0) - (a.totalPoints || 0);
             }
+            if ((b.wins || 0) !== (a.wins || 0)) {
+              return (b.wins || 0) - (a.wins || 0);
+            }
+            if ((b.positionPoints || 0) !== (a.positionPoints || 0)) {
+              return (b.positionPoints || 0) - (a.positionPoints || 0);
+            }
+            return (b.totalKills || 0) - (a.totalKills || 0);
+          }
         });
         const rankedTeams = sortedTeams.map((team, index) => ({
           ...team,

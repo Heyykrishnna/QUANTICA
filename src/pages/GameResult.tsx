@@ -16,13 +16,15 @@ const GameResult = () => {
     const { teams, event, loading, error } = useLeaderboard(gameSlug || "");
 
     // Helper function to format lap time from milliseconds
+    // Helper function to format lap time from milliseconds
     const formatLapTime = (ms: number | null | undefined): string => {
         if (ms === null || ms === undefined || ms === 0) return '--:--:---';
         const totalSeconds = ms / 1000;
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = Math.floor(totalSeconds % 60);
         const milliseconds = Math.floor((totalSeconds % 1) * 1000);
-        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+        // Use colon for milliseconds as per user request (1:45:000)
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${milliseconds.toString().padStart(3, '0')}`;
     };
 
     const gameInfo = events.find(e => e.slug === gameSlug);
@@ -30,15 +32,15 @@ const GameResult = () => {
     const isValorant = gameSlug?.includes("valorant");
     const hasPredefinedGroups = gameInfo?.groups && gameInfo.groups.length > 0 && !isValorant;
     const isBattleRoyale = gameSlug?.includes("bgmi") || gameSlug?.includes("freefire") || gameSlug?.includes("pubg");
-    const isF1 = gameSlug?.includes("f125");
+    const isF1 = gameSlug?.toLowerCase().includes("f1");
 
     // Default to Finals if active, else first group for BR, otherwise overall
     // Target: ENABLED NOW
     const finalsStartTime = new Date("2026-02-07T05:00:00+05:30");
     const now = new Date();
     const isFinalsActive = now >= finalsStartTime;
-    
-    const defaultTab = (isBattleRoyale && isFinalsActive) 
+
+    const defaultTab = (isBattleRoyale && isFinalsActive)
         ? "Finals"
         : (isBattleRoyale && gameInfo?.groups?.length)
             ? gameInfo.groups[0].replace("Group ", "")
@@ -74,14 +76,14 @@ const GameResult = () => {
         });
 
         if (!groups.overall) groups.overall = [];
-        
+
         if (!groups.overall) groups.overall = [];
-        
+
         // Populate Finals Group
         // Logic: 
         // 1. If manual list exists (e.g. Free Fire), use that.
         // 2. Else get Top 4 from each group based on GROUP MATCHES
-        
+
         // Helper for Tie-Breaker Logic
         // 1. Total Points
         // 2. Wins
@@ -103,12 +105,12 @@ const GameResult = () => {
         const manualFinalsTeams = gameInfo?.finalsTeams;
 
         if (manualFinalsTeams && manualFinalsTeams.length > 0) {
-             // Filter teams based on the manual names list
-             const filtered = (teams || []).filter(t => 
-                 manualFinalsTeams.some(manualName => manualName.toLowerCase() === t.name.toLowerCase())
-             );
-             
-             groups['Finals'] = filtered.sort(sortTeams);
+            // Filter teams based on the manual names list
+            const filtered = (teams || []).filter(t =>
+                manualFinalsTeams.some(manualName => manualName.toLowerCase() === t.name.toLowerCase())
+            );
+
+            groups['Finals'] = filtered.sort(sortTeams);
         } else {
             // Auto-qualification Logic
             const finalsTeams = new Set<Team>();
@@ -318,10 +320,10 @@ const GameResult = () => {
                                         // Qualification / Highlight Logic
                                         // If Finals: Only Top 3 get green background
                                         // If Groups: Top N (QUALIFY_LIMIT) get green background
-                                        const isQualified = activeTab === 'Finals' 
-                                            ? rank <= 3 
+                                        const isQualified = activeTab === 'Finals'
+                                            ? rank <= 3
                                             : (activeTab !== 'overall' && isBattleRoyale && rank <= QUALIFY_LIMIT);
-                                            
+
                                         const isTop3 = rank <= 3;
 
                                         return (

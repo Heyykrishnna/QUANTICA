@@ -27,15 +27,15 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
   // Helper to parse lap time from MM:SS.mmm format to milliseconds
   const parseLapTime = (timeStr: string): number | null => {
     if (!timeStr || timeStr.trim() === '') return null;
-    
+
     // Match format: MM:SS.mmm or M:SS.mmm or SS.mmm
     const match = timeStr.match(/^(?:(\d+):)?(\d+)\.(\d{1,3})$/);
     if (!match) return null;
-    
+
     const minutes = parseInt(match[1] || '0');
     const seconds = parseInt(match[2]);
     const milliseconds = parseInt(match[3].padEnd(3, '0'));
-    
+
     return (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
   };
 
@@ -77,7 +77,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
   const isF125 = (eventId: string) => {
     const event = events.find(e => e.id === eventId);
     if (!event) return false;
-    return event.slug === 'f125';
+    return event.slug.toLowerCase().includes('f1');
   };
 
   // Get game type for scoring calculations
@@ -373,7 +373,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
             {editingMatch ? `Editing Match #${matchNumber}` : `Creating Match #${matchNumber}`}
           </p>
         </div>
-        
+
         <div className="flex items-center gap-3">
           {isF125(selectedEvent) && !editingMatch && selectedForLeaderboard.size > 0 && (
             <button
@@ -459,11 +459,10 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                 setStage('Group');
                 setSelectedGroup("all");
               }}
-              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
-                stage === 'Group' 
-                  ? "bg-green-500 text-white shadow-lg" 
+              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${stage === 'Group'
+                  ? "bg-green-500 text-white shadow-lg"
                   : "text-gray-400 hover:text-white hover:bg-white/5"
-              }`}
+                }`}
             >
               Group Stage
             </button>
@@ -472,11 +471,10 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                 setStage('Finals');
                 setSelectedGroup("all"); // Remove group filter for Finals
               }}
-              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
-                stage === 'Finals' 
-                  ? "bg-yellow-500 text-white shadow-lg" 
+              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${stage === 'Finals'
+                  ? "bg-yellow-500 text-white shadow-lg"
                   : "text-gray-400 hover:text-white hover:bg-white/5"
-              }`}
+                }`}
             >
               Finals
             </button>
@@ -493,11 +491,10 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
           <div className="gap-2 bg-black/60 p-1 rounded-lg inline-flex">
             <button
               onClick={() => setSelectedGroup("all")}
-              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
-                selectedGroup === "all" 
-                  ? "bg-purple-500 text-white shadow-lg" 
+              className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${selectedGroup === "all"
+                  ? "bg-purple-500 text-white shadow-lg"
                   : "text-gray-400 hover:text-white hover:bg-white/5"
-              }`}
+                }`}
             >
               All Teams
             </button>
@@ -505,11 +502,10 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
               <button
                 key={group}
                 onClick={() => setSelectedGroup(group!)}
-                className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${
-                  selectedGroup === group 
-                    ? "bg-purple-500 text-white shadow-lg" 
+                className={`px-4 py-2 rounded-md text-sm font-bold transition-all ${selectedGroup === group
+                    ? "bg-purple-500 text-white shadow-lg"
                     : "text-gray-400 hover:text-white hover:bg-white/5"
-                }`}
+                  }`}
               >
                 Group {group}
               </button>
@@ -570,192 +566,192 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                 {teams
                   .filter(team => {
                     if (stage === 'Finals') {
-                        // Find the static event config to check for manual finals list
-                        const currentApiEvent = events.find(e => e.id === selectedEvent);
-                        const staticConfig = staticEvents.find(e => e.slug === currentApiEvent?.slug);
-                        
-                        // 1. Manual List Check (e.g. Free Fire)
-                        if (staticConfig?.finalsTeams && staticConfig.finalsTeams.length > 0) {
-                            return staticConfig.finalsTeams.some(manualName => 
-                                manualName.toLowerCase() === team.name.toLowerCase()
-                            );
+                      // Find the static event config to check for manual finals list
+                      const currentApiEvent = events.find(e => e.id === selectedEvent);
+                      const staticConfig = staticEvents.find(e => e.slug === currentApiEvent?.slug);
+
+                      // 1. Manual List Check (e.g. Free Fire)
+                      if (staticConfig?.finalsTeams && staticConfig.finalsTeams.length > 0) {
+                        return staticConfig.finalsTeams.some(manualName =>
+                          manualName.toLowerCase() === team.name.toLowerCase()
+                        );
+                      }
+
+                      // 2. Auto-qualification Logic (Fallback)
+                      // Logic to filter ONLY qualified teams based on GROUP stage matches
+                      const bgmiLimit = 8; // Top 8 per group for BGMI? No, user request said "all group top 4 teams"
+                      const ffLimit = 4;
+                      const limit = selectedEvent.includes('bgmi') ? 4 : 4; // User said "top 4 teams which have green background"
+
+                      // We need to calculate ranks based on GROUP matches only to determine qualification
+                      // This is expensive to do in render, but for admin panel with < 100 teams it's fine.
+                      // Optimization: Memorize this or move logic up.
+                      // For now, let's filter based on their CURRENT total points in Group Stage
+
+                      // 1. Filter matches to only include Group stage matches
+                      const groupMatches = matches.filter(m => !m.stage || m.stage === 'Group');
+
+                      // 2. Calculate stats for all teams based on group matches
+                      const teamStats = new Map<string, number>();
+                      teams.forEach(t => teamStats.set(t.id, 0));
+
+                      groupMatches.forEach(match => {
+                        match.scores?.forEach(s => {
+                          const current = teamStats.get(s.teamId) || 0;
+                          teamStats.set(s.teamId, current + (s.points || 0));
+                        });
+                      });
+
+                      // 3. Group teams by their group
+                      const teamsByGroup: Record<string, typeof teams> = {};
+                      teams.forEach(t => {
+                        if (t.group) {
+                          if (!teamsByGroup[t.group]) teamsByGroup[t.group] = [];
+                          teamsByGroup[t.group].push(t);
                         }
+                      });
 
-                        // 2. Auto-qualification Logic (Fallback)
-                        // Logic to filter ONLY qualified teams based on GROUP stage matches
-                        const bgmiLimit = 8; // Top 8 per group for BGMI? No, user request said "all group top 4 teams"
-                        const ffLimit = 4;
-                        const limit = selectedEvent.includes('bgmi') ? 4 : 4; // User said "top 4 teams which have green background"
+                      // 4. Sort each group and find qualified IDs
+                      const qualifiedTeamIds = new Set<string>();
+                      Object.values(teamsByGroup).forEach(groupTeams => {
+                        // Sort by calculated group points
+                        groupTeams.sort((a, b) => (teamStats.get(b.id) || 0) - (teamStats.get(a.id) || 0));
+                        // Take top N
+                        groupTeams.slice(0, limit).forEach(t => qualifiedTeamIds.add(t.id));
+                      });
 
-                        // We need to calculate ranks based on GROUP matches only to determine qualification
-                        // This is expensive to do in render, but for admin panel with < 100 teams it's fine.
-                        // Optimization: Memorize this or move logic up.
-                        // For now, let's filter based on their CURRENT total points in Group Stage
-                        
-                        // 1. Filter matches to only include Group stage matches
-                        const groupMatches = matches.filter(m => !m.stage || m.stage === 'Group');
-                        
-                        // 2. Calculate stats for all teams based on group matches
-                        const teamStats = new Map<string, number>();
-                        teams.forEach(t => teamStats.set(t.id, 0));
-                        
-                        groupMatches.forEach(match => {
-                             match.scores?.forEach(s => {
-                                 const current = teamStats.get(s.teamId) || 0;
-                                 teamStats.set(s.teamId, current + (s.points || 0));
-                             });
-                        });
-
-                        // 3. Group teams by their group
-                        const teamsByGroup: Record<string, typeof teams> = {};
-                        teams.forEach(t => {
-                            if (t.group) {
-                                if (!teamsByGroup[t.group]) teamsByGroup[t.group] = [];
-                                teamsByGroup[t.group].push(t);
-                            }
-                        });
-
-                        // 4. Sort each group and find qualified IDs
-                        const qualifiedTeamIds = new Set<string>();
-                        Object.values(teamsByGroup).forEach(groupTeams => {
-                             // Sort by calculated group points
-                             groupTeams.sort((a, b) => (teamStats.get(b.id) || 0) - (teamStats.get(a.id) || 0));
-                             // Take top N
-                             groupTeams.slice(0, limit).forEach(t => qualifiedTeamIds.add(t.id));
-                        });
-
-                        return qualifiedTeamIds.has(team.id);
+                      return qualifiedTeamIds.has(team.id);
                     }
                     return selectedGroup === "all" || team.group === selectedGroup;
                   })
                   .map((team, index) => (
-                  <tr 
-                    key={team.id} 
-                    className={`
+                    <tr
+                      key={team.id}
+                      className={`
                       border-b border-white/5 hover:bg-white/5 transition-colors
                       ${index % 2 === 0 ? 'bg-black/20' : 'bg-transparent'}
                     `}
-                  >
-                    <td className="px-4 py-3 font-mono text-gray-500 font-bold">
-                      {index + 1}
-                    </td>
-                    {isF125(selectedEvent) && (
-                      <td className="px-4 py-3 text-center">
-                        <input
-                          type="checkbox"
-                          checked={selectedForLeaderboard.has(team.id)}
-                          onChange={(e) => {
-                            const newSet = new Set(selectedForLeaderboard);
-                            if (e.target.checked) {
-                              newSet.add(team.id);
-                            } else {
-                              newSet.delete(team.id);
-                            }
-                            setSelectedForLeaderboard(newSet);
-                          }}
-                          className="w-5 h-5 rounded border-2 border-green-500/50 bg-black/60 checked:bg-green-500 checked:border-green-500 cursor-pointer transition-all hover:border-green-400"
-                        />
+                    >
+                      <td className="px-4 py-3 font-mono text-gray-500 font-bold">
+                        {index + 1}
                       </td>
-                    )}
-                    <td className="px-4 py-3 font-bold text-white flex items-center gap-2">
-                      <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
-                      {team.name}
-                    </td>
-                    {isF125(selectedEvent) ? (
-                      // F1-25: Lap Time Input (MM:SS.mmm format)
-                      <td className="px-4 py-3 text-center">
-                        <input
-                          type="text"
-                          placeholder="MM:SS.mmm"
-                          value={lapTimeInputs[team.id] ?? formatLapTimeForInput(scores[team.id]?.lapTime)}
-                          onFocus={(e) => {
-                            e.target.select();
-                            // Initialize input string if not set
-                            if (!lapTimeInputs[team.id]) {
-                              const formatted = formatLapTimeForInput(scores[team.id]?.lapTime);
-                              setLapTimeInputs(prev => ({ ...prev, [team.id]: formatted }));
-                            }
-                          }}
-                          onChange={(e) => {
-                            const timeStr = e.target.value;
-                            // Update input string immediately
-                            setLapTimeInputs(prev => ({ ...prev, [team.id]: timeStr }));
-                            
-                            // Try to parse and update score
-                            const ms = parseLapTime(timeStr);
-                            if (ms !== null) {
-                              handleScoreChange(team.id, 'lapTime', ms);
-                            } else if (timeStr === '') {
-                              handleScoreChange(team.id, 'lapTime', 0);
-                            }
-                          }}
-                          onBlur={(e) => {
-                            // Reformat on blur if valid score exists
-                            const ms = scores[team.id]?.lapTime;
-                            if (ms && ms > 0) {
-                              const formatted = formatLapTimeForInput(ms);
-                              setLapTimeInputs(prev => ({ ...prev, [team.id]: formatted }));
-                            } else {
-                              // Clear invalid input
-                              setLapTimeInputs(prev => ({ ...prev, [team.id]: '' }));
-                            }
-                          }}
-                          className="w-36 px-3 py-2 bg-black/60 border-2 border-primary/30 rounded-lg focus:border-primary outline-none text-center text-white font-mono transition-all hover:bg-black/80"
-                        />
-                        <div className="text-[10px] text-gray-500 mt-1">Format: 01:23.456</div>
+                      {isF125(selectedEvent) && (
+                        <td className="px-4 py-3 text-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedForLeaderboard.has(team.id)}
+                            onChange={(e) => {
+                              const newSet = new Set(selectedForLeaderboard);
+                              if (e.target.checked) {
+                                newSet.add(team.id);
+                              } else {
+                                newSet.delete(team.id);
+                              }
+                              setSelectedForLeaderboard(newSet);
+                            }}
+                            className="w-5 h-5 rounded border-2 border-green-500/50 bg-black/60 checked:bg-green-500 checked:border-green-500 cursor-pointer transition-all hover:border-green-400"
+                          />
+                        </td>
+                      )}
+                      <td className="px-4 py-3 font-bold text-white flex items-center gap-2">
+                        <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
+                        {team.name}
                       </td>
-                    ) : isBattleRoyale(selectedEvent) ? (
-                      // Battle Royale: Position, Kills, Points
-                      <>
+                      {isF125(selectedEvent) ? (
+                        // F1-25: Lap Time Input (MM:SS.mmm format)
+                        <td className="px-4 py-3 text-center">
+                          <input
+                            type="text"
+                            placeholder="MM:SS.mmm"
+                            value={lapTimeInputs[team.id] ?? formatLapTimeForInput(scores[team.id]?.lapTime)}
+                            onFocus={(e) => {
+                              e.target.select();
+                              // Initialize input string if not set
+                              if (!lapTimeInputs[team.id]) {
+                                const formatted = formatLapTimeForInput(scores[team.id]?.lapTime);
+                                setLapTimeInputs(prev => ({ ...prev, [team.id]: formatted }));
+                              }
+                            }}
+                            onChange={(e) => {
+                              const timeStr = e.target.value;
+                              // Update input string immediately
+                              setLapTimeInputs(prev => ({ ...prev, [team.id]: timeStr }));
+
+                              // Try to parse and update score
+                              const ms = parseLapTime(timeStr);
+                              if (ms !== null) {
+                                handleScoreChange(team.id, 'lapTime', ms);
+                              } else if (timeStr === '') {
+                                handleScoreChange(team.id, 'lapTime', 0);
+                              }
+                            }}
+                            onBlur={(e) => {
+                              // Reformat on blur if valid score exists
+                              const ms = scores[team.id]?.lapTime;
+                              if (ms && ms > 0) {
+                                const formatted = formatLapTimeForInput(ms);
+                                setLapTimeInputs(prev => ({ ...prev, [team.id]: formatted }));
+                              } else {
+                                // Clear invalid input
+                                setLapTimeInputs(prev => ({ ...prev, [team.id]: '' }));
+                              }
+                            }}
+                            className="w-36 px-3 py-2 bg-black/60 border-2 border-primary/30 rounded-lg focus:border-primary outline-none text-center text-white font-mono transition-all hover:bg-black/80"
+                          />
+                          <div className="text-[10px] text-gray-500 mt-1">Format: 01:23.456</div>
+                        </td>
+                      ) : isBattleRoyale(selectedEvent) ? (
+                        // Battle Royale: Position, Kills, Points
+                        <>
+                          <td className="px-4 py-3 text-center">
+                            <input
+                              type="number"
+                              min="0"
+                              value={scores[team.id]?.placement || 0}
+                              onFocus={(e) => e.target.select()}
+                              onChange={(e) =>
+                                handleScoreChange(team.id, 'placement', parseInt(e.target.value) || 0)
+                              }
+                              className="w-20 px-3 py-2 bg-black/60 border-2 border-purple-500/30 rounded-lg focus:border-purple-500 outline-none text-center text-white font-bold transition-all hover:bg-black/80"
+                            />
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            <input
+                              type="number"
+                              min="0"
+                              value={scores[team.id]?.kills || 0}
+                              onFocus={(e) => e.target.select()}
+                              onChange={(e) =>
+                                handleScoreChange(team.id, 'kills', parseInt(e.target.value) || 0)
+                              }
+                              className="w-20 px-3 py-2 bg-black/60 border-2 border-yellow-500/30 rounded-lg focus:border-yellow-500 outline-none text-center text-white font-bold transition-all hover:bg-black/80"
+                            />
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            <div className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-green-500/20 to-cyan-500/20 border border-green-500/30 rounded-lg">
+                              <span className="text-2xl font-bold text-green-400">
+                                {scores[team.id]?.points || 0}
+                              </span>
+                            </div>
+                          </td>
+                        </>
+                      ) : (
+                        // Other Games: Points Only
                         <td className="px-4 py-3 text-center">
                           <input
                             type="number"
                             min="0"
-                            value={scores[team.id]?.placement || 0}
+                            value={scores[team.id]?.points || 0}
                             onFocus={(e) => e.target.select()}
                             onChange={(e) =>
-                              handleScoreChange(team.id, 'placement', parseInt(e.target.value) || 0)
+                              handleScoreChange(team.id, 'points', parseInt(e.target.value) || 0)
                             }
-                            className="w-20 px-3 py-2 bg-black/60 border-2 border-purple-500/30 rounded-lg focus:border-purple-500 outline-none text-center text-white font-bold transition-all hover:bg-black/80"
+                            className="w-24 px-3 py-2 bg-black/60 border-2 border-cyan-500/30 rounded-lg focus:border-cyan-500 outline-none text-center text-white font-bold transition-all hover:bg-black/80"
                           />
                         </td>
-                        <td className="px-4 py-3 text-center">
-                          <input
-                            type="number"
-                            min="0"
-                            value={scores[team.id]?.kills || 0}
-                            onFocus={(e) => e.target.select()}
-                            onChange={(e) =>
-                              handleScoreChange(team.id, 'kills', parseInt(e.target.value) || 0)
-                            }
-                            className="w-20 px-3 py-2 bg-black/60 border-2 border-yellow-500/30 rounded-lg focus:border-yellow-500 outline-none text-center text-white font-bold transition-all hover:bg-black/80"
-                          />
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <div className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-green-500/20 to-cyan-500/20 border border-green-500/30 rounded-lg">
-                            <span className="text-2xl font-bold text-green-400">
-                              {scores[team.id]?.points || 0}
-                            </span>
-                          </div>
-                        </td>
-                      </>
-                    ) : (
-                      // Other Games: Points Only
-                      <td className="px-4 py-3 text-center">
-                        <input
-                          type="number"
-                          min="0"
-                          value={scores[team.id]?.points || 0}
-                          onFocus={(e) => e.target.select()}
-                          onChange={(e) =>
-                            handleScoreChange(team.id, 'points', parseInt(e.target.value) || 0)
-                          }
-                          className="w-24 px-3 py-2 bg-black/60 border-2 border-cyan-500/30 rounded-lg focus:border-cyan-500 outline-none text-center text-white font-bold transition-all hover:bg-black/80"
-                        />
-                      </td>
-                    )}
-                  </tr>
-                ))}
+                      )}
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -795,7 +791,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                   </div>
                   <CheckCircle className="w-5 h-5 text-green-400" />
                 </div>
-                
+
                 <div className="flex items-center gap-2 mb-3">
                   <button
                     onClick={() => handleEditMatch(match.id)}
@@ -810,7 +806,7 @@ const MatchScoring = ({ preSelectedEventId }: MatchScoringProps = {}) => {
                     Delete
                   </button>
                 </div>
-                
+
                 <div className="text-xs text-gray-500 uppercase tracking-wider">
                   Status: <span className="text-green-400 font-bold">{match.status}</span>
                   <span className="ml-2 text-gray-500">|</span> <span className={`${match.stage === 'Finals' ? 'text-yellow-400' : 'text-blue-400'} font-bold`}>{match.stage || 'Group'}</span>

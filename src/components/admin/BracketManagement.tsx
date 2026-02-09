@@ -48,9 +48,9 @@ const BracketManagement = ({ preSelectedEventId }: BracketManagementProps = {}) 
     const fetchEvents = async () => {
         try {
             const { data } = await api.get<Event[]>('/events');
-            // Filter OUT BGMI and Free Fire (Bracket only for others)
-            const excludedSlugs = ['bgmi', 'freefire'];
-            setEvents(data.filter(event => !excludedSlugs.includes(event.slug)));
+            // Filter OUT BGMI, Free Fire AND F1 (Bracket only for others)
+            const excludedSlugs = ['bgmi', 'freefire', 'f1'];
+            setEvents(data.filter(event => !excludedSlugs.some(excluded => event.slug.toLowerCase().includes(excluded))));
         } catch (error) {
             console.error(error);
         }
