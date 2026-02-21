@@ -51,46 +51,46 @@ const Index = () => {
 
       if (distance <= 0) {
         if (fireworksContainerRef.current && !fireworksInstanceRef.current) {
-             const fireworks = new Fireworks(fireworksContainerRef.current, {
-              autoresize: true,
-              opacity: 0.5,
-              acceleration: 1.05,
-              friction: 0.97,
-              gravity: 1.5,
-              particles: 50,
-              traceLength: 3,
-              traceSpeed: 10,
-              explosion: 5,
-              intensity: 30,
-              flickering: 50,
-              lineStyle: 'round',
-              hue: { min: 0, max: 360 },
-              delay: { min: 30, max: 60 },
-              rocketsPoint: { min: 50, max: 50 },
-              lineWidth: { explosion: { min: 1, max: 3 }, trace: { min: 1, max: 2 } },
-              brightness: { min: 50, max: 80 },
-              decay: { min: 0.015, max: 0.03 },
-              mouse: { click: false, move: false, max: 1 }
-            });
-            fireworks.start();
-            fireworksInstanceRef.current = fireworks;
-            
-            if (fireworkAudioRef.current) {
-              fireworkAudioRef.current.volume = 1.0;
-              fireworkAudioRef.current.play().catch(console.error);
-            }
+          const fireworks = new Fireworks(fireworksContainerRef.current, {
+            autoresize: true,
+            opacity: 0.5,
+            acceleration: 1.05,
+            friction: 0.97,
+            gravity: 1.5,
+            particles: 50,
+            traceLength: 3,
+            traceSpeed: 10,
+            explosion: 5,
+            intensity: 30,
+            flickering: 50,
+            lineStyle: 'round',
+            hue: { min: 0, max: 360 },
+            delay: { min: 30, max: 60 },
+            rocketsPoint: { min: 50, max: 50 },
+            lineWidth: { explosion: { min: 1, max: 3 }, trace: { min: 1, max: 2 } },
+            brightness: { min: 50, max: 80 },
+            decay: { min: 0.015, max: 0.03 },
+            mouse: { click: false, move: false, max: 1 }
+          });
+          fireworks.start();
+          fireworksInstanceRef.current = fireworks;
 
-            const timeout = setTimeout(() => {
-                fireworks.stop();
-                 if (fireworkAudioRef.current) {
-                    fireworkAudioRef.current.pause();
-                }
-            }, 15000);
-            
-             return () => {
-                clearTimeout(timeout);
-                fireworks.stop();
-            };
+          if (fireworkAudioRef.current) {
+            fireworkAudioRef.current.volume = 1.0;
+            fireworkAudioRef.current.play().catch(console.error);
+          }
+
+          const timeout = setTimeout(() => {
+            fireworks.stop();
+            if (fireworkAudioRef.current) {
+              fireworkAudioRef.current.pause();
+            }
+          }, 15000);
+
+          return () => {
+            clearTimeout(timeout);
+            fireworks.stop();
+          };
         }
       }
     };
@@ -117,16 +117,16 @@ const Index = () => {
             className="w-full h-full object-cover opacity-60"
           >
             <source
-              src="https://ik.imagekit.io/vdigjljlu/Sage%20Web%20(2).mp4?updatedAt=1769276754132"
+              src="https://player.cloudinary.com/embed/?cloud_name=dqia8wqtx&public_id=Sage_Web_2_em6rxb"
               type="video/mp4"
             />
           </video>
           <div className="absolute inset-0 bg-background/70" />
         </div>
-        
+
         <div className="absolute inset-0 grid-bg opacity-20" />
         <div className="absolute inset-0 scanlines pointer-events-none" />
-        
+
         <div className="relative z-10 container mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -172,8 +172,8 @@ const Index = () => {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-3 w-3 md:h-4 md:w-4 bg-red-500"></span>
                   </div>
-                  <GlitchText 
-                    text="LIVE NOW" 
+                  <GlitchText
+                    text="LIVE NOW"
                     className="text-xl md:text-2xl font-bold tracking-widest text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]"
                   />
                 </div>
