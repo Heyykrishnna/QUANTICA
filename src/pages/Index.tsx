@@ -117,7 +117,7 @@ const Index = () => {
             className="w-full h-full object-cover opacity-60"
           >
             <source
-              src="https://player.cloudinary.com/embed/?cloud_name=dqia8wqtx&public_id=Sage_Web_2_em6rxb"
+              src="/hero.mp4"
               type="video/mp4"
             />
           </video>
